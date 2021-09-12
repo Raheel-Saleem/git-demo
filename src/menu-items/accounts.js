@@ -19,33 +19,19 @@ export const accounts = {
                     id: 'signup',
                     title: 'Sign Up',
                     type: 'item',
-                    // icon: icons['AccountBoxIcon'],
-                    url: '/signup'
-                    // target: true
+                    url: '/acounts/signup'
                 },
                 {
                     id: 'see-users-profile',
                     title: 'See Users Profile',
                     type: 'item',
-                    // icon: icons['AccountBoxIcon'],
-                    url: '/users'
-                    // target: true
+                    url: '/acounts/users'
                 },
                 {
                     id: 'add-acc-details',
                     title: 'Add Accounts Detail',
                     type: 'item',
-                    // icon: icons['AccountBoxIcon'],
-                    url: '/accouts/details'
-                    // target: true
-                },
-                {
-                    id: 'sp',
-                    title: 'Sample',
-                    type: 'item',
-                    // icon: icons['AccountBoxIcon'],
-                    url: '/sp'
-                    // target: true
+                    url: '/acounts/details'
                 }
             ]
         }

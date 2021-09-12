@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline, StyledEngineProvider } from '@material-ui/core';
-
+import CircularLoader from './ui-component/CircularLoader';
 // routing
 import Routes from './routes';
 
 // defaultTheme
 import theme from './themes';
-
+import history from './historty';
 // project imports
 import NavigationScroll from './layout/NavigationScroll';
 
@@ -25,7 +25,8 @@ const App = () => {
             <ThemeProvider theme={theme(customization)}>
                 <CssBaseline />
                 <NavigationScroll>
-                    <Routes />
+                    <CircularLoader />
+                    <Routes history={history} />
                 </NavigationScroll>
             </ThemeProvider>
         </StyledEngineProvider>

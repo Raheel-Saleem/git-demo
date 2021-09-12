@@ -7,20 +7,16 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 
 // project imports
 import config from './../config';
-
+import { useSelector } from 'react-redux';
 //-----------------------|| ROUTING RENDER ||-----------------------//
 
 const Routes = () => {
+    const isSignedIn = useSelector((state) => state.auth.isSignedIn);
     return (
         <Switch>
-            <Redirect exact from="/" to={config.defaultPath} />
-            <React.Fragment>
-                {/* Routes for authentication pages */}
-                <AuthenticationRoutes />
+            {isSignedIn ? <MainRoutes /> : <AuthenticationRoutes />}
 
-                {/* Routes for main layouts */}
-                <MainRoutes />
-            </React.Fragment>
+            <Redirect exact to="/" />
         </Switch>
     );
 };

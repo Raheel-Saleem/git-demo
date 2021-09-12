@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
 // project imports
 import MainLayout from './../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
@@ -19,17 +19,20 @@ const Signup = Loadable(lazy(() => import('../views/pages/Accounts/SignUp/Signup
 
 const MainRoutes = () => {
     const location = useLocation();
+    const permission = useSelector((state) => state.auth.permission);
+    console.log('From Routes useSlector Permission', permission);
+    const pathArray = [];
 
     return (
-        <Route path={['/dashboard/default', '/sp', '/sample-page', '/addsociety', '/addplot', '/signup', '/purchase/plots']}>
+        <Route path={['/dashboard/default', '/sample-page', '/addsociety', '/addplot', '/', '/signup']}>
             <MainLayout>
                 <Switch location={location} key={location.pathname}>
                     {/* <Route path="/dashboard/default" component={DashboardDefault} /> */}
-                    <Route path="/sp" component={SamplePage1} />
+
                     <Route path="/addsociety" component={Society} />
                     <Route path="/addplot" component={Plot} />
                     <Route path="/signup" component={Signup} />
-                    <Route path="/purchase/plots" component={PurchasePlots} />
+                    <Route path="/" component={PurchasePlots} />
                 </Switch>
             </MainLayout>
         </Route>

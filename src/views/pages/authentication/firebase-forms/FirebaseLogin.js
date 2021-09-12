@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { login } from '../../../../store/actions';
 // material-ui
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -77,12 +78,6 @@ const initialValues = {
     email: '',
     password: ''
 };
-const onSubmit = (values, onSubmitProps) => {
-    console.log('form submit values', values);
-
-    onSubmitProps.setSubmitting(false);
-    onSubmitProps.resetForm();
-};
 
 const validationSchema = Yup.object({
     username: Yup.string().required('Required!'),
@@ -94,6 +89,7 @@ const validationSchema = Yup.object({
 
 const FirebaseLogin = (props, { ...others }) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const [checked, setChecked] = React.useState(true);
 
@@ -108,7 +104,12 @@ const FirebaseLogin = (props, { ...others }) => {
 
     const formik = useFormik({
         initialValues,
-        onSubmit,
+        onSubmit: (values, onSubmitProps) => {
+            // console.log('form submit values', values);
+            dispatch(login(values));
+            // onSubmitProps.setSubmitting(false);
+            // onSubmitProps.resetForm();
+        },
         // validate,
         validationSchema
     });
