@@ -119,6 +119,9 @@ const ProfileSection = () => {
     const classes = useStyles();
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
+    const userInfo = useSelector((state) => state.auth.user);
+    userInfo.username = userInfo.username.charAt(0).toUpperCase() + userInfo.username.slice(1);
+    userInfo.role = userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1);
 
     const [sdm, setSdm] = React.useState(true);
     const [value, setValue] = React.useState('');
@@ -202,10 +205,10 @@ const ProfileSection = () => {
                                         <Grid container direction="column" spacing={0}>
                                             <Grid item className={classes.flex}>
                                                 {/* <Typography variant="h4">Good Morning,</Typography> */}
-                                                <Typography variant="h4">Raheel Saleem</Typography>
+                                                <Typography variant="h4">{userInfo.username}</Typography>
                                             </Grid>
                                             <Grid item>
-                                                <Typography variant="subtitle2">Role: Admin</Typography>
+                                                <Typography variant="subtitle2">Role: {userInfo.role}</Typography>
                                             </Grid>
                                         </Grid>
                                         <OutlinedInput

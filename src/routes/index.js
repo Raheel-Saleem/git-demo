@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
+import NotFound from '../views/pages/404Page/NotFound';
 
 // routes
 import MainRoutes from './MainRoutes';
@@ -15,8 +16,7 @@ const Routes = () => {
     return (
         <Switch>
             {isSignedIn ? <MainRoutes /> : <AuthenticationRoutes />}
-
-            <Redirect exact to="/" />
+            {/* <Redirect to="*" component={NotFound} /> */}
         </Switch>
     );
 };

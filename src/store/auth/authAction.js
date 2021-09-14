@@ -3,6 +3,8 @@ import { startLoading, stopLoading } from '../actions';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import history from '../../historty';
+import { Redirect } from 'react-router';
+import { permissionArray } from '../../utils/permissionArray';
 
 export const signin = (payload) => {
     return {
@@ -32,9 +34,10 @@ export const login = (data) => async (dispatch) => {
 
         let payload = { user, permission };
 
+        permissionArray.push(permission);
         dispatch(signin(payload));
-        history.push('/');
-
+        // history.push('/');
+        <Redirect to="/" />;
         dispatch(stopLoading());
     } catch (error) {
         console.log(error);
