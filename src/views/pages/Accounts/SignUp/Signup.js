@@ -19,20 +19,21 @@ import FormGroup from '@material-ui/core/FormGroup';
 import { Divider } from '@material-ui/core';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: theme.spacing(1),
         '& .MuiFormControl-fullWidth': {
             [theme.breakpoints.down('md')]: {
                 width: '100%'
-            },
-            width: '80%'
+            }
+            // width: '80%'
         }
     },
     paper: {
-        marginTop: theme.spacing(8),
-        marginBottom: theme.spacing(8),
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
 
         display: 'flex',
         flexDirection: 'column',
@@ -83,7 +84,7 @@ export default function SignUp() {
     return (
         <div className={classes.root}>
             <Paper className={classes.page}>
-                <Container component="main" fixed>
+                <Container component="main" maxWidth="sm">
                     <Box mx="3rem">
                         <CssBaseline />
                         <div className={classes.paper}>

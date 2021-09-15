@@ -18,7 +18,7 @@ import './assets/scss/style.scss';
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter basename={config.basename}>
+        <BrowserRouter>
             <App />
         </BrowserRouter>
     </Provider>,

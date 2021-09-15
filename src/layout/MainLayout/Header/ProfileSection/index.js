@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../../../store/actions';
 // material-ui
+import historty from '../../../../historty';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import {
     Avatar,
@@ -118,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
 const ProfileSection = () => {
     const classes = useStyles();
     const theme = useTheme();
+    const dispatch = useDispatch();
     const customization = useSelector((state) => state.customization);
     const userInfo = useSelector((state) => state.auth.user);
     userInfo.username = userInfo.username.charAt(0).toUpperCase() + userInfo.username.slice(1);
@@ -130,8 +132,9 @@ const ProfileSection = () => {
 
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
-    const handleLogout = async () => {
-        console.error('Logout');
+    const handleLogout = () => {
+        dispatch(logout());
+        historty.push('/');
     };
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);

@@ -26,7 +26,7 @@ const App = () => {
                 <CssBaseline />
                 <NavigationScroll>
                     <CircularLoader />
-                    <Routes />
+                    <Routes history={history} />
                 </NavigationScroll>
             </ThemeProvider>
         </StyledEngineProvider>

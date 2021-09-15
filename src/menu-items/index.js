@@ -6,21 +6,33 @@ import { supper } from './supper';
 
 import { permissionArray } from '../utils/permissionArray';
 //-----------------------|| MENU ITEMS ||-----------------------//
-let arr = [];
-console.log('permission ary from menu', permissionArray);
-if (permissionArray.accounts) {
-    arr.push(accounts);
-}
-if (permissionArray.purchase) {
-    arr.push(purchase);
-}
-if (permissionArray.sale) {
-    arr.push(sale);
-}
-if (permissionArray.super) {
-    arr.push(supper);
-}
-console.log('menu item permissions', arr);
+// let arr = [];
+
+// // console.log('permission ary from menu', ...permissionArray);
+// let signin = permissionArray[0];
+// // console.log('hahahah', obj.accounts);
+// let obj = {};
+// if (signin) {
+//     obj = permissionArray[1];
+// } else {
+//     obj = permissionArray[2];
+// }
+// console.log(obj);
+
+// if (obj.accounts) {
+//     arr.push(accounts);
+// }
+// if (obj.purchase) {
+//     arr.push(purchase);
+// }
+// if (obj.sale) {
+//     arr.push(sale);
+// }
+// if (obj.super) {
+//     arr.push(supper);
+// }
+
+// console.log('menu item permission', ...arr);
 const menuItems = {
     items: [accounts, purchase, sale, supper]
 };

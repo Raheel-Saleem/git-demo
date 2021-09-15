@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 import history from '../../historty';
 import { Redirect } from 'react-router';
 import { permissionArray } from '../../utils/permissionArray';
-
+import { setToken } from '../../utils/token';
 export const signin = (payload) => {
     return {
         type: LOGIN,
@@ -21,6 +21,8 @@ export const login = (data) => async (dispatch) => {
         let response = await axios.post('http://127.0.0.1:5000/login', { ...data });
 
         let token = response.data[0];
+
+        setToken(token);
         var decoded = jwt_decode(token);
         let user = {};
         user.id = decoded.id;
@@ -33,14 +35,27 @@ export const login = (data) => async (dispatch) => {
         permission.super = decoded.Supper;
 
         let payload = { user, permission };
+        // console.log('before', permissionArray);
+        // permissionArray[0].isSignedIn = true;
+        // permissionArray.push(permission);
+        // permissionArray[0].purchase = permission.purchase;
+        // permissionArray[0].sale = permission.sale;
+        // permissionArray[0].super = permission.super;
 
-        permissionArray.push(permission);
+        console.log('after', permissionArray);
+
         dispatch(signin(payload));
-        // history.push('/');
-        <Redirect to="/" />;
+        history.push('/');
+        // <Redirect to="/" />;
         dispatch(stopLoading());
     } catch (error) {
         console.log(error);
         dispatch(stopLoading());
     }
+};
+
+export const logout = () => {
+    return {
+        type: LOGOUT
+    };
 };
