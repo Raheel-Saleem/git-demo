@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,7 +20,7 @@ import { Divider } from '@material-ui/core';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: theme.spacing(1),
@@ -60,26 +60,44 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    phone: '',
+    cnic: '',
+    permission: {
+        accounts: false,
+        purchase: false,
+        sale: false,
+        supper: false
+    },
+    role: ''
+};
+const validationSchema = Yup.object({
+    firstName: Yup.string().required('Required!'),
+    lastName: Yup.string().required('Required!'),
+    email: Yup.string().email('invalid email format').required('Required!'),
+    password: Yup.string().required('Required!'),
+    phone: Yup.string().required('Required!'),
+    cnic: Yup.string().required('Required!')
+});
+
 export default function SignUp() {
     const classes = useStyles();
 
-    const [state, setState] = useState({
-        account: false,
-        sale: false,
-        purchase: false,
-        payment: false
+    const formik = useFormik({
+        initialValues
     });
-    const permissionChangeHandler = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        console.log('signUp ', [event.target.name], event.target.checked);
-    };
 
     const [value, setValue] = useState('employee');
 
     const roleChangeHandler = (event) => {
         setValue(event.target.value);
-        console.log(event.target.value);
+        // console.log(event.target.value);
     };
+    console.log('signup forms permissions', formik.values.role);
 
     return (
         <div className={classes.root}>
@@ -94,18 +112,16 @@ export default function SignUp() {
                             <Typography component="h1" variant="h5">
                                 Sign up
                             </Typography>
-                            <form className={classes.form} noValidate>
+                            <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
-                                            autoComplete="fname"
                                             name="firstName"
                                             variant="outlined"
                                             required
                                             fullWidth
-                                            id="firstName"
                                             label="First Name"
-                                            autoFocus
+                                            {...formik.getFieldProps('firstName')}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -113,10 +129,9 @@ export default function SignUp() {
                                             variant="outlined"
                                             required
                                             fullWidth
-                                            id="lastName"
                                             label="Last Name"
                                             name="lastName"
-                                            autoComplete="lname"
+                                            {...formik.getFieldProps('lastName')}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -124,10 +139,9 @@ export default function SignUp() {
                                             variant="outlined"
                                             required
                                             fullWidth
-                                            id="email"
                                             label="Email Address"
                                             name="email"
-                                            autoComplete="email"
+                                            {...formik.getFieldProps('email')}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -138,15 +152,29 @@ export default function SignUp() {
                                             name="password"
                                             label="Password"
                                             type="password"
-                                            id="password"
-                                            autoComplete="current-password"
+                                            {...formik.getFieldProps('password')}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField variant="outlined" required fullWidth label="Phone Number" autoFocus />
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="phone"
+                                            label="Phone Number"
+                                            autoFocus
+                                            {...formik.getFieldProps('phone')}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField variant="outlined" required fullWidth label="CNIC #" autoFocus />
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="cnic"
+                                            label="CNIC"
+                                            {...formik.getFieldProps('cnic')}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <FormControl component="fieldset">
@@ -156,9 +184,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={state.account}
-                                                            onChange={permissionChangeHandler}
-                                                            name="account"
+                                                            checked={formik.values.permission.accounts}
+                                                            name="permission.accounts"
+                                                            {...formik.getFieldProps('permission.accounts')}
                                                         />
                                                     }
                                                     label="Accounts"
@@ -168,9 +196,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={state.sale}
-                                                            onChange={permissionChangeHandler}
-                                                            name="sale"
+                                                            checked={formik.values.permission.sale}
+                                                            name="permission.sale"
+                                                            {...formik.getFieldProps('permission.sale')}
                                                         />
                                                     }
                                                     label="Sale Property"
@@ -179,9 +207,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={state.purchase}
-                                                            onChange={permissionChangeHandler}
-                                                            name="purchase"
+                                                            checked={formik.values.permission.purchase}
+                                                            name="permission.purchase"
+                                                            {...formik.getFieldProps('permission.purchase')}
                                                         />
                                                     }
                                                     label="Purchase Property"
@@ -190,12 +218,12 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={state.payment}
-                                                            onChange={permissionChangeHandler}
-                                                            name="payment"
+                                                            checked={formik.values.permission.supper}
+                                                            name="permission.supper"
+                                                            {...formik.getFieldProps('permission.supper')}
                                                         />
                                                     }
-                                                    label="Payments"
+                                                    label="Supper"
                                                 />
                                             </FormGroup>
                                             <FormHelperText>Be careful</FormHelperText>
@@ -208,7 +236,7 @@ export default function SignUp() {
                                             </Typography>
                                             <Divider />
                                             <FormControl component="fieldset">
-                                                <RadioGroup name="userRole" value={value} onChange={roleChangeHandler}>
+                                                <RadioGroup name="role" value={formik.values.role} {...formik.getFieldProps('role')}>
                                                     <FormControlLabel value="admin" control={<Radio color="primary" />} label="Admin" />
                                                     <FormControlLabel
                                                         value="employee"

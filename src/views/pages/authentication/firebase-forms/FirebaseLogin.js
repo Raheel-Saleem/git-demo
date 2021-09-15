@@ -107,8 +107,8 @@ const FirebaseLogin = (props, { ...others }) => {
         onSubmit: (values, onSubmitProps) => {
             // console.log('form submit values', values);
             dispatch(login(values));
-            // onSubmitProps.setSubmitting(false);
-            // onSubmitProps.resetForm();
+            onSubmitProps.setSubmitting(false);
+            onSubmitProps.resetForm();
         },
         // validate,
         validationSchema
