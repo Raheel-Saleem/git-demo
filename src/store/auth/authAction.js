@@ -6,6 +6,9 @@ import history from '../../historty';
 import { Redirect } from 'react-router';
 import { permissionArray } from '../../utils/permissionArray';
 import { setToken } from '../../utils/token';
+import server from '../../server/server';
+import swal from 'sweetalert';
+
 export const signin = (payload) => {
     return {
         type: LOGIN,
@@ -58,4 +61,22 @@ export const logout = () => {
     return {
         type: LOGOUT
     };
+};
+
+export const signup = (data) => async (dispatch) => {
+    try {
+        dispatch(startLoading());
+        console.log('before send signup req data', data);
+        const response = await server.post('/signup', data);
+        // const response = await axios.post('http://127.0.0.1:5000/signup', { data });
+
+        console.log(response.data);
+        dispatch(stopLoading());
+        swal('Congrats!', 'User Added Succesfully!', 'success');
+    } catch (error) {
+        dispatch(stopLoading());
+        swal('Oopps!', 'user email,phone,cnic may already exist or invalid !', 'error');
+
+        console.log(error.response);
+    }
 };

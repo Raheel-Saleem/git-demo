@@ -13,7 +13,7 @@ const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default'
 // sample page routing
 const SamplePage1 = Loadable(lazy(() => import('../views/sample-page/samplePage')));
 const Society = Loadable(lazy(() => import('../views/pages/Socitey/Society.js')));
-const Plot = Loadable(lazy(() => import('../views/pages/Plotscreens/Plot.js')));
+const Plot = Loadable(lazy(() => import('../views/pages/AddPlotPurchase/Plot.js')));
 const Signup = Loadable(lazy(() => import('../views/pages/Accounts/SignUp/Signup.js')));
 // const PurchasePlots = Loadable(lazy(() => import('../views/pages/PurchasePlots/PurchasePlots.js')));
 //-----------------------|| MAIN ROUTING ||-----------------------//

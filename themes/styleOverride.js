@@ -36,14 +36,14 @@ export function componentStyleOverrides(theme) {
         MuiCardContent: {
             styleOverrides: {
                 root: {
-                    padding: '12px'
+                    padding: '24px'
                 }
             }
         },
         MuiCardActions: {
             styleOverrides: {
                 root: {
-                    padding: '12px'
+                    padding: '24px'
                 }
             }
         },

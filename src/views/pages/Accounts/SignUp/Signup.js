@@ -21,6 +21,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { signup } from '../../../../store/actions';
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: theme.spacing(1),
@@ -67,7 +69,7 @@ const initialValues = {
     password: '',
     phone: '',
     cnic: '',
-    permission: {
+    permissions: {
         accounts: false,
         purchase: false,
         sale: false,
@@ -77,7 +79,6 @@ const initialValues = {
 };
 const validationSchema = Yup.object({
     firstName: Yup.string().required('Required!'),
-    lastName: Yup.string().required('Required!'),
     email: Yup.string().email('invalid email format').required('Required!'),
     password: Yup.string().required('Required!'),
     phone: Yup.string().required('Required!'),
@@ -86,18 +87,19 @@ const validationSchema = Yup.object({
 
 export default function SignUp() {
     const classes = useStyles();
-
+    const dispatch = useDispatch();
     const formik = useFormik({
-        initialValues
+        initialValues,
+        validationSchema,
+        onSubmit: (values, onSubmitProps) => {
+            // console.log('from on submit fun', values);
+            dispatch(signup(values));
+            onSubmitProps.setSubmitting(false);
+            onSubmitProps.resetForm();
+        }
     });
 
-    const [value, setValue] = useState('employee');
-
-    const roleChangeHandler = (event) => {
-        setValue(event.target.value);
-        // console.log(event.target.value);
-    };
-    console.log('signup forms permissions', formik.values.role);
+    // console.log('signup forms permissionss', formik.values.role);
 
     return (
         <div className={classes.root}>
@@ -122,6 +124,8 @@ export default function SignUp() {
                                             fullWidth
                                             label="First Name"
                                             {...formik.getFieldProps('firstName')}
+                                            error={formik.touched.firstName && formik.errors.firstName ? true : false}
+                                            helperText={formik.touched.firstName && formik.errors.firstName}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -132,6 +136,8 @@ export default function SignUp() {
                                             label="Last Name"
                                             name="lastName"
                                             {...formik.getFieldProps('lastName')}
+                                            // error={formik.touched.lastName && formik.errors.lastName ? true : false}
+                                            // helperText={formik.touched.lastName && formik.errors.lastName}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -142,6 +148,8 @@ export default function SignUp() {
                                             label="Email Address"
                                             name="email"
                                             {...formik.getFieldProps('email')}
+                                            error={formik.touched.email && formik.errors.email ? true : false}
+                                            helperText={formik.touched.email && formik.errors.email}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -153,6 +161,8 @@ export default function SignUp() {
                                             label="Password"
                                             type="password"
                                             {...formik.getFieldProps('password')}
+                                            error={formik.touched.password && formik.errors.password ? true : false}
+                                            helperText={formik.touched.password && formik.errors.password}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -162,8 +172,9 @@ export default function SignUp() {
                                             fullWidth
                                             name="phone"
                                             label="Phone Number"
-                                            autoFocus
                                             {...formik.getFieldProps('phone')}
+                                            error={formik.touched.phone && formik.errors.phone ? true : false}
+                                            helperText={formik.touched.phone && formik.errors.phone}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -174,6 +185,8 @@ export default function SignUp() {
                                             name="cnic"
                                             label="CNIC"
                                             {...formik.getFieldProps('cnic')}
+                                            error={formik.touched.cnic && formik.errors.cnic ? true : false}
+                                            helperText={formik.touched.cnic && formik.errors.cnic}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={6}>
@@ -184,9 +197,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={formik.values.permission.accounts}
-                                                            name="permission.accounts"
-                                                            {...formik.getFieldProps('permission.accounts')}
+                                                            checked={formik.values.permissions.accounts}
+                                                            name="permissions.accounts"
+                                                            {...formik.getFieldProps('permissions.accounts')}
                                                         />
                                                     }
                                                     label="Accounts"
@@ -196,9 +209,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={formik.values.permission.sale}
-                                                            name="permission.sale"
-                                                            {...formik.getFieldProps('permission.sale')}
+                                                            checked={formik.values.permissions.sale}
+                                                            name="permissions.sale"
+                                                            {...formik.getFieldProps('permissions.sale')}
                                                         />
                                                     }
                                                     label="Sale Property"
@@ -207,9 +220,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={formik.values.permission.purchase}
-                                                            name="permission.purchase"
-                                                            {...formik.getFieldProps('permission.purchase')}
+                                                            checked={formik.values.permissions.purchase}
+                                                            name="permissions.purchase"
+                                                            {...formik.getFieldProps('permissions.purchase')}
                                                         />
                                                     }
                                                     label="Purchase Property"
@@ -218,9 +231,9 @@ export default function SignUp() {
                                                     control={
                                                         <Switch
                                                             color="primary"
-                                                            checked={formik.values.permission.supper}
-                                                            name="permission.supper"
-                                                            {...formik.getFieldProps('permission.supper')}
+                                                            checked={formik.values.permissions.supper}
+                                                            name="permissions.supper"
+                                                            {...formik.getFieldProps('permissions.supper')}
                                                         />
                                                     }
                                                     label="Supper"
@@ -248,10 +261,20 @@ export default function SignUp() {
                                             </FormControl>
                                         </Paper>
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <Button
+                                            disableElevation
+                                            // disabled={isSubmitting}
+                                            fullWidth
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                        >
+                                            Sign Up
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                                <Button type="submit" variant="contained" color="primary" className={classes.submit}>
-                                    Sign Up
-                                </Button>
                             </form>
                         </div>
                     </Box>

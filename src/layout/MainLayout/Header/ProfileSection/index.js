@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../../store/actions';
+import { removeToken } from '../../../../utils/token';
 // material-ui
 import historty from '../../../../historty';
 import { makeStyles, useTheme } from '@material-ui/styles';
@@ -31,7 +32,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from '../../../../ui-component/cards/MainCard';
 import Transitions from '../../../../ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
@@ -134,6 +134,7 @@ const ProfileSection = () => {
     const anchorRef = React.useRef(null);
     const handleLogout = () => {
         dispatch(logout());
+        removeToken();
         historty.push('/');
     };
     const handleListItemClick = (event, index) => {
@@ -207,29 +208,12 @@ const ProfileSection = () => {
                                     <CardContent className={classes.cardContent}>
                                         <Grid container direction="column" spacing={0}>
                                             <Grid item className={classes.flex}>
-                                                {/* <Typography variant="h4">Good Morning,</Typography> */}
                                                 <Typography variant="h4">{userInfo.username}</Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Typography variant="subtitle2">Role: {userInfo.role}</Typography>
                                             </Grid>
                                         </Grid>
-                                        <OutlinedInput
-                                            className={classes.searchControl}
-                                            id="input-search-profile"
-                                            value={value}
-                                            onChange={(e) => setValue(e.target.value)}
-                                            placeholder="Search profile options"
-                                            startAdornment={
-                                                <InputAdornment position="start">
-                                                    <IconSearch stroke={1.5} size="1.3rem" className={classes.startAdornment} />
-                                                </InputAdornment>
-                                            }
-                                            aria-describedby="search-helper-text"
-                                            inputProps={{
-                                                'aria-label': 'weight'
-                                            }}
-                                        />
                                         <Divider />
                                         <PerfectScrollbar className={classes.ScrollHeight}>
                                             <Divider />
