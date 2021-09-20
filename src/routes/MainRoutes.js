@@ -7,6 +7,7 @@ import Loadable from '../ui-component/Loadable';
 
 // dashboard routing
 import PurchasePlots from '../views/pages/PurchasePlots/PurchasePlots.js';
+import ModalData from '../views/pages/AddPlotPurchase/ModalData';
 import NotFound from '../views/pages/404Page/NotFound';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
@@ -44,6 +45,7 @@ const MainRoutes = () => {
                     {permission.accounts && (
                         <>
                             <Route path="/acounts/signup" component={Signup} exact />
+                            <Route path="/acounts/users" component={ModalData} />
                         </>
                     )}
                     {permission.super && (

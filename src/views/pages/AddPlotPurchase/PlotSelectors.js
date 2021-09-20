@@ -35,15 +35,15 @@ const useStyles = makeStyles((theme) => {
         }
     };
 });
-function PlotSelectors() {
+function PlotSelectors(props) {
     const classes = useStyles();
-    const [societyname, setSociety] = useState('');
+    const [societyname, setSociety] = useState(null);
     const [societyData, setSocietyData] = useState('');
 
-    const [sectorno, setSector] = useState('');
+    const [sectorno, setSector] = useState(null);
     const [sectorData, setSectorData] = useState('');
 
-    const [plot, setPlot] = useState('');
+    const [plot, setPlot] = useState(null);
     const [plotData, setPlotData] = useState('');
 
     useEffect(() => {
@@ -83,42 +83,46 @@ function PlotSelectors() {
         loadPlots();
     }, [societyname, sectorno]);
 
-    useEffect(() => {
-        console.log('select values from scociety: ', societyname);
-        console.log('select values from sector: ', sectorno);
-        console.log('select values from plot: ', plot);
-    }, [societyname, sectorno, plot, societyData]);
+    // useEffect(() => {
+    //     console.log('select values from scociety: ', societyname);
+    //     console.log('select values from sector: ', sectorno);
+    //     console.log('select values from plot: ', plot);
+    // }, [societyname, sectorno, plot, societyData]);
 
     const handleSociety = (value) => {
         // console.log('value from handleSocity', value);
 
         if (value === null) {
-            setSector('');
-            setPlot('');
-            setSociety('');
+            setSector(null);
+            setPlot(null);
+            setSociety(null);
         } else {
             setSociety(value);
         }
     };
     const handleSector = (value) => {
         if (value === null) {
-            setSector('');
-            setPlot('');
-            setSociety('');
+            setSector(null);
+            setPlot(null);
+            setSociety(null);
         } else {
             setSector(value);
         }
     };
     const handlePlot = (value) => {
         if (value === null) {
-            setSector('');
-            setPlot('');
-            setSociety('');
+            setSector(null);
+            setPlot(null);
+            setSociety(null);
         } else {
             setPlot(value);
         }
     };
-
+    if (societyname && sectorno && plot !== null) {
+        let values = { societyname, sectorno, plot };
+        console.log(values);
+        props.onSelecteorValues(values);
+    }
     return (
         <div className={classes.root}>
             <Paper elevation={0}>

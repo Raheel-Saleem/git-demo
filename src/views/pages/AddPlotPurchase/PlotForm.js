@@ -1,9 +1,10 @@
+import React, { useEffect } from 'react';
 import { FormControl, Grid, TextField, Typography, FormControlLabel } from '@material-ui/core';
 import { Button, RadioGroup, Radio } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/styles';
-
-import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 const useStyles = makeStyles((theme) => {
     return {
         root: {
@@ -39,30 +40,62 @@ const useStyles = makeStyles((theme) => {
         }
     };
 });
-function PlotForm() {
+
+const initialValues = {
+    plotownername: '',
+    plotamount: '',
+    development: false,
+    description: ''
+};
+
+const validationSchema = Yup.object({
+    plotownername: Yup.string().required('Required!'),
+    plotamount: Yup.string().required('Required!')
+});
+
+function PlotForm(props) {
     const classes = useStyles();
-
-    const [value, setValue] = React.useState('general');
-
-    const devTypeChangeHandler = (event) => {
-        setValue(event.target.value);
-        console.log(event.target.value);
-    };
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit: (values, onSubmitProps) => {
+            props.onSetFormData(values);
+            onSubmitProps.setSubmitting(false);
+            onSubmitProps.resetForm();
+        }
+    });
 
     return (
-        <form className={classes.root}>
+        <form className={classes.root} onSubmit={formik.handleSubmit}>
             <Grid container spacing={1}>
                 <Grid item xs={12} md={6}>
                     <Typography variant="h6" className={classes.label}>
                         Plot Owner Name:
                     </Typography>
-                    <TextField variant="outlined" fullWidth size="small" />
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        name="plotownername"
+                        {...formik.getFieldProps('plotownername')}
+                        error={formik.touched.plotownername && formik.errors.plotownername ? true : false}
+                        helperText={formik.touched.plotownername && formik.errors.plotownername}
+                    />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant="h6" className={classes.label}>
                         Plot Ammount(Rs.):
                     </Typography>
-                    <TextField variant="outlined" fullWidth size="small" placeholder="x,xx,xxxRs." />
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        placeholder="x,xx,xxxRs."
+                        name="plotamount"
+                        {...formik.getFieldProps('plotamount')}
+                        error={formik.touched.plotamount && formik.errors.plotamount ? true : false}
+                        helperText={formik.touched.plotamount && formik.errors.plotamount}
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={12}>
@@ -70,7 +103,7 @@ function PlotForm() {
                         Select Type:
                     </Typography>
                     <FormControl component="fieldset">
-                        <RadioGroup name="plotdevtype" value={value} onChange={devTypeChangeHandler}>
+                        <RadioGroup name="development" value={formik.values.development} {...formik.getFieldProps('development')}>
                             <FormControlLabel value="true" control={<Radio color="primary" />} label="With Development" />
                             <FormControlLabel value="false" control={<Radio color="primary" />} label="Without Development" />
                         </RadioGroup>
@@ -81,11 +114,11 @@ function PlotForm() {
                     <Typography variant="h6" className={classes.label}>
                         Description:
                     </Typography>
-                    <TextField multiline rows={4} rowsMax={6} variant="outlined" fullWidth size="small" />
+                    <TextField multiline rows={4} rowsMax={6} variant="outlined" fullWidth size="small" name="description" />
                 </Grid>
                 <Grid item fixed>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button size="large" variant="contained" color="primary" startIcon={<SendIcon />}>
+                        <Button type="submit" size="large" variant="contained" color="primary" startIcon={<SendIcon />}>
                             Send
                         </Button>
                     </div>

@@ -10,8 +10,8 @@ const useStyles = makeStyles((theme) => {
         },
         pageHeader: {
             display: 'flex',
-            padding: theme.spacing(2),
-            marginBottom: theme.spacing(2)
+            padding: theme.spacing(2)
+            // marginBottom: theme.spacing(2)
         },
         pageTitle: {
             paddingLeft: theme.spacing(1),
