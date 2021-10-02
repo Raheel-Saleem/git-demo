@@ -1,9 +1,9 @@
-import { Paper } from '@material-ui/core';
-import { Grid, Typography } from '@material-ui/core';
+import { Paper, Stack } from '@material-ui/core';
+import { Grid, Typography, Box, Button } from '@material-ui/core';
 import React from 'react';
 import AsyncSelector from '../../../ui-component/controls/AsyncSelector';
 import { makeStyles } from '@material-ui/styles';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import server from '../../../server/server';
 const useStyles = makeStyles((theme) => {
     return {
@@ -14,29 +14,30 @@ const useStyles = makeStyles((theme) => {
                 width: '80%'
             },
             '& .MuiPaper-root': {
-                background: 'lavender'
+                background: theme.palette.primary.light
             }
         },
-        selector: {
-            margin: 'auto',
-            width: '80%',
-            height: 40,
-            border: '1px',
-            borderRadius: '12px',
-            backgroundColor: theme.palette.primary.main,
-            color: 'white',
-            textAlign: 'center'
-        },
+
         space: {
             margin: 5
         },
         itemSpacing: {
             padding: 10
+        },
+        box: {
+            // height: 40,
+            display: 'flex',
+            padding: 8
+        },
+        bottomLeftBox: {
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end'
         }
     };
 });
-function PlotSelectors(props) {
+const PlotSelectors = forwardRef(({ onSelecteorValues, resetUpper }, ref) => {
     const classes = useStyles();
+
     const [societyname, setSociety] = useState(null);
     const [societyData, setSocietyData] = useState('');
 
@@ -46,6 +47,26 @@ function PlotSelectors(props) {
     const [plot, setPlot] = useState(null);
     const [plotData, setPlotData] = useState('');
 
+    // const resetSelector = (obj) => {
+    //     let keys = Object.keys(obj);
+    //     keys.forEach((key) => {
+    //         if (Boolean(obj[key])) {
+    //             obj[key] = false;
+    //         } else {
+    //             obj[key] = null;
+    //         }
+    //     });
+    // };
+
+    const resetSelector = () => {
+        setSociety(null);
+        setSector(null);
+        setPlot(null);
+    };
+    useImperativeHandle(ref, () => ({
+        resetSelector: () => resetSelector()
+    }));
+    // Load All Society Names
     useEffect(() => {
         const loadSocities = async () => {
             const response = await server.get('/getsocietiesname');
@@ -54,6 +75,8 @@ function PlotSelectors(props) {
         };
         loadSocities();
     }, []);
+
+    //******* Load All Setor Number Against Selected Society***********
 
     useEffect(() => {
         const loadSectors = async () => {
@@ -69,6 +92,7 @@ function PlotSelectors(props) {
         loadSectors();
     }, [societyname]);
 
+    // Load All Plot Against society & sectors
     useEffect(() => {
         const loadPlots = async () => {
             try {
@@ -83,46 +107,43 @@ function PlotSelectors(props) {
         loadPlots();
     }, [societyname, sectorno]);
 
-    // useEffect(() => {
-    //     console.log('select values from scociety: ', societyname);
-    //     console.log('select values from sector: ', sectorno);
-    //     console.log('select values from plot: ', plot);
-    // }, [societyname, sectorno, plot, societyData]);
-
     const handleSociety = (value) => {
-        // console.log('value from handleSocity', value);
+        console.log('value from handleSocity', value);
 
         if (value === null) {
-            setSector(null);
-            setPlot(null);
-            setSociety(null);
+            resetSelector();
         } else {
             setSociety(value);
         }
     };
     const handleSector = (value) => {
         if (value === null) {
-            setSector(null);
-            setPlot(null);
-            setSociety(null);
+            resetSelector();
         } else {
             setSector(value);
         }
     };
     const handlePlot = (value) => {
         if (value === null) {
-            setSector(null);
-            setPlot(null);
-            setSociety(null);
+            resetSelector();
         } else {
             setPlot(value);
         }
     };
-    if (societyname && sectorno && plot !== null) {
-        let values = { societyname, sectorno, plot };
-        console.log(values);
-        props.onSelecteorValues(values);
-    }
+
+    const setSelectorOnParent = () => {
+        if (societyname && sectorno && plot) {
+            let valuesSelected = { societyname, sectorno, plot };
+            // console.log('Selected Obect', valuesSelected);
+            onSelecteorValues((prevState) => {
+                return {
+                    ...prevState,
+                    ...valuesSelected
+                };
+            });
+        }
+    };
+
     return (
         <div className={classes.root}>
             <Paper elevation={0}>
@@ -137,9 +158,37 @@ function PlotSelectors(props) {
                         <AsyncSelector data={plotData} label={'Plot Number'} onSelectedValue={handlePlot} value={plot} />
                     </Grid>
                 </Grid>
+                <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="flex-end">
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                        type="submit"
+                        onClick={() => {
+                            resetSelector();
+                            resetUpper();
+                        }}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                        type="submit"
+                        onClick={setSelectorOnParent}
+                    >
+                        Save
+                    </Button>
+                </Stack>
+                {/* <Box component="span" className={`${classes.bottomLeftBox} ${classes.box}`}>
+                    <Button variant="contained" color="primary" style={{ height: 40 }} type="submit" onClick={setSelectorOnParent}>
+                        Okay
+                    </Button>
+                </Box> */}
             </Paper>
         </div>
     );
-}
+});
 
 export default PlotSelectors;

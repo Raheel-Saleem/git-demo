@@ -6,10 +6,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Stack } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import CloseIcon from '@material-ui/icons/Close';
+import swal from 'sweetalert';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 const StyledTableCell = withStyles((theme) => ({
     body: {
         color: 'black',
@@ -50,9 +55,16 @@ const useStyles = makeStyles({
     }
 });
 
-export default function CustomizedTables() {
+export default function ModalData({ Close, selector, form, sendRequest, resetLower, resetUpper, resetall }) {
+    const dispatch = useDispatch();
     const classes = useStyles();
+    let { sectorno, societyname, plot } = selector;
+    let { plotownername, plotamount, development } = form;
+    // console.log('modal line 58', sectorno, societyname, plot);
 
+    const handleHttp = () => {
+        sendRequest(selector, form, dispatch);
+    };
     return (
         <div>
             <TableContainer component={Paper} className={classes.container}>
@@ -66,12 +78,12 @@ export default function CustomizedTables() {
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Society Name'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'Sabsazar'}</StyledTableCell>
+                            <StyledTableCell align="center">{societyname}</StyledTableCell>
 
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Sector Number'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'D-Block'}</StyledTableCell>
+                            <StyledTableCell align="center">{sectorno}</StyledTableCell>
                         </StyledTableRow>
 
                         {/*  ################### {2nd Row}##################### */}
@@ -80,12 +92,12 @@ export default function CustomizedTables() {
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Plot Number'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'431'}</StyledTableCell>
+                            <StyledTableCell align="center">{plot}</StyledTableCell>
 
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Plot Owner'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'Raheel'}</StyledTableCell>
+                            <StyledTableCell align="center">{plotownername}</StyledTableCell>
                         </StyledTableRow>
 
                         {/*  ################### {3rd Row}##################### */}
@@ -94,50 +106,48 @@ export default function CustomizedTables() {
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Plot Amount'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'43,00,000. Rs'}</StyledTableCell>
+                            <StyledTableCell align="center">{plotamount}</StyledTableCell>
 
                             <StyledTableCell align="left" className={classes.subheader}>
                                 {'Development'}
                             </StyledTableCell>
-                            <StyledTableCell align="center">{'Yes'}</StyledTableCell>
+                            <StyledTableCell align="center">{development}</StyledTableCell>
                         </StyledTableRow>
                     </TableBody>
                 </Table>
-                <Box component="span" className={`${classes.bottomLeftBox} ${classes.box}`}>
-                    <Button variant="contained" color="primary" style={{ height: 40 }} type="submit" startIcon={<DoneAllIcon />}>
-                        Okay
+                <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="flex-end">
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        style={{ height: 40, margin: 10 }}
+                        type="submit"
+                        startIcon={<CloseIcon />}
+                        onClick={(event) => {
+                            Close();
+                            resetUpper();
+                            resetLower();
+                            resetall();
+                        }}
+                    >
+                        Cancel
                     </Button>
-                </Box>
-
-                {/* <div style={{ margin: 5, display: 'flex', justify: 'spacebetwee' }}>
-                    <div style={{ margin: 5, display: 'inline-block', position: 'relative' }}>
-                        <Button
-                            disableElevation
-                            type="submit"
-                            size="medium"
-                            variant="contained"
-                            color="primary"
-                            startIcon={<CheckCircleOutlineIcon />}
-                        >
-                            Ok
-                        </Button>
-                    </div>
-                </div> */}
-                {/* <div className={classes.contain}>
-                     <div className={'left-element'}>left</div>
-                    <div className={classes.right}>
-                        <Button
-                            disableElevation
-                            type="submit"
-                            size="medium"
-                            variant="contained"
-                            color="primary"
-                            startIcon={<CheckCircleOutlineIcon />}
-                        >
-                            Ok
-                        </Button>
-                    </div>
-                </div> */}
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ height: 40, margin: 10 }}
+                        type="submit"
+                        startIcon={<DoneAllIcon />}
+                        onClick={(event) => {
+                            Close();
+                            handleHttp();
+                            resetUpper();
+                            resetLower();
+                            resetall();
+                        }}
+                    >
+                        OKAY
+                    </Button>
+                </Stack>
             </TableContainer>
         </div>
     );

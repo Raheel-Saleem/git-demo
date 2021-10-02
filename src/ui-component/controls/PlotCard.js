@@ -8,18 +8,26 @@ const useStyles = makeStyles((theme) => {
         root: {
             maxWidth: 320,
             maxHeight: 280,
-            margin: theme.spacing(3)
+            margin: theme.spacing(3),
+            '& MuiCardHeader-root': {
+                padding: '12px important'
+            },
+            '& MuiCardContent-root': {
+                padding: '12px important'
+            }
         },
         avatar: {
-            backgroundColor: indigo[500]
-        }
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.getContrastText(theme.palette.secondary.light)
+        },
+        cardHeader: {}
     };
 });
 function PlotCard() {
     const classes = useStyles();
     return (
         <Fragment>
-            <Card className={classes.root} elevation={3}>
+            <Card className={classes.root} elevation={0}>
                 <CardHeader
                     avatar={
                         <Avatar aria-label="recipe" className={classes.avatar}>

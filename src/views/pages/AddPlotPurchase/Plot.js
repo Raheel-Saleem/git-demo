@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Grid, Paper, Card } from '@material-ui/core';
 import PageHeader from '../../../ui-component/PageHeader';
 import StoreIcon from '@material-ui/icons/Store';
@@ -6,13 +6,10 @@ import PlotForm from './PlotForm';
 import PlotSelectors from './PlotSelectors';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import ModalData from './ModalData';
+import server from '../../../server/server';
+import swal from 'sweetalert';
+import { startLoading, stopLoading } from '../../../store/actions';
 const obj = {
     icon: <StoreIcon fontSize="large" />,
     pageTitle: 'Add Plot',
@@ -29,9 +26,51 @@ const useStyles = makeStyles((theme) => {
         }
     };
 });
+const initialSelectObj = {
+    societyname: '',
+    sectorno: '',
+    plot: ''
+};
+const initialFormObj = {
+    plotownername: '',
+    plotamount: '',
+    development: false,
+    description: ''
+};
+const sendRequest = async (selectorData, formData, dispatch) => {
+    try {
+        dispatch(startLoading());
+        let data = { ...selectorData, ...formData };
+        console.log('from sending request data===>', data);
+        let response = await server.post('/plottopurchase', { ...data });
+        dispatch(stopLoading());
+
+        if (response.status === 200) {
+            swal('Success!', 'Plot Added Succesfully!', 'success');
+        }
+        if (response.status === 400) {
+            swal('Error!', 'Society Name, Sector or Plot may not exist!', 'error');
+        }
+    } catch (error) {
+        dispatch(stopLoading());
+        swal('Error!', 'Something went wrong,try again!', 'error');
+    }
+};
+
 function Plot() {
+    const resetChild = useRef();
     const classes = useStyles();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [selector, setSelector] = useState(initialSelectObj);
+    const [form, setForm] = useState(initialFormObj);
+    const resetUpper = () => {
+        setSelector(initialSelectObj);
+    };
+    const resetLower = () => {
+        setForm(initialFormObj);
+    };
+
+    // console.log(Object.keys(data).length);
     const handleOpen = () => {
         setOpen(true);
     };
@@ -39,26 +78,15 @@ function Plot() {
     const handleClose = () => {
         setOpen(false);
     };
+    // const handleStateSelector=(values)=
 
-    const handleSelector = (selectedValues) => {
-        const plotSelectorValues = {
-            ...selectedValues
-        };
-
-        console.log('plotSelectorValues==>', plotSelectorValues);
-    };
-    const handleForm = (values) => {
-        const formValues = {
-            ...values
-        };
-        console.log('formValues==>', formValues);
+    const handleResetChild = () => {
+        resetChild.current.resetSelector();
     };
 
-    const body = (
-        <div>
-            <ModalData />
-        </div>
-    );
+    useEffect(() => {
+        console.log(' selector data from useEffect in plot file', selector, form);
+    }, [selector, form]);
 
     return (
         <div>
@@ -69,14 +97,22 @@ function Plot() {
                 aria-describedby="simple-modal-description"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-                {body}
+                <ModalData
+                    selector={selector}
+                    form={form}
+                    Close={handleClose}
+                    sendRequest={sendRequest}
+                    resetLower={resetLower}
+                    resetUpper={resetUpper}
+                    resetall={handleResetChild}
+                />
             </Modal>
             <PageHeader obj={obj} />
             <Paper className={classes.root}>
                 <div className={classes.selectBar}>
-                    <PlotSelectors onSelecteorValues={handleSelector} />
+                    <PlotSelectors onSelecteorValues={setSelector} resetUpper={resetUpper} ref={resetChild} />
                 </div>
-                <PlotForm onSetFormData={handleForm} />
+                <PlotForm onSetFormData={setForm} openModal={handleOpen} />
             </Paper>
         </div>
     );

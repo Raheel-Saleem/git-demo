@@ -5,23 +5,35 @@ function PlotGrid() {
     return (
         <div>
             <Grid container fixed>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4} alignContent="cenetr" alignItems="center">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4} alignContent="cenetr" alignItems="center">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4} alignContent="cenetr" alignItems="center">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4} alignContent="cenetr" alignItems="center">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
-                <Grid item spacing={3} xs={12} sm={6} md={4}>
-                    <PlotCard />
+                <Grid item spacing={1} xs={12} sm={6} md={6} lg={4} alignContent="cenetr" alignItems="center">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <PlotCard />
+                    </div>
                 </Grid>
             </Grid>
         </div>

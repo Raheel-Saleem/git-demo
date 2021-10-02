@@ -7,8 +7,10 @@ import Loadable from '../ui-component/Loadable';
 
 // dashboard routing
 import PurchasePlots from '../views/pages/PurchasePlots/PurchasePlots.js';
-import ModalData from '../views/pages/AddPlotPurchase/ModalData';
+import UserTable from '../views/pages/Accounts/UserTable/UserTable';
+import PartnerAcc from '../views/pages/Accounts/PartnerAccDetails/PartnerAcc';
 import NotFound from '../views/pages/404Page/NotFound';
+import AccountForm from '../views/pages/Accounts/AccountForm/Account';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -24,7 +26,7 @@ const MainRoutes = () => {
     const permission = useSelector((state) => state.auth.permission);
     const pathArray = [];
     if (permission.accounts) {
-        pathArray.push('/acounts/signup', '/acounts/users', '/acounts/details');
+        pathArray.push('/acounts/signup', '/acounts/users', '/acounts/partneracc', '/acounts/form');
     }
     if (permission.purchase) {
         pathArray.push('/', '/purchase/summary');
@@ -45,7 +47,9 @@ const MainRoutes = () => {
                     {permission.accounts && (
                         <>
                             <Route path="/acounts/signup" component={Signup} exact />
-                            <Route path="/acounts/users" component={ModalData} />
+                            <Route path="/acounts/users" component={UserTable} />
+                            <Route path="/acounts/partneracc" component={PartnerAcc} />
+                            <Route path="/acounts/form" component={AccountForm} />
                         </>
                     )}
                     {permission.super && (

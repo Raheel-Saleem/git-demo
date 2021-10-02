@@ -53,13 +53,19 @@ const validationSchema = Yup.object({
     plotamount: Yup.string().required('Required!')
 });
 
-function PlotForm(props) {
+function PlotForm({ onSetFormData, openModal }) {
     const classes = useStyles();
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: (values, onSubmitProps) => {
-            props.onSetFormData(values);
+            onSetFormData((prevState) => {
+                return {
+                    ...prevState,
+                    ...values
+                };
+            });
+            openModal();
             onSubmitProps.setSubmitting(false);
             onSubmitProps.resetForm();
         }
@@ -90,6 +96,7 @@ function PlotForm(props) {
                         variant="outlined"
                         fullWidth
                         size="small"
+                        type="number"
                         placeholder="x,xx,xxxRs."
                         name="plotamount"
                         {...formik.getFieldProps('plotamount')}
@@ -114,7 +121,16 @@ function PlotForm(props) {
                     <Typography variant="h6" className={classes.label}>
                         Description:
                     </Typography>
-                    <TextField multiline rows={4} rowsMax={6} variant="outlined" fullWidth size="small" name="description" />
+                    <TextField
+                        multiline
+                        rows={4}
+                        rowsMax={6}
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        name="description"
+                        {...formik.getFieldProps('description')}
+                    />
                 </Grid>
                 <Grid item fixed>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
