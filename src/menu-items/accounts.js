@@ -32,12 +32,6 @@ export const accounts = {
                     title: 'Partner Account Detail',
                     type: 'item',
                     url: '/acounts/partneracc'
-                },
-                {
-                    id: 'acc-detail-form',
-                    title: 'Account Detail Form',
-                    type: 'item',
-                    url: '/acounts/form'
                 }
             ]
         }

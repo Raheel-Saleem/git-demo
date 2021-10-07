@@ -21,7 +21,7 @@ export const login = (data) => async (dispatch) => {
     try {
         dispatch(startLoading());
 
-        let response = await axios.post('http://127.0.0.1:5000/login', { ...data });
+        let response = await server.post('/login', { ...data });
 
         let token = response.data[0];
 

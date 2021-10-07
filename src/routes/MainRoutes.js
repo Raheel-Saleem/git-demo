@@ -49,7 +49,7 @@ const MainRoutes = () => {
                             <Route path="/acounts/signup" component={Signup} exact />
                             <Route path="/acounts/users" component={UserTable} />
                             <Route path="/acounts/partneracc" component={PartnerAcc} />
-                            <Route path="/acounts/form" component={AccountForm} />
+                            <Route path="/acounts/open/:id" component={AccountForm} />
                         </>
                     )}
                     {permission.super && (

@@ -2,9 +2,9 @@ import React from 'react';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import PageHeader from '../../../../ui-component/PageHeader';
-import AccountForm from './AccountForm';
+import AccountForm from './Forms/AccountForm';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import PaymentDetailsAcord from './PaymentDetailsAcord';
+import Chekout from './ChekoutMain';
 const obj = {
     icon: <AccountBoxIcon fontSize="large" />,
     pageTitle: 'Accounts Details',
@@ -22,9 +22,9 @@ function Account() {
     const classes = useStyles();
     return (
         <div>
-            <PageHeader obj={obj} />
+            {/* <PageHeader obj={obj} /> */}
             {/* <Paper className={classes.root}> */}
-            <AccountForm />
+            <Chekout />
             {/* </Paper> */}
         </div>
     );
