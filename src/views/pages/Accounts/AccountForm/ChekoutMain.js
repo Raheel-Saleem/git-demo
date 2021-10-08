@@ -39,6 +39,9 @@ function getStepContent(step) {
 export default function Checkout() {
     const dispatch = useDispatch();
     const history = useHistory();
+    const goToPreviousPath = () => {
+        history.goBack();
+    };
     let { id } = useParams();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
@@ -168,7 +171,8 @@ export default function Checkout() {
                                 <Button
                                     color="secondary"
                                     variant="contained"
-                                    onClick={(e) => history.push('/acounts/partneracc')}
+                                    // onClick={(e) => history.push('/acounts/partneracc')}
+                                    onClick={goToPreviousPath}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
                                     Partner Table

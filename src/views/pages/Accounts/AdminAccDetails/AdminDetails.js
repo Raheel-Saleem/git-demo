@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 let Partners = [];
 
-function UserTable() {
+function AdminAccDetails() {
     const classes = useStyles();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -69,7 +69,7 @@ function UserTable() {
         const loadPartner = async () => {
             try {
                 setLoading(true);
-                let response = await server.get('/getallpartners');
+                let response = await server.get('/getalladmins');
 
                 Partners = response.data;
                 setLoading(false);
@@ -172,4 +172,4 @@ function UserTable() {
     );
 }
 
-export default UserTable;
+export default AdminAccDetails;
