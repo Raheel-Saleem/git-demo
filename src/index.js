@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 
 // project imports
 import { store } from './store';
-import * as serviceWorker from './serviceWorker';
 import App from './App';
 import config from './config';
 

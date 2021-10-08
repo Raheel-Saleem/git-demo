@@ -84,9 +84,9 @@ function Plot() {
         resetChild.current.resetSelector();
     };
 
-    useEffect(() => {
-        console.log(' selector data from useEffect in plot file', selector, form);
-    }, [selector, form]);
+    // useEffect(() => {
+    //     console.log(' selector data from useEffect in plot file', selector, form);
+    // }, [selector, form]);
 
     return (
         <div>

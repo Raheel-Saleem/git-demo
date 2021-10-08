@@ -80,11 +80,11 @@ function SocietyForm() {
                 }
             } catch (error) {
                 dispatch(stopLoading());
-                // console.log(error.response);
+                console.log(error);
 
-                if (error.response.status === 400) {
-                    swal('Oopps!', 'plot#.sector# name may  already exist!', 'error');
-                } else swal('Oopps!', 'Something went wrong,check your connecntion and try again', 'error');
+                // if (error.response.status === 400) {
+                //     swal('Oopps!', 'plot#.sector# name may  already exist!', 'error');
+                // } else swal('Oopps!', 'Something went wrong,check your connecntion and try again', 'error');
             }
             onSubmitProps.setSubmitting(false);
             onSubmitProps.resetForm();
@@ -146,7 +146,7 @@ function SocietyForm() {
                         variant="outlined"
                         fullWidth
                         size="small"
-                        type="number"
+                        type="text"
                         {...formik.getFieldProps('plotsize')}
                         error={formik.touched.plotsize && formik.errors.plotsize ? true : false}
                         helperText={formik.touched.plotsize && formik.errors.plotsize}
