@@ -59,6 +59,7 @@ export default function Review() {
         bankName,
         accNo,
         amountToInvest,
+        amountInCash,
         chequeAmount,
         noOfCheques,
         chequeNo,
@@ -67,6 +68,8 @@ export default function Review() {
         noOfPayOrder,
         payOrderNo,
         payorderDescription,
+        onlineTransfer,
+
         onlineDescription
     } = formValues;
     return (
@@ -96,6 +99,10 @@ export default function Review() {
                 <ListItem key={'Amount To Invest'} sx={{ py: 1, px: 0 }}>
                     <ListItemText primary={'Amount To Invest'} inset primaryTypographyProps={{ fontWeight: '600' }} />
                     <Typography variant="body2">{amountToInvest}</Typography>
+                </ListItem>
+                <ListItem key={'Amount To Invest'} sx={{ py: 1, px: 0 }}>
+                    <ListItemText primary={'Amount In Cash'} inset primaryTypographyProps={{ fontWeight: '600' }} />
+                    <Typography variant="body2">{amountInCash}</Typography>
                 </ListItem>
             </Box>
             <Divider />
@@ -136,6 +143,12 @@ export default function Review() {
                 <ListItem key={'Payorder Number'} sx={{ py: 1, px: 0 }}>
                     <ListItemText primary={'Cheque Number'} inset primaryTypographyProps={{ fontWeight: '600' }} />
                     <Typography variant="body2">{payOrderNo}</Typography>
+                </ListItem>
+            </Box>
+            <Box sx={{ m: 0.5, p: 0.5 }}>
+                <ListItem key={'Online Amount'} sx={{ py: 1, px: 0 }}>
+                    <ListItemText primary={'Online Amount'} inset primaryTypographyProps={{ fontWeight: '600' }} />
+                    <Typography variant="body2">{onlineTransfer}</Typography>
                 </ListItem>
             </Box>
             <Divider />

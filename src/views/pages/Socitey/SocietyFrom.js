@@ -78,10 +78,13 @@ function SocietyForm() {
                 if (response.status === 200) {
                     swal('Success!', 'Society Added Succesfully!', 'success');
                 }
+                if (response.status === 400) {
+                    swal('Error!', 'Society , Sector, or plot# in same sector may already exist!', 'error');
+                }
             } catch (error) {
                 dispatch(stopLoading());
                 console.log(error);
-
+                swal('Oopps!', 'Something went wrong,check your connecntion and try again', 'error');
                 // if (error.response.status === 400) {
                 //     swal('Oopps!', 'plot#.sector# name may  already exist!', 'error');
                 // } else swal('Oopps!', 'Something went wrong,check your connecntion and try again', 'error');

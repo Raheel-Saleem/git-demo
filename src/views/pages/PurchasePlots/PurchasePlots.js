@@ -28,11 +28,11 @@ function PurchaseProperty() {
     return (
         <Fragment>
             {/* <PageHeader obj={obj} /> */}
-            <Paper className={classes.root}>
-                <div>
-                    <PlotGrid />
-                </div>
-            </Paper>
+            {/* <Paper className={classes.root}> */}
+            <div>
+                <PlotGrid />
+            </div>
+            {/* </Paper> */}
         </Fragment>
     );
 }
