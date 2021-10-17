@@ -16,11 +16,10 @@ const AuthenticationRoutes = () => {
     const location = useLocation();
 
     return (
-        <Route path={['/', '/pages/register/register3']}>
+        <Route path={['/']}>
             <Switch location={location} key={location.pathname}>
                 <MinimalLayout>
                     <Route path="/" component={Login} />
-                    <Route path="/pages/register/register3" component={AuthRegister3} />
                 </MinimalLayout>
                 {/* <Route path="/notfound" component={NotFound} /> */}
                 {/* <Redirect to="*" component={NotFound} /> */}
