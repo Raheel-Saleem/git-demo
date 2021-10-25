@@ -1,6 +1,5 @@
 import { LOGIN, LOGOUT } from './authConstant';
 import { startLoading, stopLoading } from '../actions';
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import history from '../../historty';
 import { Redirect } from 'react-router';
@@ -38,12 +37,7 @@ export const login = (data) => async (dispatch) => {
         permission.super = decoded.Supper;
 
         let payload = { user, permission };
-        // console.log('before', permissionArray);
-        // permissionArray[0].isSignedIn = true;
-        // permissionArray.push(permission);
-        // permissionArray[0].purchase = permission.purchase;
-        // permissionArray[0].sale = permission.sale;
-        // permissionArray[0].super = permission.super;
+
 
         console.log('after', permissionArray);
 
@@ -52,7 +46,12 @@ export const login = (data) => async (dispatch) => {
         // <Redirect to="/" />;
         dispatch(stopLoading());
     } catch (error) {
-        console.log(error);
+        if (error && error.response && error.response.status && error.response.status === 400) {
+            swal('Oopps!', 'user email,phone,cnic may already exist or invalid !', 'error');
+        }
+        if (error && error.response && error.response.status && error.response.status === 500) {
+            swal('Oopps!', 'Something went wrong! Please check your network', 'error');
+        }
         dispatch(stopLoading());
     }
 };
