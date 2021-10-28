@@ -17,6 +17,7 @@ import swal from 'sweetalert';
 import { startLoading, stopLoading } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
 const steps = ["Add Partner", 'Account Information', 'Cheque ', "Token Information", 'Pay Order', 'Online Transfer', 'Review your order'];
 
 const { formId, formField } = accountFormModel;
@@ -36,7 +37,7 @@ export default function Checkout() {
   const [selectedPartners, setSelectedPartners] = useState([])
 
   const isLastStep = activeStep === steps.length - 1;
-  console.log(activeStep, "::::::::::::::::::::::::::::::::::")
+
   useEffect(() => {
     (async () => {
       try {
@@ -112,7 +113,7 @@ export default function Checkout() {
   const submitForms = async (values) => {
     try {
       dispatch(startLoading());
-      let response = await server.post('/payments', { ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo });
+      let response = await server.post('/payments', { ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo, userid: selectedPartners });
       dispatch(stopLoading());
 
       if (response.status === 200) {
@@ -218,7 +219,7 @@ export default function Checkout() {
                       type="submit"
                       disable={isSubmitting}
                     >
-                      {activeStep === steps.length - 1 ? 'Open Account' : 'Next'}
+                      {activeStep === steps.length - 1 ? 'Buy Property' : 'Next'}
                     </Button>
                   </Box>
                 </Form>

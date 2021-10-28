@@ -29,7 +29,7 @@ const {
 const validationSchema = [
     Yup.object().shape({
         [userid.name]: Yup.array().of(Yup.object().shape({
-            id: Yup.number().required(), name: Yup.string().required(), amount: Yup.string().required()
+            id: Yup.number(), name: Yup.string(), amount: Yup.string()
         }))
     }),
     Yup.object().shape({

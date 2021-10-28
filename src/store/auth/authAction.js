@@ -41,7 +41,7 @@ export const login = (data) => async (dispatch) => {
         console.log('after', permissionArray);
 
         dispatch(signin(payload));
-        history.push('/');
+        history.push('/?plot=buy');
         dispatch(stopLoading());
     } catch (error) {
         if (error && error.response && error.response.status && error.response.status === 400) {

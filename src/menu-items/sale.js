@@ -18,7 +18,7 @@ export const sale = {
                     title: 'Sale Plots',
                     type: 'item',
                     // icon: icons['AccountBoxIcon'],
-                    url: '/sale/plots'
+                    url: '/?plot=sell'
                     // target: true
                 },
                 {

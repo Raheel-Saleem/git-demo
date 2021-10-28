@@ -30,7 +30,7 @@ const useStyles = makeStyles(
   { defaultTheme },
 );
 
-export default function ConditionalValidationGrid({ setValues, partnersData, setPartnersData, selectedPartners, setSelectedPartners }) {
+export default function ConditionalValidationGrid({ partnersData, setPartnersData, selectedPartners, setSelectedPartners }) {
   const classes = useStyles();
   // const dispatch = useDispatch();
   const [partner, setPartner] = useState("");
@@ -61,7 +61,7 @@ export default function ConditionalValidationGrid({ setValues, partnersData, set
           let newPartnersData = [...partnersData];
           newPartnersData.splice(i, 1);
           setPartnersData(newPartnersData)
-          setValues("userid", selectedPartners)
+          // setValues("userid", selectedPartners)
         }
       }
       setPartner("");

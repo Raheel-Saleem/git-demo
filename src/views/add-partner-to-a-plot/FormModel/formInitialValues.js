@@ -26,7 +26,7 @@ const {
 } = accountFormModel;
 
 const formInitialValues = {
-    [userid.name]: [],
+    [userid.name]: [{ id: "", name: "", amount: "" }],
     [accName.name]: '',
     [bankName.name]: '',
     [accNo.name]: '',

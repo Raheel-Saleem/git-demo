@@ -18,7 +18,7 @@ export const purchase = {
                     title: 'Purchase Plots',
                     type: 'item',
                     // icon: icons['AccountBoxIcon'],
-                    url: '/'
+                    url: '/?plot=buy'
                     // target: true
                 },
                 {

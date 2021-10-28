@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Divider, IconButton, Typography, Box, Stack } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/styles';
@@ -32,7 +32,9 @@ const useStyles = makeStyles((theme) => {
 });
 function PlotCard({ plot }) {
   const classes = useStyles();
-
+  const urlParams = new URLSearchParams(window.location.search);
+  const param = urlParams.get('plot');
+  console.log("::::::::::::::::::::::::;PlotCard", param)
   const { dateTime, description, plotownername, sectorno, societyname, id, plotno } = plot || {}
   return (
     <Fragment key={id}>
@@ -74,11 +76,16 @@ function PlotCard({ plot }) {
           </Box>
         </CardContent>
         <CardActions>
-          <Link to={`/addPartnerToPlot/${societyname}/${sectorno}/${plotno}`} className={classes.link}>
+          {!param || param === "buy" && <Link to={`/addPartnerToPlot/${societyname}/${sectorno}/${plotno}`} className={classes.link}>
             <Button size="medium" color="primary">
               Buy
             </Button>
-          </Link>
+          </Link>}
+          {param && param === "sell" && <Link to={`/sellPlot/${societyname}/${sectorno}/${plotno}`} className={classes.link}>
+            <Button size="medium" color="primary">
+              Sell
+            </Button>
+          </Link>}
           <Button size="medium" color="primary">
             See More
           </Button>
