@@ -2,7 +2,6 @@ import { LOGIN, LOGOUT } from './authConstant';
 import { startLoading, stopLoading } from '../actions';
 import jwt_decode from 'jwt-decode';
 import history from '../../historty';
-import { Redirect } from 'react-router';
 import { permissionArray } from '../../utils/permissionArray';
 import { setToken } from '../../utils/token';
 import server from '../../server/server';
@@ -43,7 +42,6 @@ export const login = (data) => async (dispatch) => {
 
         dispatch(signin(payload));
         history.push('/');
-        // <Redirect to="/" />;
         dispatch(stopLoading());
     } catch (error) {
         if (error && error.response && error.response.status && error.response.status === 400) {

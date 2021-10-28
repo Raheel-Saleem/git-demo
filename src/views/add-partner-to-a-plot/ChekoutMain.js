@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Container, Paper, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
@@ -17,31 +17,9 @@ import swal from 'sweetalert';
 import { startLoading, stopLoading } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-const steps = ["Add Partner", 'Account Information', 'Cheque ', 'Pay Order', 'Online Transfer', 'Review your order'];
+const steps = ["Add Partner", 'Account Information', 'Cheque ', "Token Information", 'Pay Order', 'Online Transfer', 'Review your order'];
 
 const { formId, formField } = accountFormModel;
-
-function getStepContent(step, setValues) {
-  switch (step) {
-    case 0:
-      return <PartnerTable setValues={setValues} />
-    case 1:
-      return <AccountForm formField={formField} />;
-    case 2:
-      return <Cheque formField={formField} />;
-    case 3:
-      return <TokenInformation formField={formField} />
-    case 4:
-      return <PayOrder formField={formField} />;
-    case 5:
-      return <OnlineTranser formField={formField} />;
-    case 6:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -49,12 +27,29 @@ export default function Checkout() {
   const goToPreviousPath = () => {
     history.goBack();
   };
-  let { id } = useParams();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  let { societyName, sectorNo, plotNo } = useParams();
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
   const currentValidationSchema = validationSchem[activeStep];
-  const isLastStep = activeStep === steps.length - 1;
+  //PARTNERS
+  const [partnersData, setPartnersData] = useState([]);
+  const [selectedPartners, setSelectedPartners] = useState([])
 
+  const isLastStep = activeStep === steps.length - 1;
+  console.log(activeStep, "::::::::::::::::::::::::::::::::::")
+  useEffect(() => {
+    (async () => {
+      try {
+        dispatch(startLoading())
+        const { data } = await server.get('/getallpartnersforpayments');
+        setPartnersData(data)
+        dispatch(stopLoading())
+      } catch (e) {
+        dispatch(stopLoading())
+      }
+    })()
+
+  }, []);
   const isStepOptional = (step) => {
     if (step === 1 || step === 2 || step === 3) return true;
     else return false;
@@ -65,14 +60,7 @@ export default function Checkout() {
   };
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -100,11 +88,10 @@ export default function Checkout() {
 
   const handleSubmit = (values, actions) => {
     if (isLastStep) {
-      let uid = id;
-      values = { ...values, uid };
+      values = { ...values };
       // console.log('Yo Yo Here your form values', values);
       submitForms(values);
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      handleNext()
     } else {
       let newSkipped = skipped;
       if (isStepSkipped(activeStep)) {
@@ -112,22 +99,24 @@ export default function Checkout() {
         newSkipped.delete(activeStep);
       }
 
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      handleNext()
       setSkipped(newSkipped);
       actions.setTouched({});
       actions.setSubmitting(false);
-      console.log(activeStep);
     }
   };
-
+  const truncateSpace = (spacedValue) => {
+    const [firstWord, lastWord] = spacedValue.split("%20");
+    return `${firstWord}${lastWord}`
+  }
   const submitForms = async (values) => {
     try {
       dispatch(startLoading());
-      let response = await server.post('/accountdetails', values);
+      let response = await server.post('/payments', { ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo });
       dispatch(stopLoading());
 
       if (response.status === 200) {
-        swal('Success!', 'Account Details  Added Succesfully!', 'success');
+        swal('Success!', 'Plot Added to purchase list Successfully!', 'success');
       }
       if (response.status === 400) {
         swal('Error!', 'Something Went Wrong', 'error');
@@ -137,11 +126,27 @@ export default function Checkout() {
       swal('Error!', 'Check Your Connection and Try again', 'error');
     }
   };
-
+  function getStepContent(step, setValues) {
+    switch (step) {
+      case 0:
+        return <PartnerTable setValues={setValues} partnersData={partnersData} setPartnersData={setPartnersData} selectedPartners={selectedPartners} setSelectedPartners={setSelectedPartners} />
+      case 1:
+        return <AccountForm formField={formField} />;
+      case 2:
+        return <Cheque formField={formField} />;
+      case 3:
+        return <TokenInformation formField={formField} />
+      case 4:
+        return <PayOrder formField={formField} />
+      case 5:
+        return <OnlineTranser formField={formField} />;
+      case 6:
+        return <Review />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
   return (
-    // <ThemeProvider theme={theme}>
-    // <CssBaseline />
-
     <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
       <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
         <Typography variant="h2" align="center">
@@ -190,6 +195,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <Formik initialValues={formInitialValues} validationSchema={currentValidationSchema} onSubmit={handleSubmit}>
+
               {({ isSubmitting, setValues }) => (
                 <Form id={formId}>
                   {getStepContent(activeStep, setValues)}
@@ -208,7 +214,6 @@ export default function Checkout() {
 
                     <Button
                       variant="contained"
-                      //onClick={handleNext}
                       sx={{ mt: 3, ml: 1 }}
                       type="submit"
                       disable={isSubmitting}

@@ -1,10 +1,9 @@
 const accountFormModel = {
 
-    formId: 'accountForm',
+    formId: 'plotForm',
     formField: {
-
         userid: {
-            name: 'userId',
+            name: 'userid',
             label: 'Partner',
             requiredErrorMsg: 'Partner Information is Required'
         },

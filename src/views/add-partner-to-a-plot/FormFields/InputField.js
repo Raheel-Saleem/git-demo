@@ -13,6 +13,5 @@ export default function InputField(props) {
             return error;
         }
     }
-
     return <TextField error={meta.touched && meta.error && true} helperText={_renderHelperText()} {...field} {...rest} />;
 }

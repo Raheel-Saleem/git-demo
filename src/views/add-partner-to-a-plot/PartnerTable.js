@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-import { DataGrid } from '@mui/x-data-grid';
-import { useDispatch } from 'react-redux';
-
-import { startLoading, stopLoading } from '../../store/actions';
-import server from '../../server/server';
-import swal from 'sweetalert';
+// import { DataGrid } from '@mui/x-data-grid';
+import { Autocomplete } from "@material-ui/lab";
+import { TextField, Button, Container, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+// import { useDispatch } from 'react-redux';
+// import { startLoading, stopLoading } from '../../store/actions';
+// import server from '../../server/server';
+// import swal from 'sweetalert';
 const defaultTheme = createTheme();
 
 const useStyles = makeStyles(
@@ -29,82 +30,103 @@ const useStyles = makeStyles(
   { defaultTheme },
 );
 
-const columns = [
-  { field: 'id', headerName: 'ID', editable: false, hidden: true, width: 50, },
-  { field: 'name', headerName: 'Name', editable: false, width: 150, },
-  { field: 'cnic', headerName: 'CNIC', editable: false, width: 140, },
-  { field: 'contactNo', headerName: 'Phone Num', editable: false, width: 200, },
-  { field: 'amountToInvest', headerName: 'Amount In Account', editable: false, width: 250, },
-
-  {
-    field: 'amount',
-    headerName: 'Amount to Invest',
-    editable: true,
-    width: 240,
-  }
-];
-
-export default function ConditionalValidationGrid({ setValues }) {
+export default function ConditionalValidationGrid({ setValues, partnersData, setPartnersData, selectedPartners, setSelectedPartners }) {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [partner, setPartner] = useState("");
+  // const [partnersData, setPartnersData] = useState([]);
+  const [amountToInvest, setAmountToInvest] = useState(0);
+  // const [selectedPartners, setSelectedPartners] = useState([])
 
-  const [partnersData, setPartnersData] = useState([]);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       dispatch(startLoading())
+  //       const { data } = await server.get('/getallpartnersforpayments');
+  //       setPartnersData(data)
+  //       dispatch(stopLoading())
+  //     } catch (e) {
+  //       dispatch(stopLoading())
+  //     }
+  //   })()
 
-  useEffect(() => {
-    (async () => {
-      try {
-        dispatch(startLoading())
-        const { data } = await server.get('/getallpartnersforpayments');
-        setPartnersData(data)
-        dispatch(stopLoading())
-      } catch (e) {
-        dispatch(stopLoading())
+  // }, []);
+
+  const handleSubmitPartnerData = () => {
+    if (amountToInvest > 0 && partner) {
+      for (let i = 0; i < partnersData.length; i++) {
+        if (partnersData[i].name === partner) {
+          let state = { amount: amountToInvest, ...partnersData[i] }
+          setSelectedPartners([state, ...selectedPartners]);
+          let newPartnersData = [...partnersData];
+          newPartnersData.splice(i, 1);
+          setPartnersData(newPartnersData)
+          setValues("userid", selectedPartners)
+        }
       }
-    })()
-
-  }, [])
+      setPartner("");
+      setAmountToInvest(0)
+    }
+  }
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        className={classes.root}
-        rows={partnersData}
-        columns={columns}
-        editMode="row"
-        checkboxSelection
-        onSelectionModelChange={(ids) => {
-          const selectedIDs = new Set(ids);
-          const selectedRowData = partnersData.filter((row) => selectedIDs.has(row.id));
-          console.log("onSelectionModelChange:", selectedRowData);
-          console.log("data");
-          let partnersArray = [];
-          for (let selectedPartner of selectedRowData) {
-            for (let partner of partnersData) {
-              if (partner.id === selectedPartner.id) {
-                partnersArray.push(partner)
-              }
-            }
-          }
+    <Container maxWidth="lg">
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box width={300}>
+          <Autocomplete
 
+            onChange={(_, data) => {
+              setPartner(data)
+            }}
+            value={partner}
+            id="addPartnerToPlot123"
+            options={partnersData.map((option) => option.name)}
+            allowClear
+            filterSelectedOptions
 
-          setValues("userid", partnersArray);
-          console.log("selectedRow", partnersArray)
-        }}
-        onEditCellPropsChange={(data) => {
-          console.log(data, "::::::::::::::::::::::::::daata")
-          let partnersArray = [];
-          for (let partner of partnersData) {
-            if (partner.id === data.id) {
-              const newObj = { ...partner, amount: data.props.value };
-              partnersArray.push(newObj)
-            } else {
-              partnersArray.push(partner)
-            }
-          }
-          console.log(partnersArray, "::::::::::::::::::::::::::partnersArray")
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label={"Select Partner"}
+                placeholder={"Select Partner"}
+                fullWidth
+              />
+            )}
+          />
+        </Box>
+        <Box pl={2}>
+          <TextField label="Amount To Invest" name="amount" type="number" value={amountToInvest} onChange={(e) => setAmountToInvest(e.target.value)} />
+        </Box>
+        <Box pl={2}>
+          <Button color="primary" variant='contained' onClick={handleSubmitPartnerData}>Add</Button>
+        </Box>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">ID</TableCell>
+              <TableCell align="left">Name</TableCell>
+              <TableCell align="left">Amount To Invest</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
 
-        }}
-      />
-    </div>
+            {selectedPartners && selectedPartners.length > 0 && selectedPartners.map(selectedPartner => <TableRow>
+              <TableCell align="left" >
+                {selectedPartner.id}
+              </TableCell>
+              <TableCell align="left">
+                {selectedPartner.name}
+              </TableCell>
+              <TableCell align="left">
+                {selectedPartner.amount}
+              </TableCell>
+            </TableRow>)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 }
