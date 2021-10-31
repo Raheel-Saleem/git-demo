@@ -44,8 +44,8 @@ export const login = (data) => async (dispatch) => {
         history.push('/?plot=buy');
         dispatch(stopLoading());
     } catch (error) {
-        if (error && error.response && error.response.status && error.response.status === 400) {
-            swal('Oopps!', 'user email,phone,cnic may already exist or invalid !', 'error');
+        if (error && error.response && error.response.status && error.response.status >= 400 && error.response.status < 500) {
+            swal('Oopps!', 'You have entered wrong email or password !', 'error');
         }
         if (error && error.response && error.response.status && error.response.status === 500) {
             swal('Oopps!', 'Something went wrong! Please check your network', 'error');

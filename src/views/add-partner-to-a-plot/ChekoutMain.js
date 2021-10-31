@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, Paper, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { useParams } from 'react-router-dom';
-import AccountForm from './Forms/AccountForm';
 import Cheque from './Forms/Cheque';
 import PayOrder from './Forms/PayOrder';
 import OnlineTranser from './Forms/OnlineTransfer';
 import Review from './Review';
 import server from '../../server/server';
+import AdminAcord from "./AddAdminAccount";
 import validationSchem from './FormModel/validationSchema';
 import accountFormModel from './FormModel/accountFormModel';
 import formInitialValues from './FormModel/formInitialValues';
@@ -18,7 +18,7 @@ import { startLoading, stopLoading } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const steps = ["Add Partner", 'Account Information', 'Cheque ', "Token Information", 'Pay Order', 'Online Transfer', 'Review your order'];
+const steps = ["Add Admin Information", 'Add Partner', 'Cheque ', "Token Information", 'Pay Order', 'Online Transfer', 'Review your order'];
 
 const { formId, formField } = accountFormModel;
 
@@ -30,6 +30,13 @@ export default function Checkout() {
   };
   let { societyName, sectorNo, plotNo } = useParams();
   const [activeStep, setActiveStep] = useState(0);
+  const [adminData, setAdminData] = useState([]);
+  const [admin, setAdmin] = useState({
+    id: "",
+    amount: "",
+    name: ""
+  });
+  const [adminAmount, setAdminAmount] = useState("");
   const [skipped, setSkipped] = useState(new Set());
   const currentValidationSchema = validationSchem[activeStep];
   //PARTNERS
@@ -43,6 +50,8 @@ export default function Checkout() {
       try {
         dispatch(startLoading())
         const { data } = await server.get('/getallpartnersforpayments');
+        const { data: adminData } = await server.get("/getalladminsforpayments")
+        setAdminData(adminData)
         setPartnersData(data)
         dispatch(stopLoading())
       } catch (e) {
@@ -52,7 +61,7 @@ export default function Checkout() {
 
   }, []);
   const isStepOptional = (step) => {
-    if (step === 1 || step === 2 || step === 3) return true;
+    if (step => 0 || step <= 5) return true;
     else return false;
   };
 
@@ -113,7 +122,10 @@ export default function Checkout() {
   const submitForms = async (values) => {
     try {
       dispatch(startLoading());
-      let response = await server.post('/payments', { ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo, userid: selectedPartners });
+      let response = await server.post('/payments', {
+        ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo, userid: selectedPartners,
+        admData: { id: admin.id, name: admin.name, amount: adminAmount }
+      });
       dispatch(stopLoading());
 
       if (response.status === 200) {
@@ -130,9 +142,9 @@ export default function Checkout() {
   function getStepContent(step, setValues) {
     switch (step) {
       case 0:
-        return <PartnerTable setValues={setValues} partnersData={partnersData} setPartnersData={setPartnersData} selectedPartners={selectedPartners} setSelectedPartners={setSelectedPartners} />
+        return <AdminAcord adminData={adminData} admin={admin} setAdmin={setAdmin} adminAmount={adminAmount} setAdminAmount={setAdminAmount} />
       case 1:
-        return <AccountForm formField={formField} />;
+        return <PartnerTable setValues={setValues} partnersData={partnersData} setPartnersData={setPartnersData} selectedPartners={selectedPartners} setSelectedPartners={setSelectedPartners} />
       case 2:
         return <Cheque formField={formField} />;
       case 3:

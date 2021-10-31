@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormControl, Grid, TextField, Typography, FormControlLabel } from '@material-ui/core';
 import { Button, RadioGroup, Radio } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
@@ -6,8 +6,11 @@ import { makeStyles } from '@material-ui/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import StoreIcon from '@material-ui/icons/Store';
 
+import PageHeader from '../../../ui-component/PageHeader';
+import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
 const useStyles = makeStyles((theme) => {
   return {
@@ -57,44 +60,28 @@ const validationSchema = Yup.object({
   plotamount: Yup.string().required('Required!')
 });
 
-
+const obj = {
+  icon: <StoreIcon fontSize="large" />,
+  pageTitle: 'Sale Plot',
+  pageSubtitle: 'This form is meant to add plot data  for purchasing and selling i.e development ,without dev,etc'
+};
 
 function PlotForm({ onSetFormData, openModal }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        dispatch(startLoading())
-        const { data } = await server.get('/getallpartnersforpayments');
-        setPartnersData(data)
-        dispatch(stopLoading())
-      } catch (e) {
-        dispatch(stopLoading())
-      }
-    })()
-  }, []);
-
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, onSubmitProps) => {
-      onSetFormData((prevState) => {
-        return {
-          ...prevState,
-          ...values
-        };
-      });
-      openModal();
-      onSubmitProps.setSubmitting(false);
-      onSubmitProps.resetForm();
+    onSubmit: (values, resetValues) => {
+      //requestToApiAndTransferToAccountStepper
     }
   });
 
   return (
     <form className={classes.root} onSubmit={formik.handleSubmit}>
+      <PageHeader obj={obj} />
       <Grid container spacing={1}>
         <Grid item xs={12} md={6}>
           <Typography variant="h6" className={classes.label}>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Grid, Paper, Card } from '@material-ui/core';
+import React, { useState, useRef } from 'react';
+import { Paper } from '@material-ui/core';
 import PageHeader from '../../../ui-component/PageHeader';
 import StoreIcon from '@material-ui/icons/Store';
 import PlotForm from './PlotForm';

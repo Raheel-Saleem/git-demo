@@ -2,6 +2,11 @@ const accountFormModel = {
 
     formId: 'plotForm',
     formField: {
+        admData: {
+            name: 'admData',
+            label: 'Admin Amount',
+            requiredErrorMsg: 'Admin Amount is Required'
+        },
         userid: {
             name: 'userid',
             label: 'Partner',
@@ -70,7 +75,7 @@ const accountFormModel = {
             requiredErrorMsg: 'PayOrder Number  is Required'
         },
         payorderDescription: {
-            name: 'payorderDescription',
+            name: 'payOrderDescription',
             label: 'Description:'
             // requiredErrorMsg: 'Cheques Number  is Required'
         },
@@ -89,7 +94,11 @@ const accountFormModel = {
         },
         taxAmount: {
             name: "taxAmount",
-            label: "Token Amount",
+            label: "Tax Amount",
+        },
+        taxDescription: {
+            name: "taxDescription",
+            label: "Tax Description",
         },
         /*******   Online Transfer  *******/
         onlineTransfer: {
@@ -101,6 +110,7 @@ const accountFormModel = {
             label: 'Description:'
             // requiredErrorMsg: 'Cheques Number  is Required'
         }
+
     }
 };
 export default accountFormModel;

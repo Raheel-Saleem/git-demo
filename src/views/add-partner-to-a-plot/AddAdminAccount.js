@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography, Table, TableBody,
+  Table, TableBody,
   TableCell, TableRow, TableHead, Paper, TableContainer, TextField, Select, MenuItem, FormControl
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => {
@@ -74,34 +73,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const adminList = [
-  {
-    id: 1,
-    name: "Raheel Saleem ",
-    amount: 60000,
-  },
-  {
-    id: 2,
-    name: "Badar Baig",
-    amount: 50000,
-  },
-  {
-    id: 3,
-    name: "Adil Nisar",
-    amount: 40000,
-  },
-];
-
-function AdminAcord() {
+function AdminAcord({ adminData, admin, setAdmin, adminAmount, setAdminAmount }) {
   const classes = useStyles();
-  const [admin, setAdmin] = useState(0);
+
   const handleChange = (event) => {
     setAdmin(event.target.value);
   };
-
-  useEffect(() => {
-    console.log(admin);
-  }, [admin]);
 
   const menuProps = {
     classes: {
@@ -121,65 +98,49 @@ function AdminAcord() {
 
   return (
     <div className={classes.root}>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography variant="h5">Add Admin Amount</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div style={{ margin: "20px" }}>
-            <TableContainer component={Paper}>
-              <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center" key="select-admin">
-                      Select Admin
-                    </TableCell>
-                    <TableCell align="left" key="acc-amount">
-                      Amount In Acount
-                    </TableCell>
-                    <TableCell align="left" key="invest-amount">
-                      Amount to Invest
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
+      <div style={{ margin: "20px" }}>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center" key="select-admin">
+                  Select Admin
+                </TableCell>
+                <TableCell align="left" key="invest-amount">
+                  Amount to Invest
+                </TableCell>
+              </TableRow>
+            </TableHead>
 
-                <TableBody>
-                  <TableRow key="inline-admin-selector">
-                    <TableCell align="left">
-                      <FormControl className={classes.formControl}>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          disableUnderline
-                          classes={{ root: classes.select }}
-                          MenuProps={menuProps}
-                          value={admin}
-                          onChange={handleChange}
-                        >
-                          {adminList.map((item) => {
-                            return (
-                              <MenuItem value={item.id}>{item.name}</MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                    </TableCell>
-                    <TableCell align="center">600,000,000</TableCell>
-
-                    <TableCell align="left">
-                      <TextField variant="outlined" size="small" />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        </AccordionDetails>
-      </Accordion>
+            <TableBody>
+              <TableRow key="inline-admin-selector">
+                <TableCell align="left">
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      disableUnderline
+                      classes={{ root: classes.select }}
+                      MenuProps={menuProps}
+                      value={admin}
+                      onChange={handleChange}
+                    >
+                      {adminData.map((item) => {
+                        return (
+                          <MenuItem value={item}>{item.name}</MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </TableCell>
+                <TableCell align="left">
+                  <TextField variant="outlined" size="small" value={adminAmount} onChange={(e) => setAdminAmount(e.target.value)} />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import AdminAcc from '../views/pages/Accounts/AdminAccDetails/AdminDetails';
 // import NotFound from '../views/pages/404Page/NotFound';
 import AccountForm from '../views/pages/Accounts/AccountForm/Account';
 import AddPartnerToPlot from "../views/add-partner-to-a-plot/ChekoutMain";
+import SellPlot from "../views/pages/SellPlot";
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -52,6 +53,7 @@ const MainRoutes = () => {
               <Route path="/acounts/partneracc" component={PartnerAcc} />
               <Route path="/acounts/adminacc" component={AdminAcc} />
               <Route path="/addPartnerToPlot/:societyName/:sectorNo/:plotNo" exact component={AddPartnerToPlot} />
+              <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
               <Route path="/acounts/open/:id" component={AccountForm} />
             </>
           )}

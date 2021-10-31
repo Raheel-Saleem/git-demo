@@ -2,6 +2,7 @@ import accountFormModel from './accountFormModel';
 
 const {
     formField: {
+        admData,
         userid,
         accName,
         bankName,
@@ -9,6 +10,7 @@ const {
         tokenDays,
         tokenDescription,
         taxAmount,
+        taxDescription,
         accNo,
         amountToInvest,
         amountInCash,
@@ -27,6 +29,7 @@ const {
 
 const formInitialValues = {
     [userid.name]: [{ id: "", name: "", amount: "" }],
+    [admData.name]: { id: "", name: '' },
     [accName.name]: '',
     [bankName.name]: '',
     [accNo.name]: '',
@@ -46,5 +49,6 @@ const formInitialValues = {
     [tokenDays.name]: 0,
     [tokenDescription.name]: "",
     [taxAmount.name]: 0,
+    [taxDescription.name]: 0
 };
 export default formInitialValues;

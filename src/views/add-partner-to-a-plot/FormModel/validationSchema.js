@@ -4,11 +4,8 @@ import accountFormModel from './accountFormModel';
 const {
     formField: {
         userid,
-        accName,
-        bankName,
-        accNo,
-        amountToInvest,
-        amountInCash,
+        admData,
+        taxDescription,
         chequeAmount,
         noOfCheques,
         chequeNo,
@@ -28,16 +25,14 @@ const {
 
 const validationSchema = [
     Yup.object().shape({
+        admData: Yup.object().shape({
+            id: Yup.number(), name: Yup.string(), amount: Yup.string()
+        })
+    }),
+    Yup.object().shape({
         [userid.name]: Yup.array().of(Yup.object().shape({
             id: Yup.number(), name: Yup.string(), amount: Yup.string()
         }))
-    }),
-    Yup.object().shape({
-        [accName.name]: Yup.string().required(`${accName.requiredErrorMsg}`),
-        [bankName.name]: Yup.string().required(`${bankName.requiredErrorMsg}`),
-        [accNo.name]: Yup.string().required(`${accNo.requiredErrorMsg}`),
-        [amountToInvest.name]: Yup.string().required(`${amountToInvest.requiredErrorMsg}`),
-        [amountInCash.name]: Yup.string().nullable()
     }),
     Yup.object().shape({
         [chequeAmount.name]: Yup.string().required(`${chequeAmount.requiredErrorMsg}`),
@@ -50,6 +45,7 @@ const validationSchema = [
         [tokenDays.name]: Yup.string().required(),
         [tokenDescription.name]: Yup.string().required(),
         [taxAmount.name]: Yup.string().required(),
+        [taxDescription.name]: Yup.string(),
     }),
     Yup.object().shape({
         [payorderAmount.name]: Yup.string().required(`${payorderAmount.requiredErrorMsg}`),
