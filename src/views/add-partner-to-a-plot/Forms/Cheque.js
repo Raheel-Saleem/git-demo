@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => {
 
 export default function Cheque(props) {
     const {
-        formField: { chequeAmount, noOfCheques, chequeNo, chequeDescription }
+        formField: { chequeAmount, noOfCheques, chequeNo, chequeDescription, amountInCash }
     } = props;
     const classes = useStyles();
     return (
@@ -53,6 +53,9 @@ export default function Cheque(props) {
                         rows={3}
                         rowsMax={4}
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField name={amountInCash.name} label={amountInCash.label} fullWidth variant="outlined" size="small" type="number" />
                 </Grid>
             </Grid>
         </React.Fragment>

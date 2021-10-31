@@ -5,6 +5,7 @@ const {
     formField: {
         userid,
         admData,
+        amountInCash,
         taxDescription,
         chequeAmount,
         noOfCheques,
@@ -35,10 +36,11 @@ const validationSchema = [
         }))
     }),
     Yup.object().shape({
-        [chequeAmount.name]: Yup.string().required(`${chequeAmount.requiredErrorMsg}`),
-        [noOfCheques.name]: Yup.string().required(`${noOfCheques.requiredErrorMsg}`),
-        [chequeNo.name]: Yup.string().required(`${chequeNo.requiredErrorMsg}`),
-        [chequeDescription.name]: Yup.string().nullable()
+        [chequeAmount.name]: Yup.string(),
+        [noOfCheques.name]: Yup.string(),
+        [chequeNo.name]: Yup.string(),
+        [chequeDescription.name]: Yup.string().nullable(),
+        [amountInCash.name]: Yup.string()
     }),
     Yup.object().shape({
         [tokenAmount.name]: Yup.string().required(),
