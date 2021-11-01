@@ -101,7 +101,7 @@ export default function Checkout() {
       values = { ...values };
       // console.log('Yo Yo Here your form values', values);
       submitForms(values);
-      handleNext()
+
     } else {
       let newSkipped = skipped;
       if (isStepSkipped(activeStep)) {
@@ -116,20 +116,25 @@ export default function Checkout() {
     }
   };
   const truncateSpace = (spacedValue) => {
-    const [firstWord, lastWord] = spacedValue.split("%20");
-    return `${firstWord}${lastWord}`
+    const [firstWord] = spacedValue.split("%20");
+    return `${firstWord}`
   }
   const submitForms = async (values) => {
     try {
       dispatch(startLoading());
+      const sN = truncateSpace(societyName);
+      const secNo = truncateSpace(sectorNo);
+      // console.log(":::::::::::::::::::::::::", sN, secNo)
+      // let response = "";
       let response = await server.post('/payments', {
-        ...values, societyName: truncateSpace(societyName), sectorNo: truncateSpace(sectorNo), plotNo, userid: selectedPartners,
+        ...values, societyName: sN, sectorNo: secNo, plotNo, userid: selectedPartners,
         admData: { id: admin.id, name: admin.name, amount: adminAmount }
       });
       dispatch(stopLoading());
 
       if (response.status === 200) {
         swal('Success!', 'Plot Added to purchase list Successfully!', 'success');
+        handleNext()
       }
       if (response.status === 400) {
         swal('Error!', 'Something Went Wrong', 'error');

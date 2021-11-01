@@ -9,6 +9,7 @@ import { TextField, Button, Container, Box, Paper, Table, TableBody, TableCell, 
 // import { startLoading, stopLoading } from '../../store/actions';
 // import server from '../../server/server';
 // import swal from 'sweetalert';
+
 const defaultTheme = createTheme();
 
 const useStyles = makeStyles(
@@ -49,7 +50,6 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
   //       dispatch(stopLoading())
   //     }
   //   })()
-
   // }, []);
 
   const handleSubmitPartnerData = () => {
@@ -74,7 +74,6 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
       <Box display="flex" justifyContent="center" alignItems="center">
         <Box width={300}>
           <Autocomplete
-
             onChange={(_, data) => {
               setPartner(data)
             }}
