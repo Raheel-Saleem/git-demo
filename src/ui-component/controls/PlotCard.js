@@ -86,9 +86,12 @@ function PlotCard({ plot }) {
               Sell
             </Button>
           </Link>}
-          <Button size="medium" color="primary">
-            See More
-          </Button>
+
+          <Link to={`/propertyDetail/${id}`} className={classes.link}>
+            <Button size="medium" color="primary">
+              See More
+            </Button>
+          </Link>
         </CardActions>
       </Card>
     </Fragment>

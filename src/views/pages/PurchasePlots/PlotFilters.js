@@ -57,7 +57,7 @@ const PlotSelectors = ({ plots, setPlots }) => {
   // Load All Society Names
   useEffect(() => {
     const loadSocities = async () => {
-      const { data } = await server.get('/getsocietiesname');
+      const { data } = await server.get('/getsocietiesnameforppt');
 
       setSocietyData(data);
     };
@@ -69,9 +69,11 @@ const PlotSelectors = ({ plots, setPlots }) => {
   useEffect(() => {
     const loadSectors = async () => {
       try {
-        const response = await server.post('/getsectors', { societyname });
+        if (societyname) {
+          const response = await server.post('/getsectorsforppt', { societyname });
 
-        setSectorData(response.data);
+          setSectorData(response.data);
+        }
       } catch (error) {
         console.log(error.data);
         setSectorData('Not Found');
@@ -80,19 +82,6 @@ const PlotSelectors = ({ plots, setPlots }) => {
     loadSectors();
   }, [societyname]);
 
-  // Load All Plot Against society & sectors
-  useEffect(() => {
-    const loadPlots = async () => {
-      try {
-        const response = await server.post('/getplots', { sectorno, societyname });
-
-        setPlotData(response.data);
-      } catch (error) {
-
-      }
-    };
-    loadPlots();
-  }, [societyname, sectorno]);
 
   const handleSociety = (value) => {
     console.log('value from handleSocity', value);
@@ -110,13 +99,7 @@ const PlotSelectors = ({ plots, setPlots }) => {
       setSector(value);
     }
   };
-  const handlePlot = (value) => {
-    if (value === null) {
-      resetSelector();
-    } else {
-      setPlot(value);
-    }
-  };
+
 
   const handleSearch = () => {
 
@@ -125,7 +108,7 @@ const PlotSelectors = ({ plots, setPlots }) => {
   return (
     <div className={classes.root}>
       <Paper elevation={0}>
-        <Grid container fixed spacing={1}>
+        <Grid container fixed spacing={1} justifyContent="center" alignItems="center">
           <Grid item xs={12} sm={12} md={4} lg={4} className={classes.itemSpacing}>
             <AsyncSelector data={societyData} label={'Society Name'} onSelectedValue={handleSociety} value={societyname} />
           </Grid>
@@ -133,31 +116,31 @@ const PlotSelectors = ({ plots, setPlots }) => {
             <AsyncSelector data={sectorData} label={'Sector Number'} onSelectedValue={handleSector} value={sectorno} />
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4} className={classes.itemSpacing}>
-            <AsyncSelector data={plotData} label={'Plot Number'} onSelectedValue={handlePlot} value={plot} />
+            <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="flex-end">
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                type="submit"
+                onClick={() => {
+                  resetSelector()
+                }}
+              >
+                Reset
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                type="submit"
+                onClick={handleSearch}
+              >
+                Search
+              </Button>
+            </Stack>
           </Grid>
         </Grid>
-        <Stack direction="row" spacing={2} alignItems="flex-start" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ height: 40, marginBottom: 10, marginRight: 10 }}
-            type="submit"
-            onClick={() => {
-              resetSelector()
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ height: 40, marginBottom: 10, marginRight: 10 }}
-            type="submit"
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
-        </Stack>
+
       </Paper>
     </div>
   );
