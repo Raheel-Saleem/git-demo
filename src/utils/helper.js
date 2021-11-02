@@ -1,3 +1,5 @@
+import { Typography, TableCell } from "@material-ui/core";
+
 export const renderItem = (name, value) => (
   <>
     <Typography variant="body2">{name}</Typography>
