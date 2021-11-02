@@ -73,7 +73,8 @@ const initialValues = {
         accounts: false,
         purchase: false,
         sale: false,
-        supper: false
+        supper: false,
+        construction: false
     },
     role: ''
 };
@@ -92,7 +93,7 @@ export default function SignUp() {
         initialValues,
         validationSchema,
         onSubmit: (values, onSubmitProps) => {
-            // console.log('from on submit fun', values);
+            console.log('from on submit fun', values);
             dispatch(signup(values));
             onSubmitProps.setSubmitting(false);
             onSubmitProps.resetForm();
@@ -238,7 +239,19 @@ export default function SignUp() {
                                                     }
                                                     label="Supper"
                                                 />
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch
+                                                            color="primary"
+                                                            checked={formik.values.permissions.construction}
+                                                            name="permissions.construction"
+                                                            {...formik.getFieldProps('permissions.construction')}
+                                                        />
+                                                    }
+                                                    label="Construction"
+                                                />
                                             </FormGroup>
+
                                             <FormHelperText>Be careful</FormHelperText>
                                         </FormControl>
                                     </Grid>

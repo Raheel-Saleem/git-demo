@@ -25,6 +25,9 @@ const MenuList = () => {
     if (permission.super) {
         filteredArray.push(menuItem.items[3]);
     }
+    if (permission.cunstruction) {
+        filteredArray.push(menuItem.items[4]);
+    }
     const navItems = filteredArray.map((item) => {
         switch (item.type) {
             case 'group':

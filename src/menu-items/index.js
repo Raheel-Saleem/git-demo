@@ -3,8 +3,7 @@ import { accounts } from './accounts';
 import { purchase } from './purchase';
 import { sale } from './sale';
 import { supper } from './supper';
-
-import { permissionArray } from '../utils/permissionArray';
+import { construction } from './construction';
 //-----------------------|| MENU ITEMS ||-----------------------//
 // let arr = [];
 
@@ -34,7 +33,7 @@ import { permissionArray } from '../utils/permissionArray';
 
 // console.log('menu item permission', ...arr);
 const menuItems = {
-    items: [accounts, purchase, sale, supper]
+    items: [accounts, purchase, sale, supper, construction]
 };
 
 export default menuItems;

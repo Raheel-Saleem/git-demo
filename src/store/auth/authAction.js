@@ -34,9 +34,8 @@ export const login = (data) => async (dispatch) => {
         permission.purchase = decoded.Purchase;
         permission.sale = decoded.Sale;
         permission.super = decoded.Supper;
-
+        permission.construction = decoded.Construction;
         let payload = { user, permission };
-
 
         console.log('after', permissionArray);
 
