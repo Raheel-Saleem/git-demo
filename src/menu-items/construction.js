@@ -39,7 +39,13 @@ export const construction = {
                     id: 'purchase-product',
                     title: 'Purchase Product',
                     type: 'item',
-                    url: '/purchase/product'
+                    url: '/construction/product'
+                },
+                {
+                    id: 'add-stock',
+                    title: 'Add Stock',
+                    type: 'item',
+                    url: '/construction/stock'
                 }
             ]
         }

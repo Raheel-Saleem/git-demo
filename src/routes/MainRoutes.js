@@ -15,6 +15,11 @@ import AccountForm from '../views/pages/Accounts/AccountForm/Account';
 import AddPartnerToPlot from '../views/add-partner-to-a-plot/ChekoutMain';
 import SellPlot from '../views/pages/SellPlot';
 import DetailePropertyPage from '../views/DetailePropertyPage';
+import ConstructionAccount from '../views/pages/Construction/Account/Account';
+import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
+import ConstructionProduct from '../views/pages/Construction/Product/Product';
+import ConstructionStock from '../views/pages/Construction/Stock/Stock';
+import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -39,6 +44,15 @@ const MainRoutes = () => {
     }
     if (permission.super) {
         pathArray.push('/addsociety', '/addplot');
+    }
+    if (permission.construction) {
+        pathArray.push(
+            '/construction/account',
+            '/construction/addplot',
+            '/construction/supplier',
+            '/construction/product',
+            '/construction/stock'
+        );
     }
     return (
         <Route path={[...pathArray]}>
@@ -73,10 +87,14 @@ const MainRoutes = () => {
                             <Route path="/addsociety" component={Society} exact />
                         </>
                     )}
-                    {permission.super && (
+                    {permission.construction && (
                         <>
-                            <Route path="/addplot" component={Plot} exact />
-                            <Route path="/addsociety" component={Society} exact />
+                            <Route path="/construction/account" component={ConstructionAccount} exact />
+
+                            <Route path="/construction/addplot" component={ConstructionAddPlot} exact />
+                            <Route path="/construction/product" component={ConstructionProduct} exact />
+                            <Route path="/construction/stock" component={ConstructionStock} exact />
+                            <Route path="/construction/supplier" component={ConstructionSupplier} exact />
                         </>
                     )}
                 </MainLayout>
