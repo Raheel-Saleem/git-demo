@@ -34,10 +34,11 @@ export const login = (data) => async (dispatch) => {
         permission.purchase = decoded.Purchase;
         permission.sale = decoded.Sale;
         permission.super = decoded.Supper;
-        permission.construction = decoded.Construction;
+        permission.construction = decoded.construction;
+        // console.log('construction arry', decoded.construction);
         let payload = { user, permission };
 
-        console.log('after', permissionArray);
+        console.log('after', permission);
 
         dispatch(signin(payload));
         history.push('/?plot=buy');

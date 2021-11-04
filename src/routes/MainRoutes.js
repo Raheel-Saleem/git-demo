@@ -12,9 +12,9 @@ import PartnerAcc from '../views/pages/Accounts/PartnerAccDetails/PartnerAcc';
 import AdminAcc from '../views/pages/Accounts/AdminAccDetails/AdminDetails';
 // import NotFound from '../views/pages/404Page/NotFound';
 import AccountForm from '../views/pages/Accounts/AccountForm/Account';
-import AddPartnerToPlot from "../views/add-partner-to-a-plot/ChekoutMain";
-import SellPlot from "../views/pages/SellPlot";
-import DetailePropertyPage from "../views/DetailePropertyPage"
+import AddPartnerToPlot from '../views/add-partner-to-a-plot/ChekoutMain';
+import SellPlot from '../views/pages/SellPlot';
+import DetailePropertyPage from '../views/DetailePropertyPage';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -25,50 +25,64 @@ const Signup = Loadable(lazy(() => import('../views/pages/Accounts/SignUp/Signup
 //-----------------------|| MAIN ROUTING ||-----------------------//
 
 const MainRoutes = () => {
-  const location = useLocation();
-  const permission = useSelector((state) => state.auth.permission);
-  const pathArray = [];
-  if (permission.accounts) {
-    pathArray.push('/acounts/signup', '/acounts/users', '/acounts/partneracc', '/acounts/form', '/acounts/adminacc', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
-  }
-  if (permission.purchase) {
-    pathArray.push('/', '/purchase/summary');
-  }
-  if (permission.sale) {
-    pathArray.push('/sale/plots', '/sale/summary');
-  }
-  if (permission.super) {
-    pathArray.push('/addsociety', '/addplot');
-  }
-  return (
-    <Route path={[...pathArray]}>
-      <Switch location={location} key={location.pathname}>
-        <MainLayout>
-          <Route path="/dashboard" component={DashboardDefault} />
+    const location = useLocation();
+    const permission = useSelector((state) => state.auth.permission);
+    const pathArray = [];
+    if (permission.accounts) {
+        pathArray.push('/acounts/signup', '/acounts/users', '/acounts/partneracc', '/acounts/form', '/acounts/adminacc');
+    }
+    if (permission.purchase) {
+        pathArray.push('/', '/purchase/summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
+    }
+    if (permission.sale) {
+        pathArray.push('/sale/plots', '/sale/summary');
+    }
+    if (permission.super) {
+        pathArray.push('/addsociety', '/addplot');
+    }
+    return (
+        <Route path={[...pathArray]}>
+            <Switch location={location} key={location.pathname}>
+                <MainLayout>
+                    <Route path="/dashboard" component={DashboardDefault} />
 
-          <Route path="/" component={PurchasePlots} exact />
-          {permission.accounts && (
-            <>
-              <Route path="/acounts/signup" component={Signup} exact />
-              <Route path="/acounts/users" component={UserTable} />
-              <Route path="/acounts/partneracc" component={PartnerAcc} />
-              <Route path="/acounts/adminacc" component={AdminAcc} />
-              <Route path="/addPartnerToPlot/:societyName/:sectorNo/:plotNo" exact component={AddPartnerToPlot} />
-              <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
-              <Route path="/acounts/open/:id" component={AccountForm} />
-              <Route path="/propertyDetail/:id" component={DetailePropertyPage} />
-            </>
-          )}
-          {permission.super && (
-            <>
-              <Route path="/addplot" component={Plot} exact />
-              <Route path="/addsociety" component={Society} exact />
-            </>
-          )}
-        </MainLayout>
-        {/* <Route component={NotFound} /> */}
-      </Switch>
-    </Route>
-  );
+                    <Route path="/" component={PurchasePlots} exact />
+                    {permission.accounts && (
+                        <>
+                            <Route path="/acounts/signup" component={Signup} exact />
+                            <Route path="/acounts/users" component={UserTable} />
+                            <Route path="/acounts/partneracc" component={PartnerAcc} />
+                            <Route path="/acounts/adminacc" component={AdminAcc} />
+                            <Route path="/acounts/open/:id" component={AccountForm} />
+                        </>
+                    )}
+                    {permission.purchase && (
+                        <>
+                            <Route path="/addPartnerToPlot/:societyName/:sectorNo/:plotNo" exact component={AddPartnerToPlot} />
+                            <Route path="/propertyDetail/:id" exact component={DetailePropertyPage} />
+                        </>
+                    )}
+                    {permission.sale && (
+                        <>
+                            <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
+                        </>
+                    )}
+                    {permission.super && (
+                        <>
+                            <Route path="/addplot" component={Plot} exact />
+                            <Route path="/addsociety" component={Society} exact />
+                        </>
+                    )}
+                    {permission.super && (
+                        <>
+                            <Route path="/addplot" component={Plot} exact />
+                            <Route path="/addsociety" component={Society} exact />
+                        </>
+                    )}
+                </MainLayout>
+                {/* <Route component={NotFound} /> */}
+            </Switch>
+        </Route>
+    );
 };
 export default MainRoutes;

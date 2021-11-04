@@ -1,8 +1,10 @@
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
 const icons = {
     SupervisorAccountIcon,
-    AccountBoxIcon
+    AccountBoxIcon,
+    HomeWorkIcon
 };
 export const construction = {
     id: 'constructionGroup',
@@ -13,7 +15,7 @@ export const construction = {
             id: 'constructionCollapes',
             title: 'Construction',
             type: 'collapse',
-            icon: icons['SupervisorAccountIcon'],
+            icon: icons['HomeWorkIcon'],
             children: [
                 {
                     id: 'constructionaccount',
