@@ -20,6 +20,10 @@ import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
 import ConstructionProduct from '../views/pages/Construction/Product/Product';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
+import AddPartnerToPlot from "../views/add-partner-to-a-plot/ChekoutMain";
+import SellPlot from "../views/pages/SellPlot";
+import SellPlotCheckout from "../views/pages/SellPlot/ChekoutSellProperty";
+import DetailePropertyPage from "../views/DetailePropertyPage"
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -78,6 +82,7 @@ const MainRoutes = () => {
                     )}
                     {permission.sale && (
                         <>
+                            <Route path="/sellPlotCheckout" component={SellPlotCheckout} />
                             <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
                         </>
                     )}

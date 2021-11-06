@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormControl, Grid, TextField, Typography, FormControlLabel } from '@material-ui/core';
 import { Button, RadioGroup, Radio } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
@@ -6,12 +6,14 @@ import { makeStyles } from '@material-ui/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import StoreIcon from '@material-ui/icons/Store';
+import swal from 'sweetalert';
 
 import PageHeader from '../../../ui-component/PageHeader';
 import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
+
 const useStyles = makeStyles((theme) => {
   return {
     root: {
@@ -74,8 +76,20 @@ function PlotForm({ onSetFormData, openModal }) {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, resetValues) => {
+    onSubmit: async (values, resetValues) => {
       //requestToApiAndTransferToAccountStepper
+      try {
+        dispatch(startLoading())
+        await server.post('/saleplotdetails', values);
+        dispatch(stopLoading())
+        resetValues({
+          values: ""
+        });
+        // history
+      } catch (e) {
+        swal('Error!', 'Something Went Wrong', 'error');
+        dispatch(stopLoading())
+      }
     }
   });
 

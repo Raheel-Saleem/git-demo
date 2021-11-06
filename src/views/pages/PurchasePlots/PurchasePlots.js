@@ -8,19 +8,27 @@ import PlotFilters from "./PlotFilters";
 function PurchaseProperty() {
   const dispatch = useDispatch()
   const [plots, setPlots] = useState([]);
+  const urlParams = new URLSearchParams(window.location.search);
+  const param = urlParams.get('plot');
 
   useEffect(() => {
     (async () => {
       try {
         dispatch(startLoading())
-        const { data } = await server.get('/getallpptdata');
-        setPlots(data)
+        if (param && param === "sell") {
+          const { data } = await server.get('/getplotsforsaleppt');
+          setPlots(data)
+        }
+        if (param && param === "buy") {
+          const { data } = await server.get('/getallpptdata');
+          setPlots(data)
+        }
         dispatch(stopLoading())
       } catch (e) {
         dispatch(stopLoading())
       }
     })()
-  }, [])
+  }, [param]);
 
   return (
     <Fragment>
