@@ -115,19 +115,24 @@ export default function Checkout() {
       actions.setSubmitting(false);
     }
   };
+
   const truncateSpace = (spacedValue) => {
-    const [firstWord] = spacedValue.split("%20");
-    return `${firstWord}`
+    const [firstWord, secondWord] = spacedValue.split("%20");
+    if (!secondWord) {
+      return `${firstWord}`
+    } else {
+      return `${firstWord} ${secondWord}`
+    }
   }
+
   const submitForms = async (values) => {
     try {
       dispatch(startLoading());
       const sN = truncateSpace(societyName);
       const secNo = truncateSpace(sectorNo);
-      // console.log(":::::::::::::::::::::::::", sN, secNo)
-      // let response = "";
+
       let response = await server.post('/payments', {
-        ...values, societyName: sN, sectorNo: secNo, plotNo, userid: selectedPartners,
+        ...values, societyname: sN, sectorno: secNo, plotno: plotNo, userid: selectedPartners,
         admData: { id: admin.id, name: admin.name, amount: adminAmount }
       });
       dispatch(stopLoading());

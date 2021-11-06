@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import StoreIcon from '@material-ui/icons/Store';
 import swal from 'sweetalert';
 
@@ -54,7 +54,7 @@ const initialValues = {
   plotownername: '',
   plotamount: '',
   development: false,
-  description: ''
+  plotdescription: ''
 };
 
 const validationSchema = Yup.object({
@@ -71,24 +71,37 @@ const obj = {
 function PlotForm({ onSetFormData, openModal }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  let { societyName, sectorNo, plotNo } = useParams();
+
   const history = useHistory();
+
+  const truncateSpace = (spacedValue) => {
+    const [firstWord, secondWord] = spacedValue.split("%20");
+    if (!secondWord) {
+      return `${firstWord}`
+    } else {
+      return `${firstWord} ${secondWord}`
+    }
+  }
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values, resetValues) => {
+    onSubmit: async (values, onSubmitProps) => {
       //requestToApiAndTransferToAccountStepper
       try {
-        dispatch(startLoading())
-        await server.post('/saleplotdetails', values);
+        dispatch(startLoading());
+        const sN = truncateSpace(societyName);
+        const secNo = truncateSpace(sectorNo);
+
+        await server.post('/saleplotdetails', { ...values, societyname: sN, sectorno: secNo, plotno: plotNo, development: !!values.development });
         dispatch(stopLoading())
-        resetValues({
-          values: ""
-        });
-        // history
+        onSubmitProps.resetForm()
+        history.push(`/sellPlotCheckout/${societyName}/${sectorNo}/${plotNo}`)
       } catch (e) {
-        swal('Error!', 'Something Went Wrong', 'error');
         dispatch(stopLoading())
+        swal('Error!', 'Something Went Wrong', 'error');
       }
     }
   });
@@ -151,8 +164,8 @@ function PlotForm({ onSetFormData, openModal }) {
             variant="outlined"
             fullWidth
             size="small"
-            name="description"
-            {...formik.getFieldProps('description')}
+            name="plotdescription"
+            {...formik.getFieldProps('plotdescription')}
           />
         </Grid>
         <Grid item fixed>
