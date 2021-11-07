@@ -28,7 +28,7 @@ const MenuList = () => {
     if (permission.construction) {
         filteredArray.push(menuItem.items[4]);
     }
-    console.log('filteredArray:::::--->', filteredArray);
+
     const navItems = filteredArray.map((item) => {
         switch (item.type) {
             case 'group':
