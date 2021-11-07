@@ -6,7 +6,7 @@ import Loadable from '../ui-component/Loadable';
 import MinimalLayout from './../layout/MinimalLayout';
 
 // login option 3 routing
-import NotFound from '../views/pages/404Page/NotFound';
+// import NotFound from '../views/pages/404Page/NotFound';
 const Login = Loadable(lazy(() => import('../views/pages/authentication/authentication3/Login3')));
 const AuthRegister3 = Loadable(lazy(() => import('../views/pages/authentication/authentication3/Register3')));
 
