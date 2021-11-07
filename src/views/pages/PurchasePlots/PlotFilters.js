@@ -1,10 +1,12 @@
+import React, { useState, useEffect } from 'react';
 import { Paper, Stack } from '@material-ui/core';
 import { Grid, Button } from '@material-ui/core';
-import React from 'react';
-import AsyncSelector from '../../../ui-component/controls/AsyncSelector';
 import { makeStyles } from '@material-ui/styles';
-import { useState, useEffect } from 'react';
+import swal from 'sweetalert';
+
+import AsyncSelector from '../../../ui-component/controls/AsyncSelector';
 import server from '../../../server/server';
+
 const useStyles = makeStyles((theme) => {
   return {
     root: {
@@ -35,34 +37,38 @@ const useStyles = makeStyles((theme) => {
     }
   };
 });
-const PlotSelectors = ({ plots, setPlots }) => {
+
+const PlotSelectors = ({ setPlots }) => {
   const classes = useStyles();
+  const urlParams = new URLSearchParams(window.location.search);
+  const param = urlParams.get('plot');
 
   const [societyname, setSociety] = useState(null);
-  const [societyData, setSocietyData] = useState('');
+  const [societyData, setSocietyData] = useState([]);
 
   const [sectorno, setSector] = useState(null);
-  const [sectorData, setSectorData] = useState('');
-
-  const [plot, setPlot] = useState(null);
-  const [plotData, setPlotData] = useState('');
+  const [sectorData, setSectorData] = useState([]);
 
 
   const resetSelector = () => {
     setSociety(null);
     setSector(null);
-    setPlot(null);
   };
 
   // Load All Society Names
   useEffect(() => {
     const loadSocities = async () => {
-      const { data } = await server.get('/getsocietiesnameforppt');
-
-      setSocietyData(data);
+      if (param && param === "buy") {
+        const { data } = await server.get('/getsocietiesnameforppt');
+        setSocietyData(data);
+      }
+      if (param && param === "sell") {
+        const { data } = await server.get('/getsocietiesnameforsaleppt');
+        setSocietyData(data);
+      }
     };
     loadSocities();
-  }, []);
+  }, [param]);
 
   //******* Load All Setor Number Against Selected Society***********
 
@@ -70,22 +76,25 @@ const PlotSelectors = ({ plots, setPlots }) => {
     const loadSectors = async () => {
       try {
         if (societyname) {
-          const response = await server.post('/getsectorsforppt', { societyname });
-
-          setSectorData(response.data);
+          if (param && param === "buy") {
+            const response = await server.post('/getsectorsforppt', { societyname });
+            setSectorData(response.data);
+          }
+          if (param && param === "sell") {
+            const { data } = await server.post('/getsectorsforsaleppt', { societyname });
+            setSectorData(data);
+          }
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error.data);
-        setSectorData('Not Found');
       }
     };
     loadSectors();
-  }, [societyname]);
+  }, [societyname, param]);
 
 
   const handleSociety = (value) => {
-    console.log('value from handleSocity', value);
-
     if (value === null) {
       resetSelector();
     } else {
@@ -101,8 +110,28 @@ const PlotSelectors = ({ plots, setPlots }) => {
   };
 
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    try {
+      if (societyname && !sectorno && param && param === "sell") {
+        const { data } = await server.get(`/saleInfoAgainstSocietyName/${societyname}`)
+        setPlots(data)
+      }
 
+      if (societyname && sectorno && param && param === "sell") {
+        const { data } = await server.get(`/saleInfoAgainstSocietyNameSectorNo/${societyname}/${sectorno}`)
+        setPlots(data)
+      }
+
+      if (societyname && !sectorno) {
+        const { data } = await server.get(`/infoAgainstSocietyName/${societyname}`)
+        setPlots(data)
+      } else {
+        const { data } = await server.get(`/infoAgainstSocietyNameSectorNo/${societyname}/${sectorno}`)
+        setPlots(data)
+      }
+    } catch (e) {
+      swal('Opps!', 'Something went wrong. Please! check your connection', 'error');
+    }
   }
 
   return (

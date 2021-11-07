@@ -20,6 +20,7 @@ import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
 import ConstructionProduct from '../views/pages/Construction/Product/Product';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
+import SellPlotCheckout from "../views/pages/SellPlot/ChekoutSellProperty";
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -36,15 +37,19 @@ const MainRoutes = () => {
     if (permission.accounts) {
         pathArray.push('/acounts/signup', '/acounts/users', '/acounts/partneracc', '/acounts/form', '/acounts/adminacc');
     }
+
     if (permission.purchase) {
         pathArray.push('/', '/purchase/summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
     }
+
     if (permission.sale) {
         pathArray.push('/sale/plots', '/sale/summary');
     }
+
     if (permission.super) {
         pathArray.push('/addsociety', '/addplot');
     }
+
     if (permission.construction) {
         pathArray.push(
             '/construction/account',
@@ -54,6 +59,7 @@ const MainRoutes = () => {
             '/construction/stock'
         );
     }
+
     return (
         <Route path={[...pathArray]}>
             <Switch location={location} key={location.pathname}>
@@ -78,6 +84,7 @@ const MainRoutes = () => {
                     )}
                     {permission.sale && (
                         <>
+                            <Route path="/sellPlotCheckout/:societyName/:sectorNo/:plotNo" component={SellPlotCheckout} />
                             <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
                         </>
                     )}
