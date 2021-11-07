@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormControl, Grid, TextField, Typography, FormControlLabel } from '@material-ui/core';
 import { Button, RadioGroup, Radio } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
@@ -8,10 +8,12 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import StoreIcon from '@material-ui/icons/Store';
+import swal from 'sweetalert';
 
 import PageHeader from '../../../ui-component/PageHeader';
 import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
+
 const useStyles = makeStyles((theme) => {
   return {
     root: {
@@ -52,7 +54,7 @@ const initialValues = {
   plotownername: '',
   plotamount: '',
   development: false,
-  description: ''
+  plotdescription: ''
 };
 
 const validationSchema = Yup.object({
@@ -69,13 +71,38 @@ const obj = {
 function PlotForm({ onSetFormData, openModal }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  let { societyName, sectorNo, plotNo } = useParams();
+
   const history = useHistory();
+
+  const truncateSpace = (spacedValue) => {
+    const [firstWord, secondWord] = spacedValue.split("%20");
+    if (!secondWord) {
+      return `${firstWord}`
+    } else {
+      return `${firstWord} ${secondWord}`
+    }
+  }
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, resetValues) => {
+    onSubmit: async (values, onSubmitProps) => {
       //requestToApiAndTransferToAccountStepper
+      try {
+        dispatch(startLoading());
+        const sN = truncateSpace(societyName);
+        const secNo = truncateSpace(sectorNo);
+
+        await server.post('/saleplotdetails', { ...values, societyname: sN, sectorno: secNo, plotno: plotNo, development: !!values.development });
+        dispatch(stopLoading())
+        onSubmitProps.resetForm()
+        history.push(`/sellPlotCheckout/${societyName}/${sectorNo}/${plotNo}`)
+      } catch (e) {
+        dispatch(stopLoading())
+        swal('Error!', 'Something Went Wrong', 'error');
+      }
     }
   });
 
@@ -137,8 +164,8 @@ function PlotForm({ onSetFormData, openModal }) {
             variant="outlined"
             fullWidth
             size="small"
-            name="description"
-            {...formik.getFieldProps('description')}
+            name="plotdescription"
+            {...formik.getFieldProps('plotdescription')}
           />
         </Grid>
         <Grid item fixed>
