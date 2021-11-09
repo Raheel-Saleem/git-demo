@@ -1,24 +1,27 @@
 // packages block
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, colors, Box, Grid, Container } from "@material-ui/core";
+import { Card, CardContent, CardHeader, colors, Box, Grid, Container, } from "@material-ui/core";
 import { useDispatch } from "react-redux"
+// import { Link } from 'react-router-dom';
+import { useParams } from "react-router";
+
+// import history from "../../historty";
 import { renderItem } from "../../utils/helper";
 import server from "../../server/server";
 import { startLoading, stopLoading } from "../../store/actions"
-import { useParams } from "react-router";
 
 const CardComponent = () => {
   const dispatch = useDispatch()
-  const { id } = useParams;
-  const [property, setProperty] = useState([{ plotno: "", plotamount: "", plotownername: "", plotsize: "", plottype: "", sectorno: "", societyname: "", description: "" }])
+  const { id } = useParams();
+
+  const [property, setProperty] = useState({ plotno: "", plotamount: "", plotownername: "", plotsize: "", plottype: "", sectorno: "", societyname: "", description: "" })
 
   useEffect(() => {
     (async () => {
       try {
         dispatch(startLoading())
-        const { data } = server.get(`/moregetplotsforppt/${id}`);
-        // setProperty(data)
-        console.log("::::::::::::::::::", data)
+        const { data } = await server.get(`/moregetplotsforppt/${id}`);
+        data && data.length !== 0 && data[0] && setProperty(data[0])
         dispatch(stopLoading())
       } catch (e) {
         dispatch(stopLoading())
@@ -27,7 +30,7 @@ const CardComponent = () => {
     })()
   }, [id]);
 
-  const { plotno, plotamount, plotownername, plotsize, plottype, sectorno, societyname, description } = property[0]
+  const { plotno, plotamount, plotownername, plotsize, plottype, sectorno, societyname, description } = property || {}
   return (
     <Container maxWidth="lg">
       <Box pb={4}>
@@ -73,6 +76,11 @@ const CardComponent = () => {
               </Grid>
 
 
+              {/* <Grid item md={12} xs={12}>
+                <Button variant="contained" color="primary" onClick={() => history.push(`/addPartnerToPlot/${societyname}/${sectorno}/${plotno}`)}>
+                  Buy
+                </Button>
+              </Grid> */}
             </Grid>
           </CardContent>
         </Card>

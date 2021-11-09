@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => {
         padding: '12px important'
       }
     },
+    bold: {
+      fontWeight: 'bold',
+      fontSize: 16
+    },
     avatar: {
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.getContrastText(theme.palette.primary.light)
@@ -31,11 +35,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 function PlotCard({ plot }) {
+
   const classes = useStyles();
   const urlParams = new URLSearchParams(window.location.search);
   const param = urlParams.get('plot');
-  console.log("::::::::::::::::::::::::;PlotCard", param)
-  const { dateTime, description, plotownername, sectorno, societyname, id, plotno } = plot || {}
+
+  const { dateTime, description, plotownername, sectorno, societyname, id, plotno, plotamount } = plot || {}
   return (
     <Fragment key={id}>
       <Card className={classes.root} elevation={0}>
@@ -71,10 +76,11 @@ function PlotCard({ plot }) {
           <Box sx={{ ml: 0 }}>
             <ul>
               <li>{description || ""}</li>
-
+              <Box mt={1}> <li className={classes.bold}>{plotamount || ""} Rs</li></Box>
             </ul>
           </Box>
         </CardContent>
+
         <CardActions>
           {!param || param === "buy" && <Link to={`/addPartnerToPlot/${societyname}/${sectorno}/${plotno}`} className={classes.link}>
             <Button size="medium" color="primary">
@@ -94,7 +100,7 @@ function PlotCard({ plot }) {
           </Link>
         </CardActions>
       </Card>
-    </Fragment>
+    </Fragment >
   );
 }
 

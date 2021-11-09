@@ -27,14 +27,14 @@ const initialValues = {
 const submitFormValues = async (dispatch, values) => {
     try {
         dispatch(startLoading());
-        await server.post('https://property-manag.herokuapp.com/addPlot', values);
+        await server.post('/addPlot', values);
         dispatch(stopLoading());
         swal('Success!', 'Construction Plot Added Successfully  !', 'success');
     } catch (error) {
         dispatch(stopLoading());
-        swal('Error!', 'Something Went Wrong Please TryAgain!', 'error');
+        swal('Error!', `${error.response.data}`, 'error');
 
-        console.log(error);
+        console.log(error.response.data);
     }
 };
 const AddPlot = () => {
@@ -44,8 +44,13 @@ const AddPlot = () => {
         initialValues,
         // validationSchema,
         onSubmit: (values, onSubmitProps) => {
-            console.log('from on submit fun', values);
-            submitFormValues(dispatch, values);
+            let data = {
+                ...values,
+                material: !!values.material
+            };
+
+            console.log('from on submit fun', data);
+            submitFormValues(dispatch, data);
             onSubmitProps.setSubmitting(false);
             onSubmitProps.resetForm();
         }

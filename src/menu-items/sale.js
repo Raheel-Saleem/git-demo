@@ -20,15 +20,15 @@ export const sale = {
                     // icon: icons['AccountBoxIcon'],
                     url: '/?plot=sell'
                     // target: true
-                },
-                {
-                    id: 'saleSummary',
-                    title: 'Summary',
-                    type: 'item',
-                    // icon: icons['AccountBoxIcon'],
-                    url: '/sale/summary'
-                    // target: true
                 }
+                // {
+                //     id: 'saleSummary',
+                //     title: 'Summary',
+                //     type: 'item',
+                //     // icon: icons['AccountBoxIcon'],
+                //     url: '/sale/summary'
+                //     // target: true
+                // }
             ]
         }
     ]
