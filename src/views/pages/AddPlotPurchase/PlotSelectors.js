@@ -162,7 +162,7 @@ const PlotSelectors = forwardRef(({ onSelecteorValues, resetUpper }, ref) => {
                     <Button
                         variant="contained"
                         color="secondary"
-                        style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                        style={{ height: 40, marginBottom: 10, marginRight: 10, marginTop: 20 }}
                         type="submit"
                         onClick={() => {
                             resetSelector();
@@ -174,7 +174,7 @@ const PlotSelectors = forwardRef(({ onSelecteorValues, resetUpper }, ref) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        style={{ height: 40, marginBottom: 10, marginRight: 10 }}
+                        style={{ height: 40, marginBottom: 19, marginRight: 50, marginTop: 19 }}
                         type="submit"
                         onClick={setSelectorOnParent}
                     >

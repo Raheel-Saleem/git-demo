@@ -15,169 +15,175 @@ import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
 
 const useStyles = makeStyles((theme) => {
-  return {
-    root: {
-      margin: theme.spacing(1),
-      '& .MuiFormControl-fullWidth': {
-        width: '80%'
-      }
-    },
-    label: {
-      width: '80%',
-      marginBottom: 5,
-      paddingLeft: 5
-    },
-    gallery: {
-      width: '80%',
-      height: 150,
-      border: '3px solid ',
-      borderColor: '#d8d8d8',
-      borderRadius: '6px',
-      marginTop: 10,
-      '&:hover': {
-        outline: `3px dashed ${theme.palette.primary.main}`
-      },
-      '& .filebtn': {
-        width: '100%',
-        height: '150px',
-        opacity: 0
-      },
-      '& .MuiSvgIcon-fontSizeLarge': {
-        fontSize: '4.1875rem',
-        opacity: 0.3
-      }
-    }
-  };
+    return {
+        root: {
+            margin: theme.spacing(1),
+            '& .MuiFormControl-fullWidth': {
+                width: '80%'
+            }
+        },
+        label: {
+            width: '80%',
+            marginBottom: 5,
+            paddingLeft: 5
+        },
+        gallery: {
+            width: '80%',
+            height: 150,
+            border: '3px solid ',
+            borderColor: '#d8d8d8',
+            borderRadius: '6px',
+            marginTop: 10,
+            '&:hover': {
+                outline: `3px dashed ${theme.palette.primary.main}`
+            },
+            '& .filebtn': {
+                width: '100%',
+                height: '150px',
+                opacity: 0
+            },
+            '& .MuiSvgIcon-fontSizeLarge': {
+                fontSize: '4.1875rem',
+                opacity: 0.3
+            }
+        }
+    };
 });
 
 const initialValues = {
-  plotownername: '',
-  plotamount: '',
-  development: false,
-  plotdescription: ''
+    plotownername: '',
+    plotamount: '',
+    development: false,
+    plotdescription: ''
 };
 
 const validationSchema = Yup.object({
-  plotownername: Yup.string().required('Required!'),
-  plotamount: Yup.string().required('Required!')
+    plotownername: Yup.string().required('Required!'),
+    plotamount: Yup.string().required('Required!')
 });
 
 const obj = {
-  icon: <StoreIcon fontSize="large" />,
-  pageTitle: 'Sale Plot',
-  pageSubtitle: 'This form is meant to add plot data  for purchasing and selling i.e development ,without dev,etc'
+    icon: <StoreIcon fontSize="large" />,
+    pageTitle: 'Sale Plot',
+    pageSubtitle: 'This form is meant to add plot data  for purchasing and selling i.e development ,without dev,etc'
 };
 
 function PlotForm({ onSetFormData, openModal }) {
-  const classes = useStyles();
-  const dispatch = useDispatch();
+    const classes = useStyles();
+    const dispatch = useDispatch();
 
-  let { societyName, sectorNo, plotNo } = useParams();
+    let { societyName, sectorNo, plotNo } = useParams();
 
-  const history = useHistory();
+    const history = useHistory();
 
-  const truncateSpace = (spacedValue) => {
-    const [firstWord, secondWord] = spacedValue.split("%20");
-    if (!secondWord) {
-      return `${firstWord}`
-    } else {
-      return `${firstWord} ${secondWord}`
-    }
-  }
+    const truncateSpace = (spacedValue) => {
+        const [firstWord, secondWord] = spacedValue.split('%20');
+        if (!secondWord) {
+            return `${firstWord}`;
+        } else {
+            return `${firstWord} ${secondWord}`;
+        }
+    };
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values, onSubmitProps) => {
-      //requestToApiAndTransferToAccountStepper
-      try {
-        dispatch(startLoading());
-        const sN = truncateSpace(societyName);
-        const secNo = truncateSpace(sectorNo);
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit: async (values, onSubmitProps) => {
+            //requestToApiAndTransferToAccountStepper
+            try {
+                dispatch(startLoading());
+                const sN = truncateSpace(societyName);
+                const secNo = truncateSpace(sectorNo);
 
-        await server.post('/saleplotdetails', { ...values, societyname: sN, sectorno: secNo, plotno: plotNo, development: !!values.development });
-        dispatch(stopLoading())
-        onSubmitProps.resetForm()
-        history.push(`/sellPlotCheckout/${societyName}/${sectorNo}/${plotNo}`)
-      } catch (e) {
-        dispatch(stopLoading())
-        swal('Error!', 'Something Went Wrong', 'error');
-      }
-    }
-  });
+                await server.post('/saleplotdetails', {
+                    ...values,
+                    societyname: sN,
+                    sectorno: secNo,
+                    plotno: plotNo,
+                    development: !!values.development
+                });
+                dispatch(stopLoading());
+                onSubmitProps.resetForm();
+                history.push(`/sellPlotCheckout/${societyName}/${sectorNo}/${plotNo}`);
+            } catch (e) {
+                dispatch(stopLoading());
+                swal('Error!', `${e.response.data}`, 'error');
+            }
+        }
+    });
 
-  return (
-    <form className={classes.root} onSubmit={formik.handleSubmit}>
-      <PageHeader obj={obj} />
-      <Grid container spacing={1}>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" className={classes.label}>
-            Plot Owner Name:
-          </Typography>
-          <TextField
-            variant="outlined"
-            fullWidth
-            size="small"
-            name="plotownername"
-            {...formik.getFieldProps('plotownername')}
-            error={formik.touched.plotownername && formik.errors.plotownername ? true : false}
-            helperText={formik.touched.plotownername && formik.errors.plotownername}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" className={classes.label}>
-            Plot Ammount(Rs.):
-          </Typography>
-          <TextField
-            variant="outlined"
-            fullWidth
-            size="small"
-            type="number"
-            placeholder="x,xx,xxxRs."
-            name="plotamount"
-            {...formik.getFieldProps('plotamount')}
-            error={formik.touched.plotamount && formik.errors.plotamount ? true : false}
-            helperText={formik.touched.plotamount && formik.errors.plotamount}
-          />
-        </Grid>
+    return (
+        <form className={classes.root} onSubmit={formik.handleSubmit}>
+            <PageHeader obj={obj} />
+            <Grid container spacing={1}>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h6" className={classes.label}>
+                        Plot Owner Name:
+                    </Typography>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        name="plotownername"
+                        {...formik.getFieldProps('plotownername')}
+                        error={formik.touched.plotownername && formik.errors.plotownername ? true : false}
+                        helperText={formik.touched.plotownername && formik.errors.plotownername}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography variant="h6" className={classes.label}>
+                        Plot Ammount(Rs.):
+                    </Typography>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        type="number"
+                        placeholder="x,xx,xxxRs."
+                        name="plotamount"
+                        {...formik.getFieldProps('plotamount')}
+                        error={formik.touched.plotamount && formik.errors.plotamount ? true : false}
+                        helperText={formik.touched.plotamount && formik.errors.plotamount}
+                    />
+                </Grid>
 
-        <Grid item xs={12} sm={12}>
-          <Typography variant="h6" className={classes.label}>
-            Select Type:
-          </Typography>
-          <FormControl component="fieldset">
-            <RadioGroup name="development" value={formik.values.development} {...formik.getFieldProps('development')}>
-              <FormControlLabel value="true" control={<Radio color="primary" />} label="With Development" />
-              <FormControlLabel value="false" control={<Radio color="primary" />} label="Without Development" />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+                <Grid item xs={12} sm={12}>
+                    <Typography variant="h6" className={classes.label}>
+                        Select Type:
+                    </Typography>
+                    <FormControl component="fieldset">
+                        <RadioGroup name="development" value={formik.values.development} {...formik.getFieldProps('development')}>
+                            <FormControlLabel value="true" control={<Radio color="primary" />} label="With Development" />
+                            <FormControlLabel value="false" control={<Radio color="primary" />} label="Without Development" />
+                        </RadioGroup>
+                    </FormControl>
+                </Grid>
 
-        <Grid item xs={12} md={12}>
-          <Typography variant="h6" className={classes.label}>
-            Description:
-          </Typography>
-          <TextField
-            multiline
-            rows={4}
-            rowsMax={6}
-            variant="outlined"
-            fullWidth
-            size="small"
-            name="plotdescription"
-            {...formik.getFieldProps('plotdescription')}
-          />
-        </Grid>
-        <Grid item fixed>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="submit" size="large" variant="contained" color="primary" startIcon={<SendIcon />}>
-              Send
-            </Button>
-          </div>
-        </Grid>
-      </Grid>
-    </form>
-  );
+                <Grid item xs={12} md={12}>
+                    <Typography variant="h6" className={classes.label}>
+                        Description:
+                    </Typography>
+                    <TextField
+                        multiline
+                        rows={4}
+                        rowsMax={6}
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        name="plotdescription"
+                        {...formik.getFieldProps('plotdescription')}
+                    />
+                </Grid>
+                <Grid item fixed>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button type="submit" size="large" variant="contained" color="primary" startIcon={<SendIcon />}>
+                            Send
+                        </Button>
+                    </div>
+                </Grid>
+            </Grid>
+        </form>
+    );
 }
 
 export default PlotForm;

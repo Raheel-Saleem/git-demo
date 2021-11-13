@@ -19,7 +19,11 @@ const Stock = () => {
                                         <label className="input_heading" htmlFor="account">
                                             <b>Item Name </b>
                                         </label>
-                                        <input type="text" className="form-control" placeholder id="account" />
+                                        <select className="custom-select">
+                                            <option selected>Name</option>
+                                            <option value={1}>Bricks</option>
+                                            <option value={2}>Cement</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-md-6">

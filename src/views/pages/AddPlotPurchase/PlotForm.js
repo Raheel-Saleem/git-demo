@@ -81,6 +81,7 @@ function PlotForm({ onSetFormData, openModal }) {
                     <TextField
                         variant="outlined"
                         fullWidth
+                        label="Name"
                         size="small"
                         name="plotownername"
                         {...formik.getFieldProps('plotownername')}
@@ -95,6 +96,7 @@ function PlotForm({ onSetFormData, openModal }) {
                     <TextField
                         variant="outlined"
                         fullWidth
+                        label="Ammount"
                         size="small"
                         type="number"
                         placeholder="x,xx,xxxRs."
@@ -118,11 +120,12 @@ function PlotForm({ onSetFormData, openModal }) {
                 </Grid>
 
                 <Grid item xs={12} md={12}>
-                    <Typography variant="h6" className={classes.label}>
+                    <Typography variant="h6" className={classes.label} sx={{ mt: 0.5 }}>
                         Description:
                     </Typography>
                     <TextField
                         multiline
+                        label="Description"
                         rows={4}
                         rowsMax={6}
                         variant="outlined"

@@ -53,6 +53,7 @@ const Product = () => {
                 setSupplier([...response.data]);
             } catch (error) {
                 console.log(error.response);
+                setSupplier([]);
             }
         };
         getSuppliers();
@@ -137,7 +138,7 @@ const Product = () => {
                                             <b>Supplier Name</b>
                                         </label>
                                         <select className="custom-select">
-                                            <option value="">{''}</option>
+                                            {/* <option value="">{''}</option> */}
                                             {supplier.map((s) => {
                                                 return <option value={s.id}>{s.name}</option>;
                                             })}

@@ -104,6 +104,7 @@ function SocietyForm() {
                     <TextField
                         name="societyname"
                         variant="outlined"
+                        label="Name"
                         fullWidth
                         size="small"
                         {...formik.getFieldProps('societyname')}
@@ -119,6 +120,7 @@ function SocietyForm() {
                         name="sectorno"
                         variant="outlined"
                         fullWidth
+                        label="#"
                         size="small"
                         {...formik.getFieldProps('sectorno')}
                         error={formik.touched.sectorno && formik.errors.sectorno ? true : false}
@@ -132,6 +134,7 @@ function SocietyForm() {
                     <TextField
                         name="plotno"
                         variant="outlined"
+                        label="#"
                         fullWidth
                         size="small"
                         {...formik.getFieldProps('plotno')}
@@ -148,6 +151,7 @@ function SocietyForm() {
                         name="plotsize"
                         variant="outlined"
                         fullWidth
+                        label="sq.ft"
                         size="small"
                         type="text"
                         {...formik.getFieldProps('plotsize')}
@@ -174,6 +178,7 @@ function SocietyForm() {
                     </Typography>
                     <TextField
                         name="description"
+                        label="Des"
                         multiline
                         rows={4}
                         rowsMax={6}
