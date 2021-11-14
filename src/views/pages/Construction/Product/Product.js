@@ -14,22 +14,20 @@ const initialValues = {
     rate: 0,
     unit: '',
     quantity: 0,
-    id: '',
     supplierName: '',
-    pay: 0
+    pay: 0,
+    paymentMethod: ''
 };
 
 const submitFormValues = async (dispatch, values) => {
     try {
         dispatch(startLoading());
-        await server.post('/addPlot', values);
+        await server.post('/purchaseProduct', values);
         dispatch(stopLoading());
-        swal('Success!', 'Construction Plot Added Successfully  !', 'success');
+        swal('Success!', 'Product Purchased  Successfully !', 'success');
     } catch (error) {
         dispatch(stopLoading());
-        swal('Error!', `${error.response.data}`, 'error');
-
-        console.log(error.response.data);
+        swal('Error!', 'Something Went Wrong Try Again', 'error');
     }
 };
 const Product = () => {
@@ -70,7 +68,7 @@ const Product = () => {
                 </div>
                 <div className="row align-items-center justify-content-center">
                     <div className="inner_box col-md-6 py-4">
-                        <form action="#" method="post">
+                        <form onSubmit={formik.handleSubmit}>
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group first">
@@ -137,10 +135,10 @@ const Product = () => {
                                         <label className="input_heading" htmlFor="name">
                                             <b>Supplier Name</b>
                                         </label>
-                                        <select className="custom-select">
+                                        <select className="custom-select" {...formik.getFieldProps('supplierName')}>
                                             {/* <option value="">{''}</option> */}
                                             {supplier.map((s) => {
-                                                return <option value={s.id}>{s.name}</option>;
+                                                return <option value={s.name}>{s.name}</option>;
                                             })}
 
                                             {/* <option value="">Hamza Materials </option>
@@ -155,7 +153,13 @@ const Product = () => {
                                         <label className="input_heading" htmlFor="name">
                                             <b>Total Amount</b>
                                         </label>
-                                        <input type="text" className="form-control" placeholder id="name" />
+                                        <input
+                                            type="text"
+                                            value={formik.values.quantity * formik.values.rate}
+                                            className="form-control"
+                                            disabled
+                                            id="name"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +169,13 @@ const Product = () => {
                                         <label className="input_heading" htmlFor="account">
                                             <b>Payment Method </b>
                                         </label>
-                                        <input type="text" className="form-control" placeholder id="account" />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder
+                                            name="paymentMethod"
+                                            {...formik.getFieldProps('paymentMethod')}
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
@@ -173,7 +183,7 @@ const Product = () => {
                                         <label className="input_heading" htmlFor="amount">
                                             <b>Pay</b>
                                         </label>
-                                        <input type="text" className="form-control" placeholder id="name" />
+                                        <input type="number" className="form-control" name="pay" {...formik.getFieldProps('pay')} />
                                     </div>
                                 </div>
                             </div>
