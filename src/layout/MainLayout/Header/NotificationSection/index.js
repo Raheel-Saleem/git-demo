@@ -179,47 +179,16 @@ const NotificationSection = () => {
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                                     <CardContent className={classes.cardContent}>
+                                        <Box sx={{ my: 0.5, mx: 1 }}>
+                                            <Typography variant="h3" color="secondary">
+                                                Purchase Tokens:
+                                            </Typography>
+                                        </Box>
+                                        <Divider />
                                         <Grid container direction="column" spacing={2}>
-                                            <Grid item xs={12}>
-                                                <div className={classes.bodyPPacing}>
-                                                    <Grid container alignItems="center" justifyContent="space-between">
-                                                        <Grid item>
-                                                            <Stack direction="row" spacing={2}>
-                                                                <Typography variant="subtitle1">All Notification</Typography>
-                                                                <Chip size="small" label="01" className={classes.notificationChip} />
-                                                            </Stack>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Typography component={Link} to="#" variant="subtitle2" color="primary">
-                                                                Mark as all read
-                                                            </Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                </div>
-                                            </Grid>
                                             <Grid item xs={12}>
                                                 <PerfectScrollbar className={classes.ScrollHeight}>
                                                     <Grid container direction="column" spacing={2}>
-                                                        <Grid item xs={12}>
-                                                            <div className={classes.textBoxSpacing}>
-                                                                <TextField
-                                                                    id="outlined-select-currency-native"
-                                                                    select
-                                                                    fullWidth
-                                                                    value={value}
-                                                                    onChange={handleChange}
-                                                                    SelectProps={{
-                                                                        native: true
-                                                                    }}
-                                                                >
-                                                                    {status.map((option) => (
-                                                                        <option key={option.value} value={option.value}>
-                                                                            {option.label}
-                                                                        </option>
-                                                                    ))}
-                                                                </TextField>
-                                                            </div>
-                                                        </Grid>
                                                         <Grid item xs={12} p={0}>
                                                             <Divider className={classes.divider} />
                                                         </Grid>

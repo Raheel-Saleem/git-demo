@@ -1,171 +1,237 @@
-import faker from 'faker';
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Avatar,
-  Grid,
-  Typography,
-  TablePagination,
-  TableFooter
-} from '@material-ui/core';
+import React, { useState, useEffect, Fragment } from 'react';
+import './UserTable.css';
 import { useDispatch } from 'react-redux';
 import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
-const useStyles = makeStyles((theme) => ({
-  table: {
-    minWidth: 650
-  },
-  tableContainer: {
-    borderRadius: 15,
-    margin: '10px 10px',
-    maxWidth: 850
-  },
-  tableHeaderCell: {
-    fontWeight: 'bold',
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.getContrastText(theme.palette.primary.dark),
-    fontSize: 15
-  },
-  avatar: {
-    backgroundColor: theme.palette.secondary.light,
-    color: theme.palette.getContrastText(theme.palette.secondary.light)
-  },
-  name: {
-    fontWeight: 'bold',
-    color: theme.palette.secondary.dark
-  },
-  status: {
-    fontWeight: 'bold',
-    fontSize: '0.75rem',
-    color: 'white',
-    backgroundColor: 'grey',
-    borderRadius: 8,
-    padding: '3px 10px',
-    display: 'inline-block'
-  }
-}));
+import swal from 'sweetalert';
 
-let USERS = [],
-  STATUSES = ['Admin', 'Employee', 'Partner'];
-for (let i = 0; i < 14; i++) {
-  USERS[i] = {
-    name: faker.name.findName(),
-    email: faker.internet.email(),
-    phone: faker.phone.phoneNumber(),
-    jobTitle: faker.name.jobTitle(),
-    company: faker.company.companyName(),
-    joinDate: faker.date.past().toLocaleDateString('en-US'),
-    status: STATUSES[Math.floor(Math.random() * STATUSES.length)]
-  };
-}
+import Paginantion from './Paginantion';
+import { Chip } from '@material-ui/core';
+import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
+import lightGreen from '@material-ui/core/colors/lightGreen';
+import cyan from '@material-ui/core/colors/cyan';
+import lime from '@material-ui/core/colors/lime';
 
-function UserTable() {
-  const classes = useStyles();
-  const dispatch = useDispatch()
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [users, setUsers] = useState([]);
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-  useEffect(() => {
-    (async () => {
-      try {
-        dispatch(startLoading())
-        const { data } = await server.get('/getallusers');
-        setUsers(data)
-        dispatch(stopLoading())
-      } catch (e) {
-        dispatch(stopLoading())
-      }
-    })()
-  }, [])
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  const emptyRows = users && rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
+const UserTable = () => {
+    const [users, setUsers] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [opendelete, setDelete] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [deleteId, setDeletId] = useState(null);
 
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <TableContainer component={Paper} className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableHeaderCell}>User Info</TableCell>
-              <TableCell className={classes.tableHeaderCell}>Info</TableCell>
-              <TableCell className={classes.tableHeaderCell}>Joining Date</TableCell>
-              <TableCell className={classes.tableHeaderCell}>Role</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users && users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.username}>
-                <TableCell>
-                  <Grid container>
-                    <Grid item lg={2} style={{ paddingRight: 5 }}>
-                      <Avatar alt={row.username} src="." className={classes.avatar} />
-                    </Grid>
-                    <Grid item lg={10}>
-                      <Typography className={classes.name}>{row.username}</Typography>
-                      <Typography color="textSecondary" variant="body2">
-                        {row.email}
-                      </Typography>
-                      <Typography color="textSecondary" variant="body2">
-                        {row.cnic}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </TableCell>
-                <TableCell>
-                  <Typography color="primary" variant="subtitle2">
-                    {row.phoneno}
-                  </Typography>
-                  <Typography color="textSecondary" variant="body2">
-                    {row.cnic}
-                  </Typography>
-                </TableCell>
-                <TableCell>{row.joinDate}</TableCell>
-                <TableCell>
-                  <Typography
-                    className={classes.status}
-                    style={{
-                      backgroundColor: "green"
-                    }}
-                  >
-                    {row.role}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 15]}
-              component="div"
-              count={USERS.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </TableFooter>
-        </Table>
-      </TableContainer>
-    </div>
-  );
-}
+    const [page, setPage] = useState(1);
+    const [q, setQ] = useState('');
+    const dispatch = useDispatch();
+
+    const rowsPerPage = 10;
+    let indexOfLastTodo = page * rowsPerPage;
+    let indexOfFirstTodo = indexOfLastTodo - rowsPerPage;
+    const totalUsers = users.length;
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(users.length / rowsPerPage); i++) {
+        pageNumbers.push(i);
+    }
+    const search = (rows, q) => {
+        const columns = rows[0] && Object.keys(rows[0]);
+        return rows.filter((row) => columns.some((column) => row[column].toString().toLowerCase().indexOf(q) > -1));
+    };
+
+    const openModal = (id) => {
+        console.log('modal fucn exe id', id);
+        setEditId(id);
+        setOpen(true);
+    };
+    const openDeleteModal = (id) => {
+        console.log('delete modal fucn exe id', id);
+        setDeletId(id);
+        setDelete(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+        setDelete(false);
+    };
+    const handleDelete = async (id) => {
+        const newUsers = [...users];
+
+        try {
+            dispatch(startLoading());
+            const response = await server.delete(`deleteUser/${id}`);
+            dispatch(stopLoading());
+
+            if (response.status === 200) {
+                const index = users.findIndex((user) => user.id === id);
+
+                newUsers.splice(index, 1);
+                setUsers(newUsers);
+                resetDeleteStates();
+                swal('Success!', 'User Deleted Succesfully!', 'success');
+            }
+        } catch (error) {
+            dispatch(stopLoading());
+
+            swal('Error!', 'Forbidden!', 'error');
+        }
+    };
+
+    const handleUpdate = async (values, id) => {
+        const newUsers = [...users];
+
+        try {
+            dispatch(startLoading());
+            const data = {
+                id,
+                ...values
+            };
+            console.log('--->>>>', data);
+            const response = await server.put(`/updateUser`);
+            dispatch(stopLoading());
+
+            if (response.status === 200) {
+                const index = users.findIndex((user) => user.id === id);
+
+                newUsers.splice(index, 1, data);
+                setUsers(newUsers);
+                resetUpdateStates();
+                swal('Success!', 'User Deleted Succesfully!', 'success');
+            }
+        } catch (error) {
+            dispatch(stopLoading());
+
+            swal('Error!', 'Forbidden!', 'error');
+        }
+    };
+    const resetDeleteStates = () => {
+        setDeletId(null);
+        setDelete(false);
+    };
+
+    const resetUpdateStates = () => {
+        setEditId(null);
+        setOpen(false);
+    };
+    useEffect(() => {
+        (async () => {
+            try {
+                dispatch(startLoading());
+                const { data } = await server.get('/getallusers');
+                setUsers(data);
+                dispatch(stopLoading());
+            } catch (e) {
+                dispatch(stopLoading());
+            }
+        })();
+    }, [dispatch]);
+    return (
+        <Fragment>
+            <EditModal open={open} close={handleClose} editRow={handleUpdate} editId={editId} />
+            <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
+            <div className="container-xl">
+                <div className="table-responsive">
+                    <div className="table-wrapper">
+                        <div className="table-title">
+                            <div className="row">
+                                <div className="col-sm-8">
+                                    <h2>Users Details :</h2>
+                                </div>
+                                <div className="col-sm-4">
+                                    <div className="search-box">
+                                        <i className="material-icons"></i>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Search…"
+                                            onChange={(e) => {
+                                                setQ(e.target.value);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table className="table table-striped table-hover table-bordered">
+                            <thead className="table-primary">
+                                <tr>
+                                    {/* <th>ID#</th> */}
+                                    <th>
+                                        Name
+                                        <i className="fa fa-sort" />
+                                    </th>
+                                    <th>Email</th>
+                                    <th>
+                                        Cnic <i className="fa fa-sort" />
+                                    </th>
+                                    <th>Phone Number</th>
+                                    <th>
+                                        Role <i className="fa fa-sort" />
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {search(users, q)
+                                    .slice(indexOfFirstTodo, indexOfLastTodo)
+                                    .map((row) => (
+                                        <tr key={row.id}>
+                                            {/* <td>{row.id}</td> */}
+                                            <td>{row.username}</td>
+                                            <td>{row.email}</td>
+                                            <td>{row.cnic}</td>
+                                            <td>{row.phoneno}</td>
+
+                                            <td>
+                                                <Chip
+                                                    label={row.role.toUpperCase()}
+                                                    // color={`${partnerColor}`}
+                                                    variant="outlined"
+                                                    style={{
+                                                        backgroundColor:
+                                                            row.role.toLowerCase() === 'partner'
+                                                                ? `${lightGreen[200]}`
+                                                                : '' || row.role.toLowerCase() === 'employee'
+                                                                ? `${lime[300]}`
+                                                                : '' || row.role.toLowerCase() === 'admin'
+                                                                ? `${cyan[200]}`
+                                                                : '',
+                                                        color: 'black'
+                                                    }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="edit-btn"
+                                                    type="button"
+                                                    title="Edit"
+                                                    data-toggle="tooltip"
+                                                    onClick={() => openModal(row.id)}
+                                                >
+                                                    <i className="material-icons"></i>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="delete-btn"
+                                                    title="Delete"
+                                                    data-toggle="tooltip"
+                                                    onClick={() => openDeleteModal(row.id)}
+                                                >
+                                                    <i className="material-icons"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                        <div className="clearfix">
+                            <div className="hint-text">
+                                Showing <b>10</b> out of <b>{totalUsers}</b> entries
+                            </div>
+                            <Paginantion currentPage={page} pageNumbers={pageNumbers} setPage={setPage} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Fragment>
+    );
+};
 
 export default UserTable;

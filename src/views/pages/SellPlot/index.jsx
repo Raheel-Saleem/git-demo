@@ -124,6 +124,7 @@ function PlotForm({ onSetFormData, openModal }) {
                         variant="outlined"
                         fullWidth
                         size="small"
+                        label="Name"
                         name="plotownername"
                         {...formik.getFieldProps('plotownername')}
                         error={formik.touched.plotownername && formik.errors.plotownername ? true : false}
@@ -139,6 +140,7 @@ function PlotForm({ onSetFormData, openModal }) {
                         fullWidth
                         size="small"
                         type="number"
+                        label="Amount"
                         placeholder="x,xx,xxxRs."
                         name="plotamount"
                         {...formik.getFieldProps('plotamount')}
@@ -168,6 +170,7 @@ function PlotForm({ onSetFormData, openModal }) {
                         rows={4}
                         rowsMax={6}
                         variant="outlined"
+                        label="Des"
                         fullWidth
                         size="small"
                         name="plotdescription"

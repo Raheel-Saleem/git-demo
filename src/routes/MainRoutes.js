@@ -20,7 +20,7 @@ import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
 import ConstructionProduct from '../views/pages/Construction/Product/Product';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
-import SellPlotCheckout from "../views/pages/SellPlot/ChekoutSellProperty";
+import SellPlotCheckout from '../views/pages/SellPlot/ChekoutSellProperty';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing

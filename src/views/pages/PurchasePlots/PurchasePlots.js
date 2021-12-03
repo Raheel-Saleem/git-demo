@@ -20,7 +20,7 @@ function PurchaseProperty() {
                     const { data } = await server.get('/getplotsforsaleppt');
                     setPlots(data);
                 }
-                if (param && param === 'buy') {
+                if ((param && param === 'buy') || !param) {
                     const { data } = await server.get('/getallpptdata');
                     setPlots(data);
                 }
@@ -29,7 +29,7 @@ function PurchaseProperty() {
                 dispatch(stopLoading());
             }
         })();
-    }, [param]);
+    }, [param, dispatch]);
 
     return (
         <Fragment>
