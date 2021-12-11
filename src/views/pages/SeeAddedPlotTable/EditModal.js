@@ -6,6 +6,14 @@ import { useFormik } from 'formik';
 
 import { Formik, Form, Field, ErrorMessage, FieldArray, FastField } from 'formik';
 
+const initialValues = {
+    id: -1,
+    development: false,
+    plotamount: '',
+    plotownername: '',
+    plottype: '',
+    plotsize: ''
+};
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',
@@ -46,25 +54,29 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
                             &#xE5CD;
                         </i>
                     </div>
-                    <h3 className="text-center mb-3">Update User Account</h3>
+                    <h3 className="text-center mb-3">Update Plot Details</h3>
                     <Formik initialValues={rowValues} onSubmit={onSubmit} enableReinitialize>
                         {(formik) => (
                             <Form className="signup-form">
                                 <div className="form-group mb-2">
-                                    <label htmlFor="name">Full Name</label>
-                                    <Field type="text" className="form-control" name="username" />
+                                    <label htmlFor="name">Plot Owner Name</label>
+                                    <Field type="text" className="form-control" name="plotownername" />
                                 </div>
                                 <div className="form-group mb-2">
-                                    <label htmlFor="email">Email Address</label>
-                                    <Field type="text" className="form-control" placeholder="johndoe@gmail.com" name="email" />
+                                    <label htmlFor="email">Plot Amount</label>
+                                    <Field type="text" className="form-control" name="plotamount" />
                                 </div>
                                 <div className="form-group mb-2">
-                                    <label htmlFor="password">Cnic</label>
-                                    <Field type="text" className="form-control" placeholder="Cnic" name="cnic" />
+                                    <label htmlFor="password">Plot Type</label>
+                                    <Field type="text" className="form-control" name="plottype" />
                                 </div>
                                 <div className="form-group mb-2">
-                                    <label htmlFor="password">Phone Number</label>
-                                    <Field type="text" className="form-control" placeholder="Phone Number" name="phoneno" />
+                                    <label htmlFor="password">Development</label>
+                                    <Field type="text" className="form-control" name="development" />
+                                </div>
+                                <div className="form-group mb-2">
+                                    <label htmlFor="password">Plot Size</label>
+                                    <Field type="text" className="form-control" name="plotsize" />
                                 </div>
                                 <div className="form-group mb-2">
                                     <button type="submit" className="form-control btn btn-primary rounded submit px-3">

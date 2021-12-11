@@ -21,6 +21,7 @@ import ConstructionProduct from '../views/pages/Construction/Product/Product';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
 import SellPlotCheckout from '../views/pages/SellPlot/ChekoutSellProperty';
+import AddedPlotTable from '../views/pages/SeeAddedPlotTable/AddedPlotTable';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -47,7 +48,7 @@ const MainRoutes = () => {
     }
 
     if (permission.super) {
-        pathArray.push('/addsociety', '/addplot');
+        pathArray.push('/addsociety', '/addplot', '/seeaddplot');
     }
 
     if (permission.construction) {
@@ -92,6 +93,7 @@ const MainRoutes = () => {
                         <>
                             <Route path="/addplot" component={Plot} exact />
                             <Route path="/addsociety" component={Society} exact />
+                            <Route path="/seeaddplot" component={AddedPlotTable} exact />
                         </>
                     )}
                     {permission.construction && (

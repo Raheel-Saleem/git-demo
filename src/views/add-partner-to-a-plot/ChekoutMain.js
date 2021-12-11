@@ -18,7 +18,7 @@ import { startLoading, stopLoading } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const steps = ['Add Admin Information', 'Add Partner', 'Cheque ', 'Token Information', 'Pay Order', 'Online Transfer', 'Review your order'];
+const steps = ['Add Admin Information', 'Add Partner', 'Cheque ', 'Token Information', 'Pay Order', 'Online Transfer', 'Review'];
 
 const { formId, formField } = accountFormModel;
 
@@ -51,6 +51,9 @@ export default function Checkout() {
                 dispatch(startLoading());
                 const { data } = await server.get('/getallpartnersforpayments');
                 const { data: adminData } = await server.get('/getalladminsforpayments');
+                console.log('adim ', adminData);
+                console.log('partner ', data);
+
                 setAdminData(adminData);
                 setPartnersData(data);
                 dispatch(stopLoading());
@@ -145,12 +148,13 @@ export default function Checkout() {
                 handleNext();
             }
 
-            if (response.status === 400) {
-                swal('Error!', `Succskas`, 'error');
-            }
+            // if (response.status === 400) {
+            //     console.log(response);
+            //     swal('Error!', `Succskas`, 'error');
+            // }
         } catch (error) {
             dispatch(stopLoading());
-            swal('Error!', 'Check Your Connection and Try again', 'error');
+            swal('Error!', `${error.response.data}`, 'error');
         }
     };
     function getStepContent(step, setValues) {
@@ -229,7 +233,7 @@ export default function Checkout() {
                                     onClick={goToPreviousPath}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
-                                    Partner Table
+                                    Table
                                 </Button>
                                 <Button variant="contained" onClick={handleReset} sx={{ mt: 3, ml: 1 }}>
                                     Reset

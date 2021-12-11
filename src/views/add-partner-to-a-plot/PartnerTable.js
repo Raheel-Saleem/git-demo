@@ -14,8 +14,10 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    IconButton
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 // import { useDispatch } from 'react-redux';
 // import { startLoading, stopLoading } from '../../store/actions';
 // import server from '../../server/server';
@@ -49,18 +51,9 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
     const [amountInvest, setAmountToInvest] = useState(0);
     // const [selectedPartners, setSelectedPartners] = useState([])
 
-    // useEffect(() => {
-    //   (async () => {
-    //     try {
-    //       dispatch(startLoading())
-    //       const { data } = await server.get('/getallpartnersforpayments');
-    //       setPartnersData(data)
-    //       dispatch(stopLoading())
-    //     } catch (e) {
-    //       dispatch(stopLoading())
-    //     }
-    //   })()
-    // }, []);
+    useEffect(() => {
+        console.log(selectedPartners);
+    }, [selectedPartners]);
 
     const handleSubmitPartnerData = () => {
         if (amountInvest > 0 && partner) {
@@ -77,6 +70,10 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
             setPartner('');
             setAmountToInvest(0);
         }
+    };
+    const handleDelete = (id) => {
+        const index = selectedPartners.findIndex((partner) => partner.id === id);
+        selectedPartners.splice(index, 1);
     };
 
     return (
@@ -118,7 +115,9 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
                         <TableRow>
                             <TableCell align="left">ID</TableCell>
                             <TableCell align="left">Name</TableCell>
+                            <TableCell align="left">Amount in Account</TableCell>
                             <TableCell align="left">Amount To Invest</TableCell>
+                            <TableCell align="left">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -128,7 +127,14 @@ export default function ConditionalValidationGrid({ partnersData, setPartnersDat
                                 <TableRow>
                                     <TableCell align="left">{selectedPartner.id}</TableCell>
                                     <TableCell align="left">{selectedPartner.name}</TableCell>
+                                    <TableCell align="left">{selectedPartner.amountToInvest}</TableCell>
+
                                     <TableCell align="left">{selectedPartner.amount}</TableCell>
+                                    <TableCell align="left">
+                                        <IconButton aria-label="delete" onClick={() => handleDelete(selectedPartner.id)}>
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                     </TableBody>

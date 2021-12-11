@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import './UserTable.css';
+import './AddedPlotTable.css';
 import { useDispatch } from 'react-redux';
-import server from '../../../../server/server';
-import { startLoading, stopLoading } from '../../../../store/actions';
+import server from '../../../server/server';
+import { startLoading, stopLoading } from '../../../store/actions';
 import swal from 'sweetalert';
 
 import Paginantion from './Paginantion';
@@ -14,16 +14,19 @@ import cyan from '@material-ui/core/colors/cyan';
 import lime from '@material-ui/core/colors/lime';
 
 const initialValues = {
-    id: '',
-    username: '',
-    email: '',
-    phoneno: '',
-    cnic: '',
-    role: ''
+    id: -1,
+    societyname: '',
+    sectorno: '',
+    plotno: '',
+    development: false,
+    plotamount: '',
+    plotownername: '',
+    plottype: '',
+    plotsize: ''
 };
 
-const UserTable = () => {
-    const [users, setUsers] = useState([]);
+const AddedPlotTable = () => {
+    const [plots, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
     const [editId, setEditId] = useState(null);
@@ -37,9 +40,9 @@ const UserTable = () => {
     const rowsPerPage = 10;
     let indexOfLastTodo = page * rowsPerPage;
     let indexOfFirstTodo = indexOfLastTodo - rowsPerPage;
-    const totalUsers = users.length;
+    const totalUsers = plots.length;
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(users.length / rowsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(plots.length / rowsPerPage); i++) {
         pageNumbers.push(i);
     }
     const search = (rows, q) => {
@@ -48,8 +51,8 @@ const UserTable = () => {
     };
 
     const openModal = (id) => {
-        const index = users.findIndex((user) => user.id === id);
-        const selectedRowItems = users[index];
+        const index = plots.findIndex((user) => user.id === id);
+        const selectedRowItems = plots[index];
 
         handleRowValues(selectedRowItems);
 
@@ -66,15 +69,15 @@ const UserTable = () => {
         resetDeleteStates();
     };
     const handleDelete = async (id) => {
-        const newUsers = [...users];
+        const newUsers = [...plots];
 
         try {
             dispatch(startLoading());
-            const response = await server.delete(`deleteUser/${id}`);
+            const response = await server.delete(`deletePlot/${id}`);
             dispatch(stopLoading());
 
             if (response.status === 200) {
-                const index = users.findIndex((user) => user.id === id);
+                const index = plots.findIndex((plot) => plot.id === id);
 
                 newUsers.splice(index, 1);
                 setUsers(newUsers);
@@ -89,16 +92,17 @@ const UserTable = () => {
     };
 
     const handleUpdate = async (values) => {
-        const newUsers = [...users];
+        const newUsers = [...plots];
 
         try {
             dispatch(startLoading());
+            const { societyname, sectorno, plotno, ...data } = values;
 
-            const response = await server.put(`/updateUser`, values);
+            const response = await server.put(`/updatePlot`, data);
             dispatch(stopLoading());
 
             if (response.status === 200) {
-                const index = users.findIndex((user) => user.id === values.id);
+                const index = plots.findIndex((user) => user.id === values.id);
 
                 newUsers.splice(index, 1, values);
                 setUsers(newUsers);
@@ -128,11 +132,14 @@ const UserTable = () => {
             return {
                 ...prevState,
                 id: selectedRowItems.id,
-                username: selectedRowItems.username,
-                email: selectedRowItems.email,
-                phoneno: selectedRowItems.phoneno,
-                cnic: selectedRowItems.cnic,
-                role: selectedRowItems.role
+                societyname: selectedRowItems.societyname,
+                sectorno: selectedRowItems.sectorno,
+                plotno: selectedRowItems.plotno,
+                development: selectedRowItems.development,
+                plotamount: selectedRowItems.plotamount,
+                plotownername: selectedRowItems.plotownername,
+                plottype: selectedRowItems.plottype,
+                plotsize: selectedRowItems.plotsize
             };
         });
     };
@@ -140,8 +147,9 @@ const UserTable = () => {
         (async () => {
             try {
                 dispatch(startLoading());
-                const { data } = await server.get('/getallusers');
+                const { data } = await server.get('/allplotforpurchasesummary');
                 setUsers(data);
+                console.log(data);
                 dispatch(stopLoading());
             } catch (e) {
                 dispatch(stopLoading());
@@ -152,13 +160,13 @@ const UserTable = () => {
         <Fragment>
             <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
-            <div className="container-xl">
+            <div className="container-fluid">
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-sm-8">
-                                    <h2>Users Details :</h2>
+                                    <h2>Added Plot Details :</h2>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="search-box">
@@ -179,50 +187,50 @@ const UserTable = () => {
                             <thead className="table-primary">
                                 <tr>
                                     {/* <th>ID#</th> */}
-                                    <th>
-                                        Name
-                                        <i className="fa fa-sort" />
-                                    </th>
-                                    <th>Email</th>
-                                    <th>
-                                        Cnic <i className="fa fa-sort" />
-                                    </th>
-                                    <th>Phone Number</th>
-                                    <th>
-                                        Role <i className="fa fa-sort" />
-                                    </th>
+                                    <th>Society Name</th>
+                                    <th>Sector Number</th>
+                                    <th>Plot Number</th>
+
+                                    <th>Plot Size</th>
+                                    <th>Plot Type</th>
+                                    <th>Plot-Owner</th>
+                                    <th>Plot Purchase Amount</th>
+
+                                    <th>Development</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {search(users, q)
+                                {search(plots, q)
                                     .slice(indexOfFirstTodo, indexOfLastTodo)
                                     .map((row) => (
                                         <tr key={row.id}>
-                                            {/* <td>{row.id}</td> */}
-                                            <td>{row.username}</td>
-                                            <td>{row.email}</td>
-                                            <td>{row.cnic}</td>
-                                            <td>{row.phoneno}</td>
+                                            <td>{row.societyname}</td>
+                                            <td>{row.sectorno}</td>
+                                            <td>{row.plotno}</td>
+                                            <td>{row.plotsize + ' sq.ft'}</td>
 
                                             <td>
                                                 <Chip
-                                                    label={row.role.toUpperCase()}
-                                                    // color={`${partnerColor}`}
+                                                    label={row.plottype.toUpperCase()}
                                                     variant="outlined"
                                                     style={{
                                                         backgroundColor:
-                                                            row.role.toLowerCase() === 'partner'
+                                                            row.plottype.toLowerCase() === 'comercial'
                                                                 ? `${lightGreen[200]}`
-                                                                : '' || row.role.toLowerCase() === 'employee'
+                                                                : '' || row.plottype.toLowerCase() === 'corner'
                                                                 ? `${lime[300]}`
-                                                                : '' || row.role.toLowerCase() === 'admin'
+                                                                : '' || row.plottype.toLowerCase() === 'general'
                                                                 ? `${cyan[200]}`
                                                                 : '',
                                                         color: 'black'
                                                     }}
                                                 />
                                             </td>
+                                            <td>{row.plotownername.toUpperCase()}</td>
+                                            <td>{row.plotamount}</td>
+                                            <td>{row.development ? 'Yes' : 'No'}</td>
+
                                             <td>
                                                 <button
                                                     className="edit-btn"
@@ -260,4 +268,4 @@ const UserTable = () => {
     );
 };
 
-export default UserTable;
+export default AddedPlotTable;

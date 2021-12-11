@@ -8,7 +8,7 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@material-ui/co
 // project imports
 import AuthWrapper1 from './../AuthWrapper1';
 import AuthCardWrapper from './../AuthCardWrapper';
-import FirebaseLogin from './../firebase-forms/FirebaseLogin';
+import ForgotForm from './../firebase-forms/ForgotForm';
 import Logo from './../../../../ui-component/Logo';
 import AuthFooter from './../../../../ui-component/cards/AuthFooter';
 
@@ -16,7 +16,7 @@ import AuthFooter from './../../../../ui-component/cards/AuthFooter';
 
 //================================|| AUTH3 - LOGIN ||================================//
 
-const Login = () => {
+const ForgotPassword = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -28,11 +28,6 @@ const Login = () => {
                         <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                    {/* <Grid item sx={{ mb: 3 }}>
-                                        <RouterLink to="#">
-                                            <Logo />
-                                        </RouterLink>
-                                    </Grid> */}
                                     <Grid item xs={12}>
                                         <Grid
                                             container
@@ -47,17 +42,17 @@ const Login = () => {
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Hi, Welcome Back
+                                                        Hi, Forgot Password?
                                                     </Typography>
                                                     <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : ''}>
-                                                        Enter your credentials to continue
+                                                        Don't Worry! You can reset your password here.
                                                     </Typography>
                                                 </Stack>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <FirebaseLogin login={3} />
+                                        <ForgotForm />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Divider />
@@ -75,4 +70,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default ForgotPassword;

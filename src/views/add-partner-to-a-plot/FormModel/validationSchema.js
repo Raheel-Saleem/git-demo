@@ -27,13 +27,19 @@ const {
 const validationSchema = [
     Yup.object().shape({
         admData: Yup.object().shape({
-            id: Yup.number(), name: Yup.string(), amount: Yup.string()
+            id: Yup.number(),
+            name: Yup.string(),
+            amount: Yup.string()
         })
     }),
     Yup.object().shape({
-        [userid.name]: Yup.array().of(Yup.object().shape({
-            id: Yup.number(), name: Yup.string(), amount: Yup.string()
-        }))
+        [userid.name]: Yup.array().of(
+            Yup.object().shape({
+                id: Yup.number(),
+                name: Yup.string(),
+                amount: Yup.string()
+            })
+        )
     }),
     Yup.object().shape({
         [chequeAmount.name]: Yup.string(),
@@ -45,14 +51,14 @@ const validationSchema = [
     Yup.object().shape({
         [tokenAmount.name]: Yup.string().required(),
         [tokenDays.name]: Yup.string().required(),
-        [tokenDescription.name]: Yup.string().required(),
+        [tokenDescription.name]: Yup.string(),
         [taxAmount.name]: Yup.string().required(),
-        [taxDescription.name]: Yup.string(),
+        [taxDescription.name]: Yup.string()
     }),
     Yup.object().shape({
-        [payorderAmount.name]: Yup.string().required(`${payorderAmount.requiredErrorMsg}`),
-        [noOfPayOrder.name]: Yup.string().required(`${noOfPayOrder.requiredErrorMsg}`),
-        [payOrderNo.name]: Yup.string().required(`${payOrderNo.requiredErrorMsg}`),
+        [payorderAmount.name]: Yup.string(),
+        [noOfPayOrder.name]: Yup.string(),
+        [payOrderNo.name]: Yup.string(),
         [payorderDescription.name]: Yup.string().nullable()
     }),
     Yup.object().shape({

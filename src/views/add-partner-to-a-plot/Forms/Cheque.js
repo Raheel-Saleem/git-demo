@@ -22,6 +22,13 @@ export default function Cheque(props) {
     return (
         <React.Fragment>
             <Typography variant="h3" sx={{ my: 2 }}>
+                Cash Amount:
+            </Typography>
+            <Grid item xs={12}>
+                <InputField name={amountInCash.name} label={amountInCash.label} fullWidth variant="outlined" size="small" type="number" />
+            </Grid>
+
+            <Typography variant="h3" sx={{ my: 2 }}>
                 Cheque Info:
             </Typography>
             <Grid container spacing={3}>
@@ -53,9 +60,6 @@ export default function Cheque(props) {
                         rows={3}
                         rowsMax={4}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <InputField name={amountInCash.name} label={amountInCash.label} fullWidth variant="outlined" size="small" type="number" />
                 </Grid>
             </Grid>
         </React.Fragment>

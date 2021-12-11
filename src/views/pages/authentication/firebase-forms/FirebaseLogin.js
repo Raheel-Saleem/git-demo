@@ -201,7 +201,7 @@ const FirebaseLogin = (props, { ...others }) => {
                             <Typography
                                 variant="subtitle1"
                                 component={Link}
-                                to={props.login ? '/pages/forgot-password/forgot-password' + props.login : '#'}
+                                to={'/forgot-password'}
                                 color="secondary"
                                 sx={{ textDecoration: 'none' }}
                             >

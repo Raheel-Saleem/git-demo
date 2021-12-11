@@ -6,6 +6,8 @@ import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
 import PlotFilters from './PlotFilters';
 import { Box } from '@material-ui/system';
+import NoPlot from '../../No_Plot_Found/NoPlot';
+import Divider from '@material-ui/core/Divider';
 function PurchaseProperty() {
     const dispatch = useDispatch();
     const [plots, setPlots] = useState([]);
@@ -33,9 +35,11 @@ function PurchaseProperty() {
 
     return (
         <Fragment>
-            <Box></Box>
             <PlotFilters plots={plots} setPlots={setPlots} />
-            <PlotGrid plots={plots} />
+            <Box sx={{ mx: 4, my: 2 }}>
+                <Divider variant="fullWidth" style={{ borderColor: '#a09595' }} />
+            </Box>
+            {(plots.length === 0 && <NoPlot />) || <PlotGrid plots={plots} />}
         </Fragment>
     );
 }
