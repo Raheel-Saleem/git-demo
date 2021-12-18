@@ -20,6 +20,14 @@ export const purchase = {
                     // icon: icons['AccountBoxIcon'],
                     url: '/?plot=buy'
                     // target: true
+                },
+                {
+                    id: 'purchase-plots-summary',
+                    title: 'Purchase Plots Summary',
+                    type: 'item',
+                    // icon: icons['AccountBoxIcon'],
+                    url: '/purchase-summary'
+                    // target: true
                 }
                 // {
                 //     id: 'purchaseSummary',

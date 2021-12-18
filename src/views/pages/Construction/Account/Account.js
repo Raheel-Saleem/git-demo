@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
 const submitFormValues = async (dispatch, values) => {
     try {
         dispatch(startLoading());
-        await server.post('https://property-manag.herokuapp.com/constructionAmount', values);
+        await server.post('/constructionAmount', values);
         dispatch(stopLoading());
         swal('Success!', 'Construction Account Open !', 'success');
     } catch (error) {

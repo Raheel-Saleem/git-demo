@@ -22,6 +22,8 @@ import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
 import SellPlotCheckout from '../views/pages/SellPlot/ChekoutSellProperty';
 import AddedPlotTable from '../views/pages/SeeAddedPlotTable/AddedPlotTable';
+import PurchaseSummary from '../views/pages/PurchaseSummary/PurchaseSummary';
+
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -40,7 +42,7 @@ const MainRoutes = () => {
     }
 
     if (permission.purchase) {
-        pathArray.push('/', '/purchase/summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
+        pathArray.push('/', '/purchase-summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
     }
 
     if (permission.sale) {
@@ -81,6 +83,7 @@ const MainRoutes = () => {
                         <>
                             <Route path="/addPartnerToPlot/:societyName/:sectorNo/:plotNo" exact component={AddPartnerToPlot} />
                             <Route path="/propertyDetail/:id" exact component={DetailePropertyPage} />
+                            <Route path="/purchase-summary" exact component={PurchaseSummary} />
                         </>
                     )}
                     {permission.sale && (
