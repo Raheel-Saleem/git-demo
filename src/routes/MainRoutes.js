@@ -16,10 +16,13 @@ import AddPartnerToPlot from '../views/add-partner-to-a-plot/ChekoutMain';
 import SellPlot from '../views/pages/SellPlot';
 import DetailePropertyPage from '../views/DetailePropertyPage';
 import ConstructionAccount from '../views/pages/Construction/Account/Account';
+import ConstructionAccountSummary from '../views/pages/Construction/AccountSummary/AccountSummary';
 import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
+import ConstructionPlotSummary from '../views/pages/Construction/PlotSummary/PlotSummary';
 import ConstructionProduct from '../views/pages/Construction/Product/Product';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
+import ConstructionSupplierSummary from '../views/pages/Construction/SupplierSummary/SupplierSummary';
 import SellPlotCheckout from '../views/pages/SellPlot/ChekoutSellProperty';
 import AddedPlotTable from '../views/pages/SeeAddedPlotTable/AddedPlotTable';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -54,8 +57,11 @@ const MainRoutes = () => {
     if (permission.construction) {
         pathArray.push(
             '/construction/account',
+            '/construction/accountSummmary',
             '/construction/addplot',
+            '/construction/plotSummmary',
             '/construction/supplier',
+            '/construction/supplierSummary',
             '/construction/product',
             '/construction/stock'
         );
@@ -99,11 +105,13 @@ const MainRoutes = () => {
                     {permission.construction && (
                         <>
                             <Route path="/construction/account" component={ConstructionAccount} exact />
-
+                            <Route path="/construction/accountSummary" component={ConstructionAccountSummary} exact />
                             <Route path="/construction/addplot" component={ConstructionAddPlot} exact />
+                            <Route path="/construction/plotSummary" component={ConstructionPlotSummary} exact />
                             <Route path="/construction/product" component={ConstructionProduct} exact />
                             <Route path="/construction/stock" component={ConstructionStock} exact />
                             <Route path="/construction/supplier" component={ConstructionSupplier} exact />
+                            <Route path="/construction/supplierSummary" component={ConstructionSupplierSummary} exact />
                         </>
                     )}
                 </MainLayout>

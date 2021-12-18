@@ -24,16 +24,34 @@ export const construction = {
                     url: '/construction/account'
                 },
                 {
+                    id: 'constructionaccountsummary',
+                    title: 'Construction Account Summary',
+                    type: 'item',
+                    url: '/construction/accountSummary'
+                },
+                {
                     id: 'add-cunstrction-plot',
                     title: 'Add Construction Plot',
                     type: 'item',
                     url: '/construction/addplot'
                 },
                 {
+                    id: 'cunstrction-plot-summary',
+                    title: 'Construction Plot Summary',
+                    type: 'item',
+                    url: '/construction/plotSummary'
+                },
+                {
                     id: 'add-supplier',
                     title: 'Add Supplier',
                     type: 'item',
                     url: '/construction/supplier'
+                },
+                {
+                    id: 'supplier-summary',
+                    title: 'Supplier Summary',
+                    type: 'item',
+                    url: '/construction/supplierSummary'
                 },
                 {
                     id: 'purchase-product',
