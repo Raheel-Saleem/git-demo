@@ -133,6 +133,7 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
                                             id="account"
                                             name="itemName"
                                             value={itemName}
+                                            disabled
                                             onChange={(e) => setItemName(e.target.value)}
                                         />
                                     </div>
@@ -149,6 +150,7 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
                                             id="name"
                                             name="rate"
                                             value={rate}
+                                            disabled
                                             onChange={(e) => setRate(e.target.value)}
                                         />
                                     </div>
@@ -178,6 +180,7 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
                                             placeholder
                                             id="name"
                                             name="quantity"
+                                            disabled
                                             value={quantity}
                                             onChange={(e) => setQuantity(e.target.value)}
                                         />
@@ -213,6 +216,7 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
                                             disabled
                                             id="name"
                                             name="totalAmount"
+                                            disabled
                                             value={totalAmount}
                                             onChange={(e) => setTotalAmount(e.target.value)}
                                         />
