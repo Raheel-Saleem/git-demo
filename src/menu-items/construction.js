@@ -60,6 +60,12 @@ export const construction = {
                     url: '/construction/product'
                 },
                 {
+                    id: 'product-summary',
+                    title: 'Product Summary',
+                    type: 'item',
+                    url: '/construction/productSummary'
+                },
+                {
                     id: 'add-stock',
                     title: 'Add Stock',
                     type: 'item',

@@ -9,13 +9,17 @@ import DeleteModal from './DeleteModal';
 
 const initialValues = {
     id: '',
+    dateOfPurchase: '',
     itemName: '',
-    rate: '',
-    unit: '',
-    quantity: '',
-    supplierName: '',
+    paid: '',
     pay: '',
-    paymentMethod: ''
+    paymentMethod: '',
+    quantity: '',
+    rate: '',
+    remainingBalance: '',
+    supplierName: '',
+    totalAmount: '',
+    unit: ''
 };
 
 const ProductSummary = () => {
@@ -66,7 +70,7 @@ const ProductSummary = () => {
 
         try {
             dispatch(startLoading());
-            const response = await server.delete(`/deleteConstructionAddSupplier/${id}`);
+            const response = await server.delete(`/deleteConstructionPurchaseProduct/${id}`);
             dispatch(stopLoading());
 
             if (response.status === 200) {
@@ -90,7 +94,7 @@ const ProductSummary = () => {
         try {
             dispatch(startLoading());
 
-            const response = await server.put(`/updateConstructionAddSupplier`, values);
+            const response = await server.put(`/updateConstructionPurchaseProduct`, values);
             dispatch(stopLoading());
 
             if (response.status === 200) {
@@ -124,13 +128,17 @@ const ProductSummary = () => {
             return {
                 ...prevState,
                 id: selectedRowItems.id,
+                dateOfPurchase: selectedRowItems.dateOfPurchase,
                 itemName: selectedRowItems.itemName,
-                rate: selectedRowItems.rate,
-                unit: selectedRowItems.unit,
-                quantity: selectedRowItems.quantity,
-                supplierName: selectedRowItems.supplierName,
+                paid: selectedRowItems.paid,
                 pay: selectedRowItems.pay,
-                paymentMethod: selectedRowItems.paymentMethod
+                paymentMethod: selectedRowItems.paymentMethod,
+                quantity: selectedRowItems.quantity,
+                rate: selectedRowItems.rate,
+                remainingBalance: selectedRowItems.remainingBalance,
+                supplierName: selectedRowItems.supplierName,
+                totalAmount: selectedRowItems.totalAmount,
+                unit: selectedRowItems.unit
             };
         });
     };
@@ -138,7 +146,7 @@ const ProductSummary = () => {
         (async () => {
             try {
                 dispatch(startLoading());
-                const { data } = await server.get('/getConstructionAddSupplierData');
+                const { data } = await server.get('/getConstructionPurchaseProducts');
                 setProducts(data);
                 dispatch(stopLoading());
             } catch (e) {
@@ -177,12 +185,29 @@ const ProductSummary = () => {
                             <thead className="table-primary">
                                 <tr>
                                     {/* <th>ID#</th> */}
-                                    {['Item Name', 'Rate', 'Unit', 'Quantity', 'Supplier Name', 'Pay', 'Payment Method'].map((column) => (
-                                        <th>
-                                            {column}
-                                            <i className="fa fa-sort" />
-                                        </th>
-                                    ))}
+                                    {[
+                                        'dateOfPurchase',
+                                        'itemName',
+                                        'paid',
+                                        'pay',
+                                        'paymentMethod',
+                                        'quantity',
+                                        'rate',
+                                        'remainingBalance',
+                                        'supplierName',
+                                        'totalAmount',
+                                        'unit'
+                                    ].map((column) => {
+                                        const result = column.replace(/([A-Z])/g, " $1");
+                                        const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+                                        console.log(finalResult);
+                                        return (
+                                            <th>
+                                                {finalResult}
+                                                <i className="fa fa-sort" />
+                                            </th>
+                                        );
+                                    })}
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -192,9 +217,20 @@ const ProductSummary = () => {
                                     .map((row) => (
                                         <tr key={row.id}>
                                             {/* <td>{row.id}</td> */}
-                                            {['itemName', 'rate', 'unit', 'quantity', 'supplierName', 'pay', 'paymentMethod'].map(
-                                                (column) =>
-                                                    column === 'filer' ? <td>{row[column] ? 'Yes' : 'No'}</td> : <td>{row[column]}</td>
+                                            {[
+                                                'dateOfPurchase',
+                                                'itemName',
+                                                'paid',
+                                                'pay',
+                                                'paymentMethod',
+                                                'quantity',
+                                                'rate',
+                                                'remainingBalance',
+                                                'supplierName',
+                                                'totalAmount',
+                                                'unit'
+                                            ].map((column) =>
+                                                column === 'paid' ? <td>{row[column] ? 'Yes' : 'No'}</td> : <td>{row[column]}</td>
                                             )}
 
                                             <td>

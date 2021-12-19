@@ -20,6 +20,7 @@ import ConstructionAccountSummary from '../views/pages/Construction/AccountSumma
 import ConstructionAddPlot from '../views/pages/Construction/AddPlot/AddPlot';
 import ConstructionPlotSummary from '../views/pages/Construction/PlotSummary/PlotSummary';
 import ConstructionProduct from '../views/pages/Construction/Product/Product';
+import ConstructionProductSummary from '../views/pages/Construction/ProductSummary/ProductSummary';
 import ConstructionStock from '../views/pages/Construction/Stock/Stock';
 import ConstructionSupplier from '../views/pages/Construction/Supplier/Supplier';
 import ConstructionSupplierSummary from '../views/pages/Construction/SupplierSummary/SupplierSummary';
@@ -112,6 +113,7 @@ const MainRoutes = () => {
                             <Route path="/construction/addplot" component={ConstructionAddPlot} exact />
                             <Route path="/construction/plotSummary" component={ConstructionPlotSummary} exact />
                             <Route path="/construction/product" component={ConstructionProduct} exact />
+                            <Route path="/construction/productSummary" component={ConstructionProductSummary} exact />
                             <Route path="/construction/stock" component={ConstructionStock} exact />
                             <Route path="/construction/supplier" component={ConstructionSupplier} exact />
                             <Route path="/construction/supplierSummary" component={ConstructionSupplierSummary} exact />
