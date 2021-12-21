@@ -4,25 +4,17 @@ import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
 import swal from 'sweetalert';
 import Paginantion from './Paginantion';
-import EditModal from './EditModal';
+import DetailModal from './DetailModal';
 import DeleteModal from './DeleteModal';
 
 const initialValues = {
     id: '',
-    dateOfPurchase: '',
-    itemName: '',
-    paid: '',
-    pay: '',
-    paymentMethod: '',
-    quantity: '',
-    rate: '',
-    remainingBalance: '',
-    supplierName: '',
-    totalAmount: '',
-    unit: ''
+    societyName: '',
+    sectorNo: '',
+    plotNo: ''
 };
 
-const ProductSummary = () => {
+const StockSummary = () => {
     const [products, setProducts] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
@@ -70,7 +62,7 @@ const ProductSummary = () => {
 
         try {
             dispatch(startLoading());
-            const response = await server.delete(`/deleteConstructionPurchaseProduct/${id}`);
+            const response = await server.delete(`/deleteConstructionMaterialAgainstPlot/${id}`);
             dispatch(stopLoading());
 
             if (response.status === 200) {
@@ -88,28 +80,6 @@ const ProductSummary = () => {
         }
     };
 
-    const handleUpdate = async (values) => {
-        const newSuppliers = [...products];
-
-        try {
-            dispatch(startLoading());
-
-            const response = await server.put(`/updateConstructionPurchaseProduct`, values);
-            const { data } = await server.get('/getConstructionPurchaseProducts');
-            dispatch(stopLoading());
-
-            if (response.status === 200) {
-                setProducts(data);
-                resetUpdateStates();
-                swal('Success!', 'Record Updated Succesfully!', 'success');
-            }
-        } catch (error) {
-            dispatch(stopLoading());
-            resetUpdateStates();
-            console.log(error.response);
-            swal('Error!', 'Forbidden!', 'error');
-        }
-    };
     const resetDeleteStates = () => {
         setDeletId(null);
         setDelete(false);
@@ -126,17 +96,9 @@ const ProductSummary = () => {
             return {
                 ...prevState,
                 id: selectedRowItems.id,
-                dateOfPurchase: selectedRowItems.dateOfPurchase,
-                itemName: selectedRowItems.itemName,
-                paid: selectedRowItems.paid,
-                pay: selectedRowItems.pay,
-                paymentMethod: selectedRowItems.paymentMethod,
-                quantity: selectedRowItems.quantity,
-                rate: selectedRowItems.rate,
-                remainingBalance: selectedRowItems.remainingBalance,
-                supplierName: selectedRowItems.supplierName,
-                totalAmount: selectedRowItems.totalAmount,
-                unit: selectedRowItems.unit
+                societyName: selectedRowItems.societyName,
+                sectorNo: selectedRowItems.sectorNo,
+                plotNo: selectedRowItems.plotNo
             };
         });
     };
@@ -144,7 +106,7 @@ const ProductSummary = () => {
         (async () => {
             try {
                 dispatch(startLoading());
-                const { data } = await server.get('/getConstructionPurchaseProducts');
+                const { data } = await server.get('/getConstructionMaterialAssignedPlot');
                 setProducts(data);
                 dispatch(stopLoading());
             } catch (e) {
@@ -154,7 +116,7 @@ const ProductSummary = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
+            <DetailModal open={open} close={handleClose} rowID={editId}/>
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
             <div className="">
                 <div className="table-responsive">
@@ -162,7 +124,7 @@ const ProductSummary = () => {
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-sm-8">
-                                    <h2>Construction Product Summary :</h2>
+                                    <h2>Construction Stock Summary :</h2>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="search-box">
@@ -183,20 +145,8 @@ const ProductSummary = () => {
                             <thead className="table-primary">
                                 <tr>
                                     {/* <th>ID#</th> */}
-                                    {[
-                                        'dateOfPurchase',
-                                        'itemName',
-                                        'paid',
-                                        'pay',
-                                        'paymentMethod',
-                                        'quantity',
-                                        'rate',
-                                        'remainingBalance',
-                                        'supplierName',
-                                        'totalAmount',
-                                        'unit'
-                                    ].map((column) => {
-                                        const result = column.replace(/([A-Z])/g, " $1");
+                                    {['societyName', 'sectorNo', 'plotNo'].map((column) => {
+                                        const result = column.replace(/([A-Z])/g, ' $1');
                                         const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
                                         console.log(finalResult);
                                         return (
@@ -215,31 +165,13 @@ const ProductSummary = () => {
                                     .map((row) => (
                                         <tr key={row.id}>
                                             {/* <td>{row.id}</td> */}
-                                            {[
-                                                'dateOfPurchase',
-                                                'itemName',
-                                                'paid',
-                                                'pay',
-                                                'paymentMethod',
-                                                'quantity',
-                                                'rate',
-                                                'remainingBalance',
-                                                'supplierName',
-                                                'totalAmount',
-                                                'unit'
-                                            ].map((column) =>
-                                                column === 'paid' ? <td>{row[column] ? 'Yes' : 'No'}</td> : <td>{row[column]}</td>
-                                            )}
+                                            {['societyName', 'sectorNo', 'plotNo'].map((column) => (
+                                                <td>{row[column]}</td>
+                                            ))}
 
                                             <td>
-                                                <button
-                                                    className="edit-btn"
-                                                    type="button"
-                                                    title="Edit"
-                                                    data-toggle="tooltip"
-                                                    onClick={() => openModal(row.id)}
-                                                >
-                                                    <i className="material-icons"></i>
+                                                <button className="btn btn-success rounded-pill shadow" onClick={() => openModal(row.id)}>
+                                                    View
                                                 </button>
                                                 <button
                                                     type="button"
@@ -268,4 +200,4 @@ const ProductSummary = () => {
     );
 };
 
-export default ProductSummary;
+export default StockSummary;
