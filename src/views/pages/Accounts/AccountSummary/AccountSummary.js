@@ -63,7 +63,7 @@ const AccountSummary = () => {
 
         try {
             dispatch(startLoading());
-            const response = await server.delete(`/deleteConstructionAccount/${id}`);
+            const response = await server.delete(`/deleteAccount/${id}`);
             dispatch(stopLoading());
 
             if (response.status === 200) {
