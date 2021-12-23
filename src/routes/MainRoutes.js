@@ -12,6 +12,7 @@ import PartnerAcc from '../views/pages/Accounts/PartnerAccDetails/PartnerAcc';
 import AdminAcc from '../views/pages/Accounts/AdminAccDetails/AdminDetails';
 // import NotFound from '../views/pages/404Page/NotFound';
 import AccountForm from '../views/pages/Accounts/AccountForm/Account';
+import AccountSummary from '../views/pages/Accounts/AccountSummary/AccountSummary';
 import AddPartnerToPlot from '../views/add-partner-to-a-plot/ChekoutMain';
 import SellPlot from '../views/pages/SellPlot';
 import DetailePropertyPage from '../views/DetailePropertyPage';
@@ -85,6 +86,7 @@ const MainRoutes = () => {
                             <Route path="/acounts/partneracc" component={PartnerAcc} />
                             <Route path="/acounts/adminacc" component={AdminAcc} />
                             <Route path="/acounts/open/:id" component={AccountForm} />
+                            <Route path="/acounts/accountSummary" component={AccountSummary} />
                         </>
                     )}
                     {permission.purchase && (

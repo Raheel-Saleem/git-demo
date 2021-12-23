@@ -38,6 +38,12 @@ export const accounts = {
                     title: 'Admin Account Detail',
                     type: 'item',
                     url: '/acounts/adminacc'
+                },
+                {
+                    id: 'acc-summary',
+                    title: 'Account Summary',
+                    type: 'item',
+                    url: '/acounts/accountSummary'
                 }
             ]
         }

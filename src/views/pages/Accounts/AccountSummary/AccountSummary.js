@@ -4,18 +4,19 @@ import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
 import swal from 'sweetalert';
 import Paginantion from './Paginantion';
-import DetailModal from './DetailModal';
+import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 
 const initialValues = {
+    accName: '',
+    amountToInvest: '',
+    bankName: '',
     id: '',
-    societyName: '',
-    sectorNo: '',
-    plotNo: ''
+    name: ''
 };
 
-const StockSummary = () => {
-    const [products, setProducts] = useState([]);
+const AccountSummary = () => {
+    const [accounts, setAccounts] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
     const [editId, setEditId] = useState(null);
@@ -29,9 +30,9 @@ const StockSummary = () => {
     const rowsPerPage = 10;
     let indexOfLastTodo = page * rowsPerPage;
     let indexOfFirstTodo = indexOfLastTodo - rowsPerPage;
-    const totalUsers = products.length;
+    const totalUsers = accounts.length;
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(products.length / rowsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(accounts.length / rowsPerPage); i++) {
         pageNumbers.push(i);
     }
     const search = (rows, q) => {
@@ -40,8 +41,8 @@ const StockSummary = () => {
     };
 
     const openModal = (id) => {
-        const index = products.findIndex((supplier) => supplier.id === id);
-        const selectedRowItems = products[index];
+        const index = accounts.findIndex((conAccount) => conAccount.id === id);
+        const selectedRowItems = accounts[index];
 
         handleRowValues(selectedRowItems);
 
@@ -58,18 +59,18 @@ const StockSummary = () => {
         resetDeleteStates();
     };
     const handleDelete = async (id) => {
-        const newSuppliers = [...products];
+        const newAccounts = [...accounts];
 
         try {
             dispatch(startLoading());
-            const response = await server.delete(`/deleteConstructionMaterialAgainstPlot/${id}`);
+            const response = await server.delete(`/deleteConstructionAccount/${id}`);
             dispatch(stopLoading());
 
             if (response.status === 200) {
-                const index = products.findIndex((supplier) => supplier.id === id);
+                const index = accounts.findIndex((conAccount) => conAccount.id === id);
 
-                newSuppliers.splice(index, 1);
-                setProducts(newSuppliers);
+                newAccounts.splice(index, 1);
+                setAccounts(newAccounts);
                 resetDeleteStates();
                 swal('Success!', 'Record Deleted Succesfully!', 'success');
             }
@@ -80,6 +81,30 @@ const StockSummary = () => {
         }
     };
 
+    const handleUpdate = async (values) => {
+        const newAccounts = [...accounts];
+
+        try {
+            dispatch(startLoading());
+
+            const response = await server.put(`/updateAccount`, values);
+            dispatch(stopLoading());
+
+            if (response.status === 200) {
+                const index = accounts.findIndex((conAccount) => conAccount.id === values.id);
+
+                newAccounts.splice(index, 1, values);
+                setAccounts(newAccounts);
+                resetUpdateStates();
+                swal('Success!', 'Record Updated Succesfully!', 'success');
+            }
+        } catch (error) {
+            dispatch(stopLoading());
+            resetUpdateStates();
+            console.log(error.response);
+            swal('Error!', 'Forbidden!', 'error');
+        }
+    };
     const resetDeleteStates = () => {
         setDeletId(null);
         setDelete(false);
@@ -95,10 +120,11 @@ const StockSummary = () => {
         setNewValues((prevState) => {
             return {
                 ...prevState,
+                accName: selectedRowItems.accName,
+                amountToInvest: selectedRowItems.amountToInvest,
+                bankName: selectedRowItems.bankName,
                 id: selectedRowItems.id,
-                societyName: selectedRowItems.societyName,
-                sectorNo: selectedRowItems.sectorNo,
-                plotNo: selectedRowItems.plotNo
+                name: selectedRowItems.name
             };
         });
     };
@@ -106,8 +132,8 @@ const StockSummary = () => {
         (async () => {
             try {
                 dispatch(startLoading());
-                const { data } = await server.get('/getConstructionMaterialAssignedPlot');
-                setProducts(data);
+                const { data } = await server.get('/getAccountData');
+                setAccounts(data);
                 dispatch(stopLoading());
             } catch (e) {
                 dispatch(stopLoading());
@@ -116,15 +142,15 @@ const StockSummary = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <DetailModal open={open} close={handleClose} rowID={editId} />
+            <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
-            <div className="">
+            <div className="container-xl">
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-sm-8">
-                                    <h2>Construction Stock Summary :</h2>
+                                    <h2>Accounts Summary :</h2>
                                 </div>
                                 <div className="col-sm-4">
                                     <div className="search-box">
@@ -162,7 +188,7 @@ const StockSummary = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {search(products, q)
+                                {search(accounts, q)
                                     .slice(indexOfFirstTodo, indexOfLastTodo)
                                     .map((row) => (
                                         <tr key={row.id}>
@@ -174,8 +200,14 @@ const StockSummary = () => {
                                                 ))}
 
                                             <td>
-                                                <button className="btn btn-success rounded-pill shadow" onClick={() => openModal(row.id)}>
-                                                    View
+                                                <button
+                                                    className="edit-btn"
+                                                    type="button"
+                                                    title="Edit"
+                                                    data-toggle="tooltip"
+                                                    onClick={() => openModal(row.id)}
+                                                >
+                                                    <i className="material-icons"></i>
                                                 </button>
                                                 <button
                                                     type="button"
@@ -204,4 +236,4 @@ const StockSummary = () => {
     );
 };
 
-export default StockSummary;
+export default AccountSummary;
