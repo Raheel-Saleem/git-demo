@@ -28,15 +28,15 @@ export const purchase = {
                     // icon: icons['AccountBoxIcon'],
                     url: '/purchase-summary'
                     // target: true
-                }
-                // {
-                //     id: 'purchaseSummary',
-                //     title: 'Summary',
-                //     type: 'item',
-                //     // icon: icons['AccountBoxIcon'],
-                //     url: '/purchase/summary'
-                //     // target: true
-                // }
+                },
+                {
+                    id: 'purchase-token-plot',
+                    title: 'Purchase Token Plots',
+                    type: 'item',
+                    // icon: icons['AccountBoxIcon'],
+                    url: '/purchase-token-plot'
+                    // target: true
+                },
             ]
         }
     ]

@@ -20,15 +20,23 @@ export const sale = {
                     // icon: icons['AccountBoxIcon'],
                     url: '/?plot=sell'
                     // target: true
+                },
+                {
+                    id: 'sale-summary',
+                    title: 'Sale Plots Summary',
+                    type: 'item',
+                    // icon: icons['AccountBoxIcon'],
+                    url: '/sale-summary'
+                    // target: true
+                },
+                {
+                    id: 'sale-token-plot',
+                    title: 'Sale Token Plots',
+                    type: 'item',
+                    // icon: icons['AccountBoxIcon'],
+                    url: '/sale-token-plot'
+                    // target: true
                 }
-                // {
-                //     id: 'saleSummary',
-                //     title: 'Summary',
-                //     type: 'item',
-                //     // icon: icons['AccountBoxIcon'],
-                //     url: '/sale/summary'
-                //     // target: true
-                // }
             ]
         }
     ]

@@ -15,6 +15,8 @@ import AccountForm from '../views/pages/Accounts/AccountForm/Account';
 import AccountSummary from '../views/pages/Accounts/AccountSummary/AccountSummary';
 import AddPartnerToPlot from '../views/add-partner-to-a-plot/ChekoutMain';
 import SellPlot from '../views/pages/SellPlot';
+import SalePlotSummary from '../views/pages/SalePlotSummary/SalePlotSummary';
+import SaleTokenPlot from '../views/pages/SaleTokenPlot/SaleTokenPlot';
 import DetailePropertyPage from '../views/DetailePropertyPage';
 import ConstructionAccount from '../views/pages/Construction/Account/Account';
 import ConstructionAccountSummary from '../views/pages/Construction/AccountSummary/AccountSummary';
@@ -29,6 +31,7 @@ import ConstructionSupplierSummary from '../views/pages/Construction/SupplierSum
 import SellPlotCheckout from '../views/pages/SellPlot/ChekoutSellProperty';
 import AddedPlotTable from '../views/pages/SeeAddedPlotTable/AddedPlotTable';
 import PurchaseSummary from '../views/pages/PurchaseSummary/PurchaseSummary';
+import PurchaseTokenPlot from '../views/pages/PurchaseTokenPlot/PurchaseTokenPlot';
 
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
@@ -48,11 +51,11 @@ const MainRoutes = () => {
     }
 
     if (permission.purchase) {
-        pathArray.push('/', '/purchase-summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo');
+        pathArray.push('/', '/purchase-summary', '/addPartnerToPlot/:societyName/:sectorNo/:plotNo', 'purchase-token-plot');
     }
 
     if (permission.sale) {
-        pathArray.push('/sale/plots', '/sale/summary');
+        pathArray.push('/sale/plots', '/sale/summary', 'sale-token-plot');
     }
 
     if (permission.super) {
@@ -94,12 +97,15 @@ const MainRoutes = () => {
                             <Route path="/addPartnerToPlot/:societyName/:sectorNo/:plotNo" exact component={AddPartnerToPlot} />
                             <Route path="/propertyDetail/:id" exact component={DetailePropertyPage} />
                             <Route path="/purchase-summary" exact component={PurchaseSummary} />
+                            <Route path="/purchase-token-plot" exact component={PurchaseTokenPlot} />
                         </>
                     )}
                     {permission.sale && (
                         <>
                             <Route path="/sellPlotCheckout/:societyName/:sectorNo/:plotNo" component={SellPlotCheckout} />
                             <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
+                            <Route path="/sale-summary" exact component={SalePlotSummary} />
+                            <Route path="/sale-token-plot" exact component={SaleTokenPlot} />
                         </>
                     )}
                     {permission.super && (
