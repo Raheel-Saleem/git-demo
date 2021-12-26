@@ -126,7 +126,7 @@ const SalePlotSummary = () => {
     return (
         <Fragment>
             <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
-            <div className="container-xl">
+            <div className="">
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
@@ -166,7 +166,7 @@ const SalePlotSummary = () => {
                                                 </th>
                                             );
                                         })}
-                                    <th>Actions</th>
+                                    {/* <th>Actions</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,7 +181,7 @@ const SalePlotSummary = () => {
                                                     <td>{row[column]}</td>
                                                 ))}
 
-                                            <td>
+                                            {/* <td>
                                                 <button
                                                     className="edit-btn"
                                                     type="button"
@@ -191,7 +191,7 @@ const SalePlotSummary = () => {
                                                 >
                                                     <i className="material-icons"></i>
                                                 </button>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))}
                             </tbody>

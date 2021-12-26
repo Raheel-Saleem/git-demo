@@ -2,10 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
-import swal from 'sweetalert';
 import Paginantion from './Paginantion';
-import EditModal from './EditModal';
-import DeleteModal from './DeleteModal';
+import { Link } from 'react-router-dom';
 
 const initialValues = {
     id: '',
@@ -19,12 +17,6 @@ const initialValues = {
 
 const PurchaseTokenPlot = () => {
     const [accounts, setAccounts] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [opendelete, setDelete] = useState(false);
-    const [editId, setEditId] = useState(null);
-    const [deleteId, setDeletId] = useState(null);
-    const [rowValues, setNewValues] = useState(initialValues);
-
     const [page, setPage] = useState(1);
     const [q, setQ] = useState('');
     const dispatch = useDispatch();
@@ -42,94 +34,6 @@ const PurchaseTokenPlot = () => {
         return rows.filter((row) => columns.some((column) => row[column].toString().toLowerCase().indexOf(q) > -1));
     };
 
-    const openModal = (id) => {
-        const index = accounts.findIndex((conAccount) => conAccount.id === id);
-        const selectedRowItems = accounts[index];
-
-        handleRowValues(selectedRowItems);
-
-        setEditId(id);
-        setOpen(true);
-    };
-    const openDeleteModal = (id) => {
-        console.log('delete modal fucn exe id', id);
-        setDeletId(id);
-        setDelete(true);
-    };
-    const handleClose = () => {
-        resetUpdateStates();
-        resetDeleteStates();
-    };
-    const handleDelete = async (id) => {
-        const newAccounts = [...accounts];
-
-        try {
-            dispatch(startLoading());
-            const response = await server.delete(`/deleteAccount/${id}`);
-            dispatch(stopLoading());
-
-            if (response.status === 200) {
-                const index = accounts.findIndex((conAccount) => conAccount.id === id);
-
-                newAccounts.splice(index, 1);
-                setAccounts(newAccounts);
-                resetDeleteStates();
-                swal('Success!', 'Record Deleted Succesfully!', 'success');
-            }
-        } catch (error) {
-            dispatch(stopLoading());
-
-            swal('Error!', 'Forbidden!', 'error');
-        }
-    };
-
-    const handleUpdate = async (values) => {
-        const newAccounts = [...accounts];
-
-        try {
-            dispatch(startLoading());
-
-            const response = await server.put(`/updateAccount`, values);
-            dispatch(stopLoading());
-
-            if (response.status === 200) {
-                const index = accounts.findIndex((conAccount) => conAccount.id === values.id);
-
-                newAccounts.splice(index, 1, values);
-                setAccounts(newAccounts);
-                resetUpdateStates();
-                swal('Success!', 'Record Updated Succesfully!', 'success');
-            }
-        } catch (error) {
-            dispatch(stopLoading());
-            resetUpdateStates();
-            console.log(error.response);
-            swal('Error!', 'Forbidden!', 'error');
-        }
-    };
-    const resetDeleteStates = () => {
-        setDeletId(null);
-        setDelete(false);
-    };
-
-    const resetUpdateStates = () => {
-        setNewValues(initialValues);
-        setEditId(null);
-        setOpen(false);
-    };
-
-    const handleRowValues = (selectedRowItems) => {
-        setNewValues((prevState) => {
-            return {
-                ...prevState,
-                accName: selectedRowItems.accName,
-                amountToInvest: selectedRowItems.amountToInvest,
-                bankName: selectedRowItems.bankName,
-                id: selectedRowItems.id,
-                name: selectedRowItems.name
-            };
-        });
-    };
     useEffect(() => {
         (async () => {
             try {
@@ -144,8 +48,6 @@ const PurchaseTokenPlot = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
-            <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
             <div className="container-xl">
                 <div className="table-responsive">
                     <div className="table-wrapper">
@@ -202,15 +104,9 @@ const PurchaseTokenPlot = () => {
                                                 ))}
 
                                             <td>
-                                                <button
-                                                    className="edit-btn"
-                                                    type="button"
-                                                    title="Edit"
-                                                    data-toggle="tooltip"
-                                                    onClick={() => openModal(row.id)}
-                                                >
+                                                <Link to={`/purchase-token-plot-edit/${row.id}/${row.societyName}/${row.sectorNo}/${row.plotNo}`} className="edit-btn">
                                                     <i className="material-icons"></i>
-                                                </button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}

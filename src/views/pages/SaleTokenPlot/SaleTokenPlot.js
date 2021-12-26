@@ -2,9 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
-import swal from 'sweetalert';
 import Paginantion from './Paginantion';
-import EditModal from './EditModal';
+import { Link } from 'react-router-dom';
 
 const initialValues = {
     id: '',
@@ -18,9 +17,6 @@ const initialValues = {
 
 const SaleTokenPlot = () => {
     const [accounts, setAccounts] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [rowValues, setNewValues] = useState(initialValues);
-
     const [page, setPage] = useState(1);
     const [q, setQ] = useState('');
     const dispatch = useDispatch();
@@ -37,62 +33,6 @@ const SaleTokenPlot = () => {
         const columns = rows[0] && Object.keys(rows[0]);
         return rows.filter((row) => columns.some((column) => row[column].toString().toLowerCase().indexOf(q) > -1));
     };
-
-    const openModal = (id) => {
-        const index = accounts.findIndex((conAccount) => conAccount.id === id);
-        const selectedRowItems = accounts[index];
-
-        handleRowValues(selectedRowItems);
-
-        setOpen(true);
-    };
-    const handleClose = () => {
-        resetUpdateStates();
-    };
-
-    const handleUpdate = async (values) => {
-        const newAccounts = [...accounts];
-
-        try {
-            dispatch(startLoading());
-
-            const response = await server.put(`/updateAccount`, values);
-            dispatch(stopLoading());
-
-            if (response.status === 200) {
-                const index = accounts.findIndex((conAccount) => conAccount.id === values.id);
-
-                newAccounts.splice(index, 1, values);
-                setAccounts(newAccounts);
-                resetUpdateStates();
-                swal('Success!', 'Record Updated Succesfully!', 'success');
-            }
-        } catch (error) {
-            dispatch(stopLoading());
-            resetUpdateStates();
-            console.log(error.response);
-            swal('Error!', 'Forbidden!', 'error');
-        }
-    };
-    const resetUpdateStates = () => {
-        setNewValues(initialValues);
-        setOpen(false);
-    };
-
-    const handleRowValues = (selectedRowItems) => {
-        setNewValues((prevState) => {
-            return {
-                ...prevState,
-                id: selectedRowItems.id,
-                plotNo: selectedRowItems.plotNo,
-                remainingBalance: selectedRowItems.remainingBalance,
-                sectorNo: selectedRowItems.sectorNo,
-                societyName: selectedRowItems.societyName,
-                tokenAmount: selectedRowItems.tokenAmount,
-                type: selectedRowItems.type
-            };
-        });
-    };
     useEffect(() => {
         (async () => {
             try {
@@ -107,7 +47,6 @@ const SaleTokenPlot = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <div className="container-xl">
                 <div className="table-responsive">
                     <div className="table-wrapper">
@@ -164,15 +103,12 @@ const SaleTokenPlot = () => {
                                                 ))}
 
                                             <td>
-                                                <button
+                                                <Link
+                                                    to={`/sale-token-plot-edit/${row.id}/${row.societyName}/${row.sectorNo}/${row.plotNo}`}
                                                     className="edit-btn"
-                                                    type="button"
-                                                    title="Edit"
-                                                    data-toggle="tooltip"
-                                                    onClick={() => openModal(row.id)}
                                                 >
                                                     <i className="material-icons"></i>
-                                                </button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}
