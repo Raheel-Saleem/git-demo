@@ -9,7 +9,6 @@ import Review from './Review';
 import server from '../../../../server/server';
 import validationSchem from './FormModel/validationSchema';
 import accountFormModel from './FormModel/accountFormModel';
-import formInitialValues from './FormModel/formInitialValues';
 import swal from 'sweetalert';
 import { startLoading, stopLoading } from '../../../../store/actions';
 import { useDispatch } from 'react-redux';
@@ -29,6 +28,7 @@ export default function Edit() {
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const currentValidationSchema = validationSchem[activeStep];
+    const [initialVals, setInitialVals] = useState(null);
     //PARTNERS
 
     const isLastStep = activeStep === steps.length - 1;
@@ -37,10 +37,8 @@ export default function Edit() {
         (async () => {
             try {
                 dispatch(startLoading());
-                const { data } = await server.get('/getallpartnersforpayments');
-                const { data: adminData } = await server.get('/getalladminsforpayments');
-                console.log('adim ', adminData);
-                console.log('partner ', data);
+                const { data } = await server.get('/getAllPaymentsDetailsReview/' + id);
+                setInitialVals(data[0]);
 
                 dispatch(stopLoading());
             } catch (e) {
@@ -155,7 +153,7 @@ export default function Edit() {
     }
     return (
         <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            {initialVals && <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Typography variant="h2" align="center">
                     Edit Plot Token
                 </Typography>
@@ -201,7 +199,7 @@ export default function Edit() {
                             </Box>
                         </React.Fragment>
                     ) : (
-                        <Formik initialValues={formInitialValues} validationSchema={currentValidationSchema} onSubmit={handleSubmit}>
+                        <Formik initialValues={initialVals} validationSchema={currentValidationSchema} onSubmit={handleSubmit}>
                             {({ isSubmitting, setValues }) => (
                                 <Form id={formId}>
                                     {getStepContent(activeStep, setValues)}
@@ -227,7 +225,7 @@ export default function Edit() {
                         </Formik>
                     )}
                 </React.Fragment>
-            </Paper>
+            </Paper>}
         </Container>
         // </ThemeProvider>
     );
