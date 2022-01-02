@@ -34,6 +34,9 @@ import AddedPlotTable from '../views/pages/SeeAddedPlotTable/AddedPlotTable';
 import PurchaseSummary from '../views/pages/PurchaseSummary/PurchaseSummary';
 import PurchaseTokenPlot from '../views/pages/PurchaseTokenPlot/PurchaseTokenPlot';
 import PurchaseTokenPlotEdit from '../views/pages/PurchaseTokenPlot/edit/Edit';
+import PlotConstructionManagement from '../views/pages/Construction/Management';
+import PlotConstructionManagementUpdate from '../views/pages/Construction/Management/update';
+import PlotConstructionManagementSummary from '../views/pages/Construction/ManagementSummary';
 
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
@@ -106,7 +109,11 @@ const MainRoutes = () => {
                             <Route path="/propertyDetail/:id" exact component={DetailePropertyPage} />
                             <Route path="/purchase-summary" exact component={PurchaseSummary} />
                             <Route path="/purchase-token-plot" exact component={PurchaseTokenPlot} />
-                            <Route path="/purchase-token-plot-edit/:id/:societyName/:sectorNo/:plotNo" exact component={PurchaseTokenPlotEdit} />
+                            <Route
+                                path="/purchase-token-plot-edit/:id/:societyName/:sectorNo/:plotNo"
+                                exact
+                                component={PurchaseTokenPlotEdit}
+                            />
                         </>
                     )}
                     {permission.sale && (
@@ -137,6 +144,17 @@ const MainRoutes = () => {
                             <Route path="/construction/stockSummary" component={ConstructionStockSummary} exact />
                             <Route path="/construction/supplier" component={ConstructionSupplier} exact />
                             <Route path="/construction/supplierSummary" component={ConstructionSupplierSummary} exact />
+                            <Route path="/construction/plot-construction-management" component={PlotConstructionManagement} exact />
+                            <Route
+                                path="/construction/plot-construction-management-update/:supervisor/:dateStart/:dateFinish/:plotId"
+                                component={PlotConstructionManagementUpdate}
+                                exact
+                            />
+                            <Route
+                                path="/construction/plot-construction-management-summary"
+                                component={PlotConstructionManagementSummary}
+                                exact
+                            />
                         </>
                     )}
                 </MainLayout>

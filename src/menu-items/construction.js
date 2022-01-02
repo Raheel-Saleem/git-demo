@@ -18,6 +18,18 @@ export const construction = {
             icon: icons['HomeWorkIcon'],
             children: [
                 {
+                    id: 'plot-construction-management',
+                    title: 'Plot Construction Management',
+                    type: 'item',
+                    url: '/construction/plot-construction-management'
+                },
+                {
+                    id: 'plot-construction-management-summary',
+                    title: 'Plot Construction Management Summary',
+                    type: 'item',
+                    url: '/construction/plot-construction-management-summary'
+                },
+                {
                     id: 'constructionaccount',
                     title: 'Construction Account',
                     type: 'item',
