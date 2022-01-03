@@ -23,8 +23,8 @@ export default function PlotConstructionManagementSummary() {
                     <table className="table table-hover table-light rounded border">
                         <thead>
                             <tr>
-                                <th>Date Finish</th>
                                 <th>Date Start</th>
+                                <th>Date Finish</th>
                                 {/* <th>Plot Id</th> */}
                                 <th>Plot No</th>
                                 <th>Sector No</th>
@@ -36,8 +36,8 @@ export default function PlotConstructionManagementSummary() {
                         <tbody>
                             {dataList.map((i, index) => (
                                 <tr key={index}>
-                                    <td>{i.dateFinish}</td>
                                     <td>{i.dateStart}</td>
+                                    <td>{i.dateFinish}</td>
                                     {/* <td>{i.plotId}</td> */}
                                     <td>{i.plotNo}</td>
                                     <td>{i.sectorNo}</td>

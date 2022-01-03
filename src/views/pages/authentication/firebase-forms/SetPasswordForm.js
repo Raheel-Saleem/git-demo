@@ -67,82 +67,96 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialValues = {
-    email: ''
+    password: '',
+    passwordConfirmation: ''
 };
 
 const validationSchema = Yup.object({
-    email: Yup.string().email('invalid email format').required('Required!')
+    password: Yup.string().required('Password is required'),
+    passwordConfirmation: Yup.string().test('passwords-match', 'Passwords must match', function (value) {
+        return this.parent.password === value;
+    })
 });
 
 //============================|| FIREBASE - LOGIN ||============================//
 
-const ForgotForm = (props, { ...others }) => {
+const SetPasswordForm = (props, { ...others }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
 
     const formik = useFormik({
         initialValues,
+        // validate,
+        validationSchema,
         onSubmit: (values, onSubmitProps) => {
             // console.log('form submit values', values);
             // dispatch(login(values));
             onSubmitProps.setSubmitting(false);
             onSubmitProps.resetForm();
-        },
-        // validate,
-        validationSchema
+        }
     });
 
     return (
         <React.Fragment>
-            <Grid container direction="column" justifyContent="center" spacing={2}>
-                <Grid item xs={12} container alignItems="center" justifyContent="center">
-                    <Box
-                        sx={{
-                            mb: 2
-                        }}
-                    >
-                        <Typography variant="subtitle1">Enter Email</Typography>
-                    </Box>
-                </Grid>
-            </Grid>
-
             <form onSubmit={formik.handleSubmit} noValidate>
                 <Grid container maxwidth="xs" spacing={2}>
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
                             variant="outlined"
-                            label="Email "
-                            name="email"
-                            {...formik.getFieldProps('email')}
-                            error={formik.touched.email && formik.errors.email ? true : false}
-                            helperText={formik.touched.email && formik.errors.email}
+                            label="Password "
+                            name="password"
+                            {...formik.getFieldProps('password')}
+                            error={formik.touched.password && formik.errors.password ? true : false}
+                            helperText={formik.touched.password && formik.errors.password}
+                            type={showPassword ? 'text' : 'password'}
                             InputProps={{
                                 endAdornment: (
-                                    <InputAdornment position="start">
-                                        <IconButton>
-                                            <MailOutlineIcon />
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 )
                             }}
                         />
                     </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            label="Confirm Password"
+                            name="passwordConfirmation"
+                            {...formik.getFieldProps('passwordConfirmation')}
+                            error={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation ? true : false}
+                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
+                            type={showPassword ? 'text' : 'password'}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            label="Email Code "
+                            name="emailcode"
+                            {...formik.getFieldProps('emailcode')}
+                        />
+                    </Grid>
 
                     <Grid item sm={12}>
-                        <Link to={'/reset-password'}>
-                            <Button
-                                disableElevation
-                                // disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
-                                color="secondary"
-                            >
-                                Send Me Email
-                            </Button>
-                        </Link>
                         <Button
                             disableElevation
                             // disabled={isSubmitting}
@@ -152,7 +166,7 @@ const ForgotForm = (props, { ...others }) => {
                             variant="contained"
                             color="secondary"
                         >
-                            Send Me Email
+                            Save New Password
                         </Button>
                     </Grid>
                 </Grid>
@@ -161,4 +175,4 @@ const ForgotForm = (props, { ...others }) => {
     );
 };
 
-export default ForgotForm;
+export default SetPasswordForm;
