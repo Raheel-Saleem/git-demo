@@ -115,12 +115,13 @@ const Stock = () => {
                                         <label className="input_heading" htmlFor="name">
                                             <b>Quantity Type</b>
                                         </label>
-                                        <select className="custom-select" name="quantityType" {...formik.getFieldProps('quantityType')}>
-                                            {/* <option selected>Filer</option> */}
-
-                                            <option value="sq.ft">sq feet</option>
-                                            <option value="kg">Kg</option>
-                                        </select>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="name"
+                                            name="quantityType"
+                                            {...formik.getFieldProps('quantityType')}
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-md-6">

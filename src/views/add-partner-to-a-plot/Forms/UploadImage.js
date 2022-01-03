@@ -19,7 +19,7 @@ const truncateSpace = (spacedValue) => {
 
 const UploadImage = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
+
     let { societyName, sectorNo, plotNo } = useParams();
 
     const [image, setImage] = useState(null);
@@ -29,7 +29,7 @@ const UploadImage = () => {
         setImage(event.target.files[0]);
     }
 
-    const onButtonClick = (event) => {
+    const resetHandler = (event) => {
         event.preventDefault();
         event.target.files = null;
         setPreview(null);
@@ -50,7 +50,7 @@ const UploadImage = () => {
             let response = await server.post('/paymentImages', fd);
             dispatch(stopLoading());
             console.log(response);
-
+            resetHandler();
             // if (response.status === 400) {
             //     console.log(response);
             //     swal('Error!', `Succskas`, 'error');
@@ -78,7 +78,7 @@ const UploadImage = () => {
             <div className="file-upload">
                 {preview ? (
                     <>
-                        <button type="button" class="close" aria-label="Close" onClick={onButtonClick}>
+                        <button type="button" class="close" aria-label="Close" onClick={resetHandler}>
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <img className="file-upload-image" src={preview} alt="cook note" />
