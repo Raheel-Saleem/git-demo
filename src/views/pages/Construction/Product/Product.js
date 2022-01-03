@@ -105,12 +105,14 @@ const Product = () => {
                                         <label className="input_heading" htmlFor="name">
                                             <b>Quantity Type</b>
                                         </label>
-                                        <select className="custom-select" name="unit" {...formik.getFieldProps('unit')}>
-                                            {/* <option selected>Filer</option> */}
-
-                                            <option value="sq.ft">sq feet</option>
-                                            <option value="kg">Kg</option>
-                                        </select>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder
+                                            id="name"
+                                            name="unit"
+                                            {...formik.getFieldProps('unit')}
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
@@ -136,7 +138,7 @@ const Product = () => {
                                             <b>Supplier Name</b>
                                         </label>
                                         <select className="custom-select" {...formik.getFieldProps('supplierName')}>
-                                            {/* <option value="">{''}</option> */}
+                                            <option value="">{''}</option>
                                             {supplier.map((s) => {
                                                 return <option value={s.name}>{s.name}</option>;
                                             })}

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../../store/actions';
 import { removeToken } from '../../../../utils/token';
 // material-ui
-import historty from '../../../../historty';
+import history from '../../../../historty';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import {
     Avatar,
@@ -135,7 +135,7 @@ const ProfileSection = () => {
     const handleLogout = () => {
         dispatch(logout());
         removeToken();
-        historty.push('/');
+        history.push('/');
     };
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);

@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 
 const Routes = () => {
     const isSignedIn = useSelector((state) => state.auth.isSignedIn);
+    console.log('🚀 ~ file: index.js ~ line 16 ~ Routes ~ isSignedIn', isSignedIn);
     return (
         <Switch>
             {isSignedIn ? <MainRoutes /> : <AuthenticationRoutes />}

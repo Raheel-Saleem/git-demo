@@ -50,14 +50,13 @@ const Signup = Loadable(lazy(() => import('../views/pages/Accounts/SignUp/Signup
 const MainRoutes = () => {
     const location = useLocation();
     const permission = useSelector((state) => state.auth.permission);
-    const pathArray = [];
+    const pathArray = ['/'];
     if (permission.accounts) {
         pathArray.push('/acounts/signup', '/acounts/users', '/acounts/partneracc', '/acounts/form', '/acounts/adminacc');
     }
 
     if (permission.purchase) {
         pathArray.push(
-            '/',
             '/purchase-summary',
             '/addPartnerToPlot/:societyName/:sectorNo/:plotNo',
             'purchase-token-plot',
@@ -96,11 +95,11 @@ const MainRoutes = () => {
                     {permission.accounts && (
                         <>
                             <Route path="/acounts/signup" component={Signup} exact />
-                            <Route path="/acounts/users" component={UserTable} />
-                            <Route path="/acounts/partneracc" component={PartnerAcc} />
-                            <Route path="/acounts/adminacc" component={AdminAcc} />
-                            <Route path="/acounts/open/:id" component={AccountForm} />
-                            <Route path="/acounts/accountSummary" component={AccountSummary} />
+                            <Route path="/acounts/users" component={UserTable} exact />
+                            <Route path="/acounts/partneracc" component={PartnerAcc} exact />
+                            <Route path="/acounts/adminacc" component={AdminAcc} exact />
+                            <Route path="/acounts/open/:id" component={AccountForm} exact />
+                            <Route path="/acounts/accountSummary" component={AccountSummary} exact />
                         </>
                     )}
                     {permission.purchase && (
@@ -118,7 +117,7 @@ const MainRoutes = () => {
                     )}
                     {permission.sale && (
                         <>
-                            <Route path="/sellPlotCheckout/:societyName/:sectorNo/:plotNo" component={SellPlotCheckout} />
+                            <Route path="/sellPlotCheckout/:societyName/:sectorNo/:plotNo" component={SellPlotCheckout} exact />
                             <Route path="/sellPlot/:societyName/:sectorNo/:plotNo" exact component={SellPlot} />
                             <Route path="/sale-summary" exact component={SalePlotSummary} />
                             <Route path="/sale-token-plot" exact component={SaleTokenPlot} />

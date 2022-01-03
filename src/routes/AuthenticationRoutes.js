@@ -9,7 +9,9 @@ import MinimalLayout from './../layout/MinimalLayout';
 // import NotFound from '../views/pages/404Page/NotFound';
 import ForgotPassword from '../views/pages/authentication/authentication3/ForgotPassword';
 import SetPassword from '../views/pages/authentication/authentication3/SetPassword';
-const Login = Loadable(lazy(() => import('../views/pages/authentication/authentication3/Login3')));
+import Login from '../views/pages/authentication/authentication3/Login3';
+// const Login = Loadable(lazy(() => import('../views/pages/authentication/authentication3/Login3')));
+
 const AuthRegister3 = Loadable(lazy(() => import('../views/pages/authentication/authentication3/Register3')));
 
 //-----------------------|| AUTHENTICATION ROUTING ||-----------------------//

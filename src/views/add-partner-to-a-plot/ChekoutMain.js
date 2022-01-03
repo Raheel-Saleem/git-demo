@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import Cheque from './Forms/Cheque';
 import PayOrder from './Forms/PayOrder';
 import OnlineTranser from './Forms/OnlineTransfer';
+import UploadImage from './Forms/UploadImage';
 import Review from './Review';
 import server from '../../server/server';
 import AdminAcord from './AddAdminAccount';
@@ -18,7 +19,16 @@ import { startLoading, stopLoading } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const steps = ['Add Admin Information', 'Add Partner', 'Cheque ', 'Token Information', 'Pay Order', 'Online Transfer', 'Review'];
+const steps = [
+    'Add Admin Information',
+    'Add Partner',
+    'Token Information',
+    'Cheque ',
+    'Pay Order',
+    'Online Transfer',
+    'Upload Image',
+    'Review'
+];
 
 const { formId, formField } = accountFormModel;
 
@@ -63,7 +73,7 @@ export default function Checkout() {
         })();
     }, []);
     const isStepOptional = (step) => {
-        if ((step) => 0 || step <= 5) return true;
+        if ((step) => 0 || step <= 6) return true;
         else return false;
     };
 
@@ -180,14 +190,16 @@ export default function Checkout() {
                     />
                 );
             case 2:
-                return <Cheque formField={formField} />;
-            case 3:
                 return <TokenInformation formField={formField} />;
+            case 3:
+                return <Cheque formField={formField} />;
             case 4:
                 return <PayOrder formField={formField} />;
             case 5:
                 return <OnlineTranser formField={formField} />;
             case 6:
+                return <UploadImage />;
+            case 7:
                 return <Review />;
             default:
                 throw new Error('Unknown step');
