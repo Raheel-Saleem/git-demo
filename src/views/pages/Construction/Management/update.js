@@ -58,15 +58,15 @@ export default function PlotConstructionManagementUpdate() {
 
             console.log(data);
 
-            // dispatch(startLoading);
-            // const response = await server.post('/constructionManagment', data);
+            dispatch(startLoading);
+            const response = await server.post('/constructionManagment', data);
 
-            // if (response.status === 200) {
-            //     swal('Success!', 'Record Updated Succesfully!', 'success');
-            // } else {
-            //     swal('Error!', 'Forbidden!', 'error');
-            // }
-            // dispatch(stopLoading);
+            if (response.status === 200) {
+                swal('Success!', 'Record Updated Succesfully!', 'success');
+            } else {
+                swal('Error!', 'Forbidden!', 'error');
+            }
+            dispatch(stopLoading);
         })();
     };
 
