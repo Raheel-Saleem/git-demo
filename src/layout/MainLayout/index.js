@@ -17,7 +17,7 @@ import Sidebar from './Sidebar';
 import navigation from './../../menu-items';
 import { drawerWidth } from '../../store/constant';
 import { SET_MENU } from './../../store/actions';
-
+import CircularLoader from '../../ui-component/CircularLoader';
 // assets
 import { IconChevronRight } from '@tabler/icons';
 
@@ -124,6 +124,7 @@ const MainLayout = ({ children }) => {
                 {/* <Main open={leftDrawerOpened}> */}
                 {/* breadcrumb */}
                 <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+
                 <div>{children}</div>
                 {/* </Main> */}
             </main>
