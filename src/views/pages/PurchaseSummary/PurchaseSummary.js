@@ -12,21 +12,80 @@ import DeleteModal from './DeleteModal';
 import lightGreen from '@material-ui/core/colors/lightGreen';
 import cyan from '@material-ui/core/colors/cyan';
 import lime from '@material-ui/core/colors/lime';
+import PropTypes from 'prop-types';
+import { makeStyles, withStyles, useTheme } from '@material-ui/styles';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import TablePagination from '@material-ui/core/TablePagination';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import TableFooter from '@material-ui/core/TableFooter';
+const useRowStyles = makeStyles((theme) => {
+    return {
+        root: {
+            '& > *': {
+                borderBottom: 'unset'
+            }
+        },
+        head: {
+            backgroundColor: '#7abaff',
+            color: theme.palette.common.white
+        },
+        firstHead: {
+            fontSize: '1rem',
+            color: 'black'
+        }
+    };
+});
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover
+        }
+    }
+}))(TableRow);
 
 const PurchaseSummary = () => {
     const [plots, setUsers] = useState([]);
-    const [page, setPage] = useState(1);
     const [q, setQ] = useState('');
     const dispatch = useDispatch();
+    const classes = useRowStyles();
+    const [open, setOpen] = useState(false);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const rowsPerPage = 10;
-    let indexOfLastTodo = page * rowsPerPage;
-    let indexOfFirstTodo = indexOfLastTodo - rowsPerPage;
-    const totalUsers = plots.length;
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(plots.length / rowsPerPage); i++) {
-        pageNumbers.push(i);
-    }
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, plots.length - page * rowsPerPage);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    // const rowsPerPage = 10;
+    // let indexOfLastTodo = page * rowsPerPage;
+    // let indexOfFirstTodo = indexOfLastTodo - rowsPerPage;
+    // const totalUsers = plots.length;
+    // const pageNumbers = [];
+    // for (let i = 1; i <= Math.ceil(plots.length / rowsPerPage); i++) {
+    //     pageNumbers.push(i);
+    // }
     const search = (rows, q) => {
         const columns = rows[0] && Object.keys(rows[0]);
         return rows.filter((row) => columns.some((column) => row[column].toString().toLowerCase().indexOf(q) > -1));
@@ -45,94 +104,235 @@ const PurchaseSummary = () => {
             }
         })();
     }, [dispatch]);
+
     return (
-        <Fragment>
-            <div className="container-fluid">
-                <div className="table-responsive">
-                    <div className="table-wrapper">
-                        <div className="table-title">
-                            <div className="row">
-                                <div className="col-sm-8">
-                                    <h2>Added Plot Details :</h2>
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="search-box">
-                                        <i className="material-icons"></i>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Search…"
-                                            onChange={(e) => {
-                                                setQ(e.target.value);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+        <TableContainer component={Paper}>
+            <Box sx={{ m: 1 }}>
+                <div className="table-title">
+                    <div className="row">
+                        <div className="col-sm-8">
+                            <h2>Plot Purchase Summary :</h2>
                         </div>
-                        <table className="table table-striped table-hover table-bordered">
-                            <thead className="table-primary">
-                                <tr>
-                                    {/* <th>ID#</th> */}
-                                    <th>Society Name</th>
-                                    <th>Sector Number</th>
-                                    <th>Plot Number</th>
-
-                                    <th>Amount in Cash</th>
-                                    <th>Cheque Amount</th>
-                                    {/* <th>Number of Cheque</th>
-                                    <th>Cheque Number</th> */}
-
-                                    <th>PayOrder Amount</th>
-                                    <th>Number of PayOrder</th>
-                                    <th>PayOrder Number</th>
-
-                                    <th>Token Amount</th>
-                                    <th>Token Days</th>
-                                    <th>Date</th>
-
-                                    <th>Tax Amount</th>
-                                    <th>Online Transfer</th>
-                                    <th>Remaining Balence</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {search(plots, q)
-                                    .slice(indexOfFirstTodo, indexOfLastTodo)
-                                    .map((row) => (
-                                        <tr key={row.id}>
-                                            <td>{row.societyName}</td>
-                                            <td>{row.sectorNo}</td>
-                                            <td>{row.plotNo}</td>
-                                            <td>{row.amountInCash}</td>
-                                            <td>{row.chequeAmount}</td>
-                                            {/* <td>{row.noOfCheques}</td>
-                                            <td>{row.chequeNo}</td> */}
-                                            <td>{row.payorderAmount}</td>
-                                            <td>{row.noOfPayOrder}</td>
-                                            <td>{row.payOrderNo}</td>
-                                            <td>{row.tokenAmount}</td>
-                                            <td>{row.tokenDays}</td>
-
-                                            <td>{row.tokenDate}</td>
-                                            <td>{row.taxAmount}</td>
-                                            <td>{row.onlineTransfer}</td>
-                                            <td>{row.remaningBalance}</td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
-                        <div className="clearfix">
-                            <div className="hint-text">
-                                Showing <b> {totalUsers < 10 ? totalUsers : 10}</b> out of <b>{totalUsers}</b> entries
+                        <div className="col-sm-4">
+                            <div className="search-box">
+                                <i className="material-icons"></i>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search…"
+                                    onChange={(e) => {
+                                        setQ(e.target.value);
+                                    }}
+                                />
                             </div>
-                            <Paginantion currentPage={page} pageNumbers={pageNumbers} setPage={setPage} />
                         </div>
                     </div>
                 </div>
-            </div>
-        </Fragment>
+            </Box>
+            <Table aria-label="collapsible table">
+                <TableHead className={classes.head}>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell align="left" className={classes.firstHead}>
+                            Society Name
+                        </TableCell>
+                        <TableCell align="left" className={classes.firstHead}>
+                            Sector Number
+                        </TableCell>
+                        <TableCell align="left" className={classes.firstHead}>
+                            Plot Number
+                        </TableCell>
+                        <TableCell align="left" className={classes.firstHead}>
+                            Amount in Cash
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {(rowsPerPage > 0 ? search(plots, q).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : plots).map((row) => (
+                        <Row key={row.name} row={row} setQ={setQ} />
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            colSpan={3}
+                            count={plots.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                                inputProps: { 'aria-label': 'rows per page' },
+                                native: true
+                            }}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                        />
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </TableContainer>
     );
 };
+
+function Row(props) {
+    const { row, setQ } = props;
+    const [open, setOpen] = useState(false);
+    const classes = useRowStyles();
+
+    return (
+        <React.Fragment>
+            <StyledTableRow>
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell align="left" component="th" scope="row">
+                    {row.societyName}
+                </TableCell>
+                <TableCell align="left">{row.sectorNo}</TableCell>
+                <TableCell align="left">{row.plotNo}</TableCell>
+                <TableCell align="left">{row.amountInCash}</TableCell>
+            </StyledTableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 1, paddingTop: 1 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h4" gutterBottom component="div" style={{ backgroundColor: '#d4e4f2' }}>
+                                Cheque Info:
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">Cheque Amount</TableCell>
+                                        <TableCell align="left">Number of Cheque</TableCell>
+                                        <TableCell align="left">Cheque Number</TableCell>
+                                        <TableCell align="left">Cheque Description</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">{row.chequeAmount}</TableCell>
+                                        <TableCell align="left">{row.noOfCheques}</TableCell>
+                                        <TableCell align="left">{row.chequeNo}</TableCell>
+                                        <TableCell align="left">{row.chequeDescription}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </Box>
+
+                        <Box margin={1}>
+                            <Typography variant="h4" gutterBottom component="div" style={{ backgroundColor: '#d4e4f2' }}>
+                                Payoder & OnlineTransfer Info :
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">PayOrder Amount</TableCell>
+                                        <TableCell align="left">Number of PayOrder</TableCell>
+                                        <TableCell align="left">PayOrder Number</TableCell>
+                                        <TableCell align="left">Online Transfer</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">{row.payorderAmount}</TableCell>
+                                        <TableCell align="left">{row.noOfPayOrder}</TableCell>
+                                        <TableCell align="left">{row.payOrderNo}</TableCell>
+                                        <TableCell align="left">{row.onlineTransfer}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </Box>
+
+                        <Box margin={1}>
+                            <Typography variant="h4" gutterBottom component="div" style={{ backgroundColor: '#d4e4f2' }}>
+                                Token & Tax Info :
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">Token Amount</TableCell>
+                                        <TableCell align="left">Token Days</TableCell>
+                                        <TableCell align="left">Token Date</TableCell>
+                                        <TableCell align="left">Tax Amount</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell />
+
+                                        <TableCell align="left">{row.tokenAmount}</TableCell>
+                                        <TableCell align="left">{row.tokenDays}</TableCell>
+                                        <TableCell align="left">{new Date(row.tokenDate).toDateString()}</TableCell>
+                                        <TableCell align="left">{row.taxAmount}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
+
+const useStyles1 = makeStyles((theme) => ({
+    root: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2)
+    }
+}));
+
+function TablePaginationActions(props) {
+    const classes = useStyles1();
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <div className={classes.root}>
+            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="first page">
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="next page">
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="last page">
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </div>
+    );
+}
 
 export default PurchaseSummary;
