@@ -105,7 +105,7 @@ const PlotSummary = () => {
             if (response.status === 200) {
                 const index = conPlots.findIndex((conPlot) => conPlot.id === values.id);
 
-                newConPlots.splice(index, 1, values);
+                newConPlots.splice(index, 1, response.data);
                 setConPlots(newConPlots);
                 resetUpdateStates();
                 swal('Success!', 'Record Updated Succesfully!', 'success');
