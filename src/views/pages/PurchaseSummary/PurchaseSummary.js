@@ -63,7 +63,6 @@ const PurchaseSummary = () => {
     const [q, setQ] = useState('');
     const dispatch = useDispatch();
     const classes = useRowStyles();
-    const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
