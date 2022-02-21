@@ -30,6 +30,14 @@ export const sale = {
                     // target: true
                 },
                 {
+                    id: 'profit-loss-summary',
+                    title: 'Profit-Loss Summary',
+                    type: 'item',
+                    // icon: icons['AccountBoxIcon'],
+                    url: '/sale-profit-loss'
+                    // target: true
+                },
+                {
                     id: 'sale-token-plot',
                     title: 'Sale Token Plots',
                     type: 'item',

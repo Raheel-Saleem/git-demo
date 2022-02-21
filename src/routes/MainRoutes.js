@@ -37,7 +37,7 @@ import PurchaseTokenPlotEdit from '../views/pages/PurchaseTokenPlot/edit/Edit';
 import PlotConstructionManagement from '../views/pages/Construction/Management';
 import PlotConstructionManagementUpdate from '../views/pages/Construction/Management/update';
 import PlotConstructionManagementSummary from '../views/pages/Construction/ManagementSummary';
-
+import ProfitLossTable from '../views/pages/AdminPartnerProfit/ProfitLossTable';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -65,7 +65,13 @@ const MainRoutes = () => {
     }
 
     if (permission.sale) {
-        pathArray.push('/sale/plots', '/sale/summary', 'sale-token-plot', '/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo');
+        pathArray.push(
+            '/sale/plots',
+            '/sale/summary',
+            'sale-token-plot',
+            '/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo',
+            '/sale-profit-loss'
+        );
     }
 
     if (permission.super) {
@@ -122,6 +128,7 @@ const MainRoutes = () => {
                             <Route path="/sale-summary" exact component={SalePlotSummary} />
                             <Route path="/sale-token-plot" exact component={SaleTokenPlot} />
                             <Route path="/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo" exact component={SaleTokenPlotEdit} />
+                            <Route path="/sale-profit-loss" exact component={ProfitLossTable} />
                         </>
                     )}
                     {permission.super && (
