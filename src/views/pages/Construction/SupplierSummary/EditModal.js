@@ -24,8 +24,8 @@ const EditModal = ({ open, close, rowValues, editRow }) => {
     const classes = useStyles();
 
     const onSubmit = (values, submitProps) => {
-        console.log('Form data', values);
-        editRow(values);
+        console.log('Form data', { ...values, filer: (values.filer === 'true') });
+        editRow({ ...values, filer: (values.filer === 'true') });
         submitProps.setSubmitting(false);
         submitProps.resetForm();
     };

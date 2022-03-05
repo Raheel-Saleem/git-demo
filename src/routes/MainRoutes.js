@@ -38,6 +38,7 @@ import PlotConstructionManagement from '../views/pages/Construction/Management';
 import PlotConstructionManagementUpdate from '../views/pages/Construction/Management/update';
 import PlotConstructionManagementSummary from '../views/pages/Construction/ManagementSummary';
 import ProfitLossTable from '../views/pages/AdminPartnerProfit/ProfitLossTable';
+import ProductInventory from '../views/pages/Construction/Product Inventory/ProductInventory';
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -151,6 +152,7 @@ const MainRoutes = () => {
                             <Route path="/construction/supplier" component={ConstructionSupplier} exact />
                             <Route path="/construction/supplierSummary" component={ConstructionSupplierSummary} exact />
                             <Route path="/construction/plot-construction-management" component={PlotConstructionManagement} exact />
+                            <Route path="/construction/product-inventory" component={ProductInventory} exact />
                             <Route
                                 path="/construction/plot-construction-management-update/:supervisor/:dateStart/:dateFinish/:plotId"
                                 component={PlotConstructionManagementUpdate}

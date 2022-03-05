@@ -21,11 +21,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EditModal = ({ open, close, rowValues, editRow }) => {
+    const [prevAmount, setPrevAmount] = React.useState(rowValues.amount);
     const classes = useStyles();
 
+    React.useEffect(() => {
+        setPrevAmount(rowValues.amount);
+    }, [rowValues])
+
     const onSubmit = (values, submitProps) => {
-        console.log('Form data', values);
-        editRow(values);
+        editRow({ ...values, prevAmount });
         submitProps.setSubmitting(false);
         submitProps.resetForm();
     };

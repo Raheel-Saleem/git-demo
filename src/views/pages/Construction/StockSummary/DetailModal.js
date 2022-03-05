@@ -85,6 +85,7 @@ const DetailModal = ({ open, close, rowID }) => {
                                 ))}
                             </tbody>
                         </table>
+                        {datalist && datalist.length && <div className="text-right fw-bold">Grand Total: <b>{datalist.reduce((a, b) => (a.totalAmount + b.totalAmount))}</b></div>}
                     </div>
                 </div>
             </Fade>

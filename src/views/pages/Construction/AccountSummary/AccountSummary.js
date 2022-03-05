@@ -92,7 +92,7 @@ const AccountSummary = () => {
             if (response.status === 200) {
                 const index = conAccounts.findIndex((conAccount) => conAccount.id === values.id);
 
-                newConAccounts.splice(index, 1, values);
+                newConAccounts.splice(index, 1, { ...values, amount: parseInt(values.amount) + parseInt(values.prevAmount) });
                 setConAccounts(newConAccounts);
                 resetUpdateStates();
                 swal('Success!', 'Record Updated Succesfully!', 'success');

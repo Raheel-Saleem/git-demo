@@ -18,18 +18,6 @@ export const construction = {
             icon: icons['HomeWorkIcon'],
             children: [
                 {
-                    id: 'plot-construction-management',
-                    title: 'Plot Construction Management',
-                    type: 'item',
-                    url: '/construction/plot-construction-management'
-                },
-                {
-                    id: 'plot-construction-management-summary',
-                    title: 'Plot Construction Management Summary',
-                    type: 'item',
-                    url: '/construction/plot-construction-management-summary'
-                },
-                {
                     id: 'constructionaccount',
                     title: 'Construction Account',
                     type: 'item',
@@ -72,6 +60,12 @@ export const construction = {
                     url: '/construction/product'
                 },
                 {
+                    id: 'product-inventory',
+                    title: 'Product Inventory',
+                    type: 'item',
+                    url: '/construction/product-inventory'
+                },
+                {
                     id: 'product-summary',
                     title: 'Product Summary',
                     type: 'item',
@@ -88,7 +82,19 @@ export const construction = {
                     title: 'Stock Summary',
                     type: 'item',
                     url: '/construction/stockSummary'
-                }
+                },
+                {
+                    id: 'plot-construction-management',
+                    title: 'Plot Construction Management',
+                    type: 'item',
+                    url: '/construction/plot-construction-management'
+                },
+                {
+                    id: 'plot-construction-management-summary',
+                    title: 'Plot Construction Management Summary',
+                    type: 'item',
+                    url: '/construction/plot-construction-management-summary'
+                },
             ]
         }
     ]
