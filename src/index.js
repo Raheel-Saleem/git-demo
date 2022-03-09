@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 // project imports
-import { store } from './store';
+import {store} from './store';
 import App from './App';
 import config from './config';
 
