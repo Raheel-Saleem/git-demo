@@ -164,7 +164,12 @@ export default function Checkout() {
             // }
         } catch (error) {
             dispatch(stopLoading());
-            swal('Error!', `${error.response.data}`, 'error');
+           if(error.response) { 
+
+                swal('Error!', `${error.response.data}`, 'error');
+            }else
+            swal('Error!', `${error}`, 'error');
+
         }
     };
     function getStepContent(step, setValues) {

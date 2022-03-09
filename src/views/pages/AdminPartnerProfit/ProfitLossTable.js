@@ -1,4 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment,useRef ,forwardRef } from 'react';
+import {ReactToPrint,useReactToPrint} from 'react-to-print'
+import { Box ,Button } from '@material-ui/core';
+
 import './ProfitLossTable.css';
 import { useDispatch } from 'react-redux';
 import server from '../../../server/server';
@@ -24,7 +27,7 @@ const initialValues = {
     societyName: ''
 };
 
-const ProfitLossTable = () => {
+const ProfitLossTable1 =forwardRef( (props,ref) => {
     const [plots, setUsers] = useState([]);
 
     const [page, setPage] = useState(1);
@@ -59,7 +62,7 @@ const ProfitLossTable = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <div className="container-fluid">
+            <div className="container-fluid" ref={ref}>
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
@@ -143,6 +146,31 @@ const ProfitLossTable = () => {
             </div>
         </Fragment>
     );
-};
+})
+const ProfitLossTable = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,documentTitle: "accountsummary"
+      });
+  
+    return (
+      <div>
 
+<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={handlePrint}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                   Print this out! 
+                                </Button>
+                               
+                            </Box>
+      
+{/* <button onClick={handlePrint}>Print this out!</button> */}
+        <ProfitLossTable1 ref={componentRef} />
+      </div>
+    );
+  };
 export default ProfitLossTable;

@@ -1,4 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment ,useRef ,forwardRef} from 'react';
+import {ReactToPrint,useReactToPrint} from 'react-to-print'
+import { Box ,Button } from '@material-ui/core';
+
 import { useDispatch } from 'react-redux';
 import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
@@ -15,7 +18,7 @@ const initialValues = {
     name: ''
 };
 
-const AccountSummary = () => {
+const AccountSummary1 =forwardRef( (props,ref) => {
     const [accounts, setAccounts] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
@@ -144,7 +147,7 @@ const AccountSummary = () => {
         <Fragment>
             <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
-            <div className="container-xl">
+            <div className="container-xl" ref={ref}>
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
@@ -234,6 +237,32 @@ const AccountSummary = () => {
             </div>
         </Fragment>
     );
-};
+})
+const AccountSummary = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,documentTitle: "accountsummary"
+      });
+  
+    return (
+      <div>
+
+<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={handlePrint}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                   Print this out! 
+                                </Button>
+                               
+                            </Box>
+      
+{/* <button onClick={handlePrint}>Print this out!</button> */}
+        <AccountSummary1 ref={componentRef} />
+      </div>
+    );
+  };
 
 export default AccountSummary;

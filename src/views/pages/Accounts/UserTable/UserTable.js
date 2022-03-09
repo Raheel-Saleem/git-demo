@@ -1,9 +1,11 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment,useRef ,forwardRef} from 'react';
+import {ReactToPrint,useReactToPrint} from 'react-to-print'
 import './UserTable.css';
 import { useDispatch } from 'react-redux';
 import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
 import swal from 'sweetalert';
+import { Box ,Button } from '@material-ui/core';
 
 import Paginantion from './Paginantion';
 import { Chip } from '@material-ui/core';
@@ -22,7 +24,7 @@ const initialValues = {
     role: ''
 };
 
-const UserTable = () => {
+const UserTable1 = forwardRef((props,ref) => {
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
@@ -149,12 +151,12 @@ const UserTable = () => {
         })();
     }, [dispatch]);
     return (
-        <Fragment>
+        <div >
             <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
             <div className="container-xl">
                 <div className="table-responsive">
-                    <div className="table-wrapper">
+                    <div className="table-wrapper"  ref={ref}>
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-sm-8">
@@ -175,7 +177,7 @@ const UserTable = () => {
                                 </div>
                             </div>
                         </div>
-                        <table className="table table-striped table-hover table-bordered">
+                        <table className="table table-striped table-hover table-bordered" >
                             <thead className="table-primary">
                                 <tr>
                                     {/* <th>ID#</th> */}
@@ -256,8 +258,35 @@ const UserTable = () => {
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
-};
+}
+);
+const UserTable = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,documentTitle: "User Profile"
+      });
+  
+    return (
+      <div>
+
+<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={handlePrint}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                   Print this out! 
+                                </Button>
+                               
+                            </Box>
+      
+{/* <button onClick={handlePrint}>Print this out!</button> */}
+        <UserTable1 ref={componentRef} />
+      </div>
+    );
+  };
 
 export default UserTable;

@@ -88,6 +88,7 @@ function PlotCard({ plot }) {
                             <Button size="medium" color="primary">
                                 Sell
                             </Button>
+                          
                         </Link>
                     )}
 

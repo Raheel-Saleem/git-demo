@@ -1,4 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment,useRef ,forwardRef } from 'react';
+import {ReactToPrint,useReactToPrint} from 'react-to-print'
+import { Box ,Button } from '@material-ui/core';
+
 import { useDispatch } from 'react-redux';
 import server from '../../../server/server';
 import { startLoading, stopLoading } from '../../../store/actions';
@@ -15,7 +18,7 @@ const initialValues = {
     type: ''
 };
 
-const PurchaseTokenPlot = () => {
+const PurchaseTokenPlot1 = forwardRef((props,ref) => {
     const [accounts, setAccounts] = useState([]);
     const [page, setPage] = useState(1);
     const [q, setQ] = useState('');
@@ -48,7 +51,7 @@ const PurchaseTokenPlot = () => {
     }, [dispatch]);
     return (
         <Fragment>
-            <div className="container-xl">
+            <div className="container-xl" ref={ref}>
                 <div className="table-responsive">
                     <div className="table-wrapper">
                         <div className="table-title">
@@ -123,6 +126,32 @@ const PurchaseTokenPlot = () => {
             </div>
         </Fragment>
     );
-};
+});
 
+const PurchaseTokenPlot = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,documentTitle: "User Profile"
+      });
+  
+    return (
+      <div>
+
+<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={handlePrint}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                   Print this out! 
+                                </Button>
+                               
+                            </Box>
+      
+{/* <button onClick={handlePrint}>Print this out!</button> */}
+        <PurchaseTokenPlot1 ref={componentRef} />
+      </div>
+    );
+  };
 export default PurchaseTokenPlot;
