@@ -91,9 +91,8 @@ const MainRoutes = () => {
             '/construction/stock'
         );
     }
-console.log('path-array::::::',pathArray)
+    console.log('from main route::::::', location.pathname);
 
-console.log('llllllllllllllll::::::',location.pathname)
     return (
         <Route path={[...pathArray]}>
             <Switch location={location} key={location.pathname}>

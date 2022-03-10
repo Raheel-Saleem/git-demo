@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../../../store/actions';
 import { removeToken } from '../../../../utils/token';
@@ -135,7 +135,7 @@ const ProfileSection = () => {
     const handleLogout = () => {
         dispatch(logout());
         removeToken();
-        history.push('/');
+        <Redirect to="/" />;
     };
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);

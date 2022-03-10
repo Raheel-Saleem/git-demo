@@ -18,15 +18,15 @@ const AuthRegister3 = Loadable(lazy(() => import('../views/pages/authentication/
 
 const AuthenticationRoutes = () => {
     const location = useLocation();
+    console.log('i am from login', location.pathname);
 
     return (
         <Route path={['/', '/forgot-password', '/reset-password']}>
             <Switch location={location} key={location.pathname}>
                 <MinimalLayout>
-                    <Route path="/" component={Login} exact />
-
                     <Route path="/forgot-password" component={ForgotPassword} exact />
                     <Route path="/reset-password" component={SetPassword} exact />
+                    <Route path="/" component={Login} exact />
                 </MinimalLayout>
                 {/* <Route path="/notfound" component={NotFound} /> */}
                 {/* <Redirect to="*" component={NotFound} /> */}
