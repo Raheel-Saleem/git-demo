@@ -41,38 +41,6 @@ export default function Review() {
     } = formValues;
     return (
         <React.Fragment>
-            <Typography variant="h3" align="center" gutterBottom>
-                Account Opening Summary
-            </Typography>
-            <Divider classes={{ root: classes.dividerColor }} />
-            <Box sx={{ m: 0.5, p: 0.5 }} className={classes.boxbg}>
-                <Typography variant="h4" align="left">
-                    Account Details:
-                </Typography>
-            </Box>
-            <Box sx={{ m: 0.5, p: 0.5 }}>
-                <ListItem key={'Account Title'} sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary={'Account Title'} inset primaryTypographyProps={{ fontWeight: '600' }} />
-                    <Typography variant="body2">{accName}</Typography>
-                </ListItem>
-                <ListItem key={'Bank Name'} sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary={'Bank Name'} inset primaryTypographyProps={{ fontWeight: '600' }} />
-                    <Typography variant="body2">{bankName}</Typography>
-                </ListItem>
-                <ListItem key={'Account Number'} sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary={'Account Number'} inset primaryTypographyProps={{ fontWeight: '600' }} />
-                    <Typography variant="body2">{accNo}</Typography>
-                </ListItem>
-                <ListItem key={'Amount To Invest'} sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary={'Amount To Invest'} inset primaryTypographyProps={{ fontWeight: '600' }} />
-                    <Typography variant="body2">{amountToInvest}</Typography>
-                </ListItem>
-                <ListItem key={'Amount To Invest'} sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary={'Amount In Cash'} inset primaryTypographyProps={{ fontWeight: '600' }} />
-                    <Typography variant="body2">{amountInCash}</Typography>
-                </ListItem>
-            </Box>
-            <Divider />
             <Box sx={{ m: 0.5, p: 0.5 }} className={classes.boxbg}>
                 <Typography variant="h4" align="left">
                     Cheque Details:

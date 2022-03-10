@@ -193,10 +193,11 @@ const ProductSummary = () => {
                                         'rate',
                                         'remainingBalance',
                                         'supplierName',
-                                        'totalAmount',
-                                        'unit'
+                                        'noOfDays',
+                                        'unit',
+                                        'totalAmount'
                                     ].map((column) => {
-                                        const result = column.replace(/([A-Z])/g, " $1");
+                                        const result = column.replace(/([A-Z])/g, ' $1');
                                         const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
                                         console.log(finalResult);
                                         return (
@@ -225,10 +226,17 @@ const ProductSummary = () => {
                                                 'rate',
                                                 'remainingBalance',
                                                 'supplierName',
-                                                'totalAmount',
-                                                'unit'
+                                                'noOfDays',
+                                                'unit',
+                                                'totalAmount'
                                             ].map((column) =>
-                                                column === 'paid' ? <td>{row[column] ? 'Yes' : 'No'}</td> : <td>{row[column]}</td>
+                                                column === 'paid' ? (
+                                                    <td>{row[column] ? 'Yes' : 'No'}</td>
+                                                ) : (
+                                                    (column === 'dateOfPurchase' && (
+                                                        <td>{new Date(row[column]).toLocaleDateString()}</td>
+                                                    )) || <td>{row[column]}</td>
+                                                )
                                             )}
 
                                             <td>

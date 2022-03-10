@@ -30,17 +30,30 @@ const validationSchema = [
         [chequeDescription.name]: Yup.string().nullable(),
         [amountInCash.name]: Yup.string()
     }),
+    // Yup.object().shape({
+    //     [tokenAmount.name]: Yup.string().required(),
+    //     [tokenDays.name]: Yup.string().required(),
+    //     [tokenDescription.name]: Yup.string().required(),
+    //     [taxAmount.name]: Yup.string().required(),
+    //     [taxDescription.name]: Yup.string(),
+    // }),
     Yup.object().shape({
-        [tokenAmount.name]: Yup.string().required(),
-        [tokenDays.name]: Yup.string().required(),
-        [tokenDescription.name]: Yup.string().required(),
-        [taxAmount.name]: Yup.string().required(),
-        [taxDescription.name]: Yup.string(),
+        [tokenAmount.name]: Yup.string(),
+        [tokenDays.name]: Yup.string(),
+        [tokenDescription.name]: Yup.string(),
+        [taxAmount.name]: Yup.string(),
+        [taxDescription.name]: Yup.string()
     }),
+    // Yup.object().shape({
+    //     [payorderAmount.name]: Yup.string().required(`${payorderAmount.requiredErrorMsg}`),
+    //     [noOfPayOrder.name]: Yup.string().required(`${noOfPayOrder.requiredErrorMsg}`),
+    //     [payOrderNo.name]: Yup.string().required(`${payOrderNo.requiredErrorMsg}`),
+    //     [payorderDescription.name]: Yup.string().nullable()
+    // }),
     Yup.object().shape({
-        [payorderAmount.name]: Yup.string().required(`${payorderAmount.requiredErrorMsg}`),
-        [noOfPayOrder.name]: Yup.string().required(`${noOfPayOrder.requiredErrorMsg}`),
-        [payOrderNo.name]: Yup.string().required(`${payOrderNo.requiredErrorMsg}`),
+        [payorderAmount.name]: Yup.string(),
+        [noOfPayOrder.name]: Yup.string(),
+        [payOrderNo.name]: Yup.string(),
         [payorderDescription.name]: Yup.string().nullable()
     }),
     Yup.object().shape({
