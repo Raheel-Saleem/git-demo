@@ -128,48 +128,52 @@ const PurchaseSummary = () => {
                     </div>
                 </div>
             </Box>
-            <Table aria-label="collapsible table">
-                <TableHead className={classes.head}>
-                    <TableRow>
-                        <TableCell />
-                        <TableCell align="left" className={classes.firstHead}>
-                            Society Name
-                        </TableCell>
-                        <TableCell align="left" className={classes.firstHead}>
-                            Sector Number
-                        </TableCell>
-                        <TableCell align="left" className={classes.firstHead}>
-                            Plot Number
-                        </TableCell>
-                        <TableCell align="left" className={classes.firstHead}>
-                            Amount in Cash
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {(rowsPerPage > 0 ? search(plots, q).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : plots).map((row) => (
-                        <Row key={row.name} row={row} setQ={setQ} />
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={3}
-                            count={plots.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                                inputProps: { 'aria-label': 'rows per page' },
-                                native: true
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table>
+            <Box sx={{ m: 1 }}>
+                <Table aria-label="collapsible table">
+                    <TableHead className={classes.head}>
+                        <TableRow>
+                            <TableCell />
+                            <TableCell align="left" className={classes.firstHead}>
+                                Society Name
+                            </TableCell>
+                            <TableCell align="left" className={classes.firstHead}>
+                                Sector Number
+                            </TableCell>
+                            <TableCell align="left" className={classes.firstHead}>
+                                Plot Number
+                            </TableCell>
+                            <TableCell align="left" className={classes.firstHead}>
+                                Amount in Cash
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {(rowsPerPage > 0 ? search(plots, q).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : plots).map(
+                            (row) => (
+                                <Row key={row.name} row={row} setQ={setQ} />
+                            )
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={3}
+                                count={plots.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: { 'aria-label': 'rows per page' },
+                                    native: true
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </Box>
         </TableContainer>
     );
 };

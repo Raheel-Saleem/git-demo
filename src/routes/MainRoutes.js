@@ -39,6 +39,8 @@ import PlotConstructionManagementUpdate from '../views/pages/Construction/Manage
 import PlotConstructionManagementSummary from '../views/pages/Construction/ManagementSummary';
 import ProfitLossTable from '../views/pages/AdminPartnerProfit/ProfitLossTable';
 import ProductInventory from '../views/pages/Construction/Product Inventory/ProductInventory';
+import SaleInvoice from '../views/pages/SaleInvoice/SaleInvoice';
+
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
 
 // sample page routing
@@ -71,7 +73,8 @@ const MainRoutes = () => {
             '/sale/summary',
             'sale-token-plot',
             '/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo',
-            '/sale-profit-loss'
+            '/sale-profit-loss',
+            '/saleinvoice'
         );
     }
 
@@ -131,6 +134,7 @@ const MainRoutes = () => {
                             <Route path="/sale-token-plot" exact component={SaleTokenPlot} />
                             <Route path="/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo" exact component={SaleTokenPlotEdit} />
                             <Route path="/sale-profit-loss" exact component={ProfitLossTable} />
+                            <Route path="/saleinvoice" exact component={SaleInvoice} />
                         </>
                     )}
                     {permission.super && (
