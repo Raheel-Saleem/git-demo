@@ -17,13 +17,14 @@ const SaleInvoice = () => {
             try {
                 dispatch(startLoading());
                 const { data } = await server.get(`/saleInvoice/${id}`);
+                console.log('data: ', data);
                 setSaleData(data);
                 dispatch(stopLoading());
             } catch (e) {
                 dispatch(stopLoading());
             }
         })();
-    }, [dispatch]);
+    }, []);
     return (
         <Fragment>
             <div className="receipt-content">

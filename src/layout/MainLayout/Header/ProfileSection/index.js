@@ -134,8 +134,11 @@ const ProfileSection = () => {
     const anchorRef = React.useRef(null);
     const handleLogout = () => {
         dispatch(logout());
-        removeToken();
+
+        history.push('/');
         <Redirect to="/" />;
+        removeToken();
+        window.location.reload();
     };
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);

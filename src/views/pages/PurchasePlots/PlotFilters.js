@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => {
     };
 });
 
-const PlotSelectors = ({ setPlots, plots }) => {
+const PlotSelectors = ({ setPlots, plots, fetchPlots }) => {
     const classes = useStyles();
     const urlParams = new URLSearchParams(window.location.search);
     const param = urlParams.get('plot');
@@ -52,6 +52,8 @@ const PlotSelectors = ({ setPlots, plots }) => {
     const resetSelector = () => {
         setSociety(null);
         setSector(null);
+        fetchPlots();
+        // setPlots(plots);
     };
 
     // Load All Society Names

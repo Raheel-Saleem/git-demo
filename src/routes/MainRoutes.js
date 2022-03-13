@@ -74,7 +74,7 @@ const MainRoutes = () => {
             'sale-token-plot',
             '/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo',
             '/sale-profit-loss',
-            '/saleinvoice'
+            '/saleinvoice/:id'
         );
     }
 
@@ -134,7 +134,7 @@ const MainRoutes = () => {
                             <Route path="/sale-token-plot" exact component={SaleTokenPlot} />
                             <Route path="/sale-token-plot-edit/:id/:societyName/:sectorNo/:plotNo" exact component={SaleTokenPlotEdit} />
                             <Route path="/sale-profit-loss" exact component={ProfitLossTable} />
-                            <Route path="/saleinvoice" exact component={SaleInvoice} />
+                            <Route path="/saleinvoice/:id" exact component={SaleInvoice} />
                         </>
                     )}
                     {permission.super && (

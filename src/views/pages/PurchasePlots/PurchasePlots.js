@@ -8,34 +8,37 @@ import PlotFilters from './PlotFilters';
 import { Box } from '@material-ui/system';
 import NoPlot from '../../No_Plot_Found/NoPlot';
 import Divider from '@material-ui/core/Divider';
+
 function PurchaseProperty() {
     const dispatch = useDispatch();
     const [plots, setPlots] = useState([]);
     const urlParams = new URLSearchParams(window.location.search);
     const param = urlParams.get('plot');
 
-    useEffect(() => {
-        (async () => {
-            try {
-                dispatch(startLoading());
-                if (param && param === 'sell') {
-                    const { data } = await server.get('/getplotsforsaleppt');
-                    setPlots(data);
-                }
-                if ((param && param === 'buy') || !param) {
-                    const { data } = await server.get('/getallpptdata');
-                    setPlots(data);
-                }
-                dispatch(stopLoading());
-            } catch (e) {
-                dispatch(stopLoading());
+    const fetchPlots = async () => {
+        try {
+            dispatch(startLoading());
+            if (param && param === 'sell') {
+                const { data } = await server.get('/getplotsforsaleppt');
+                setPlots(data);
             }
-        })();
+            if ((param && param === 'buy') || !param) {
+                const { data } = await server.get('/getallpptdata');
+                setPlots(data);
+            }
+            dispatch(stopLoading());
+        } catch (e) {
+            dispatch(stopLoading());
+        }
+    };
+
+    useEffect(() => {
+        fetchPlots();
     }, [param, dispatch]);
 
     return (
         <Fragment>
-            <PlotFilters plots={plots} setPlots={setPlots} />
+            <PlotFilters plots={plots} setPlots={setPlots} fetchPlots={fetchPlots} />
             <Box sx={{ mx: 4, my: 2 }}>
                 <Divider variant="fullWidth" style={{ borderColor: '#a09595' }} />
             </Box>

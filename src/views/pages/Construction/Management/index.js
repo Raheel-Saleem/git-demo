@@ -87,7 +87,7 @@ export default function PlotConstructionManagement() {
     };
 
     return (
-        <div className="plotConstructionManagement">
+        <div className="plotConstructionManagement ">
             <div className="w-100 bg-light p-4 rounded">
                 <h5>Plot Construction Management</h5>
             </div>

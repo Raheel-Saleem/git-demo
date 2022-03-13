@@ -218,7 +218,7 @@ function Row(props) {
                 <TableCell align="left">{row.amountInCash}</TableCell>
 
                 <TableCell align="left">
-                    <Link to="/saleinvoice">
+                    <Link to={`/saleinvoice/${row.id}`}>
                         <button className="btn btn-primary rounded-pill shadow">Print Invoice</button>
                     </Link>
                 </TableCell>

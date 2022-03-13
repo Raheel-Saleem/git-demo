@@ -1,4 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef, forwardRef } from 'react';
+import { ReactToPrint, useReactToPrint } from 'react-to-print';
+import { Box, Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
@@ -14,7 +16,7 @@ const initialValues = {
     amount: ''
 };
 
-const AccountSummary = () => {
+const AccountSummary1 = forwardRef((props, ref) => {
     const [conAccounts, setConAccounts] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
@@ -144,7 +146,7 @@ const AccountSummary = () => {
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
             <div className="container-xl">
                 <div className="table-responsive">
-                    <div className="table-wrapper">
+                    <div className="table-wrapper" ref={ref}>
                         <div className="table-title">
                             <div className="row">
                                 <div className="col-sm-8">
@@ -223,6 +225,27 @@ const AccountSummary = () => {
                 </div>
             </div>
         </Fragment>
+    );
+});
+
+const AccountSummary = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'construction-account-summary'
+    });
+
+    return (
+        <div>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button color="secondary" variant="contained" onClick={handlePrint} sx={{ mt: 3, ml: 1 }}>
+                    Print this out!
+                </Button>
+            </Box>
+
+            {/* <button onClick={handlePrint}>Print this out!</button> */}
+            <AccountSummary1 ref={componentRef} />
+        </div>
     );
 };
 
