@@ -1,4 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, forwardRef, useRef } from 'react';
+import { ReactToPrint, useReactToPrint } from 'react-to-print';
+import { Box, Button } from '@material-ui/core';
+
 import { useDispatch } from 'react-redux';
 import server from '../../../../server/server';
 import { startLoading, stopLoading } from '../../../../store/actions';
@@ -28,7 +31,7 @@ const initialValues = {
     id: ''
 };
 
-const PlotSummary = () => {
+const PlotSummary1 = forwardRef((props, ref) => {
     const [conPlots, setConPlots] = useState([]);
     const [open, setOpen] = useState(false);
     const [opendelete, setDelete] = useState(false);
@@ -166,12 +169,13 @@ const PlotSummary = () => {
             }
         })();
     }, [dispatch]);
+
     return (
         <Fragment>
             <EditModal open={open} close={handleClose} editRow={handleUpdate} rowValues={rowValues} />
             <DeleteModal open={opendelete} close={resetDeleteStates} deleteRow={handleDelete} deleteId={deleteId} />
             <div className="">
-                <div className="table-responsive">
+                <div className="table-responsive" ref={ref}>
                     <div className="table-wrapper">
                         <div className="table-title">
                             <div className="row">
@@ -287,6 +291,26 @@ const PlotSummary = () => {
             </div>
         </Fragment>
     );
-};
+});
 
+const PlotSummary = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'User Profile'
+    });
+
+    return (
+        <div>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button color="secondary" variant="contained" onClick={handlePrint} sx={{ mt: 3, ml: 1 }}>
+                    Print this out!
+                </Button>
+            </Box>
+
+            {/* <button onClick={handlePrint}>Print this out!</button> */}
+            <PlotSummary1 ref={componentRef} />
+        </div>
+    );
+};
 export default PlotSummary;

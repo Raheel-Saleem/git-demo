@@ -1,4 +1,7 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useRef, forwardRef } from 'react';
+import { ReactToPrint, useReactToPrint } from 'react-to-print';
+import { Box, Button } from '@material-ui/core';
+
 import { useDispatch } from 'react-redux';
 import server from '../../../server/server';
 import { stopLoading, startLoading } from '../../../store/actions';
@@ -7,9 +10,9 @@ import swal from 'sweetalert';
 import './SaleInvoice.css';
 import { useParams } from 'react-router-dom';
 
-const SaleInvoice = () => {
+const SaleInvoice = forwardRef((props, ref) => {
     const dispatch = useDispatch();
-    const { saledata, setSaleData } = useState();
+    const [saledata, setSaleData] = useState({});
 
     let { id } = useParams();
     useEffect(() => {
@@ -18,16 +21,18 @@ const SaleInvoice = () => {
                 dispatch(startLoading());
                 const { data } = await server.get(`/saleInvoice/${id}`);
                 console.log('data: ', data);
-                setSaleData(data);
+                setSaleData(data[0]);
                 dispatch(stopLoading());
             } catch (e) {
                 dispatch(stopLoading());
             }
         })();
+
+        console.log('saledata: ', saledata.societyname);
     }, []);
     return (
         <Fragment>
-            <div className="receipt-content">
+            <div className="receipt-content" ref={ref}>
                 <div className="container bootstrap snippets bootdey">
                     <div className="row">
                         <div className="col-md-12">
@@ -42,34 +47,34 @@ const SaleInvoice = () => {
                                             <br />
                                             <strong> Bahria </strong>
                                             <p>
-                                                989 5th Street <br />
-                                                Bahria <br />
-                                                55839 <br />
-                                                Karachi <br />
+                                                {saledata.societyname}
+                                                <br />
+                                                {saledata.sectorno} <br />
+                                                {saledata.plotno} <br />
                                             </p>
                                         </div>
                                         <div className="col-sm-6 text-right">
                                             <span>Payment To</span>
                                             <br />
-                                            <strong> Bahria </strong>
+                                            <strong> {saledata.plotownername} </strong>
                                             <p>
-                                                989 5th Street <br />
-                                                Bahria <br />
-                                                55839 <br />
-                                                Karachi <br />
+                                                {saledata.societyname}
+                                                <br />
+                                                {saledata.sectorno} <br />
+                                                {saledata.plotno} <br />
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="line-items">
-                                    <div className="headers clearfix">
+                                    {/* <div className="headers clearfix">
                                         <div className="row">
                                             <div className="col-sm-4">Description</div>
                                             <div className="col-sm-3">Quantity</div>
                                             <div className="col-sm-5 text-right">Amount</div>
                                         </div>
-                                    </div>
-                                    <div className="items">
+                                    </div> */}
+                                    {/* <div className="items">
                                         <div className="row item">
                                             <div className="col-sm-4 desc">item 1</div>
                                             <div className="col-sm-3 qty">3</div>
@@ -85,13 +90,13 @@ const SaleInvoice = () => {
                                             <div className="col-sm-3 qty">2</div>
                                             <div className="col-sm-5 amount text-right">$18.00</div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="total text-right">
                                         <p className="extra-notes">
-                                            <strong>Extra Notes</strong>
-                                            Please send all items at the same time to shipping address by next week. Thanks a lot.
+                                            <strong>Description</strong>
+                                            {saledata.description}
                                         </p>
-                                        <div className="field">
+                                        {/* <div className="field">
                                             Subtotal <span>$379.00</span>
                                         </div>
                                         <div className="field">
@@ -99,16 +104,10 @@ const SaleInvoice = () => {
                                         </div>
                                         <div className="field">
                                             Discount <span>4.5%</span>
-                                        </div>
+                                        </div> */}
                                         <div className="field grand-total">
-                                            Total <span>$312.00</span>
+                                            Total <span>{saledata.plotamount}</span>
                                         </div>
-                                    </div>
-                                    <div className="print">
-                                        <a href="#">
-                                            <i className="fa fa-print" />
-                                            Print this receipt
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -119,6 +118,25 @@ const SaleInvoice = () => {
             </div>
         </Fragment>
     );
+});
+
+const PrintInvoice = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        documentTitle: 'accountsummary'
+    });
+
+    return (
+        <div>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button color="secondary" variant="contained" onClick={handlePrint} sx={{ mt: 3, ml: 1 }}>
+                    Print Receipt!
+                </Button>
+            </Box>
+            <SaleInvoice ref={componentRef}></SaleInvoice>
+        </div>
+    );
 };
 
-export default SaleInvoice;
+export default PrintInvoice;
